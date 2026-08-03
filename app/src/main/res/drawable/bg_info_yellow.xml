@@ -1,0 +1,5 @@
+<!-- Figma 67:1077 / 81:336 — 안내·번역 결과 카드 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/info_yellow_bg" />
+    <corners android:radius="@dimen/card_radius" />
+</shape>

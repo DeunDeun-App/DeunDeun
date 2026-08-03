@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavItemView">
+        <attr name="navIcon" format="reference" />
+        <attr name="navLabel" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="LabeledInputView">
+        <attr name="labelText" format="string" />
+        <!-- 라벨 뒤에 빨간 별표를 붙인다 -->
+        <attr name="required" format="boolean" />
+        <!-- 눈 모양 표시/숨김 토글을 단다 -->
+        <attr name="password" format="boolean" />
+        <attr name="android:hint" />
+        <attr name="android:inputType" />
+    </declare-styleable>
+
+    <declare-styleable name="AuthHeaderView">
+        <attr name="authTitle" format="string" />
+        <attr name="authDesc" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="FeatureHeaderView">
+        <attr name="featureEyebrow" format="string" />
+        <attr name="featureTitle" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="AgreementRowView">
+        <attr name="agreeLabel" format="string" />
+        <!-- 미동의 시 가입을 막을 항목인지 -->
+        <attr name="requiredAgreement" format="boolean" />
+    </declare-styleable>
+</resources>

@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="Theme.DeunDeun" parent="android:Theme.Material.Light.NoActionBar" />
+    <!--
+        화면설계서에 다크 모드 시안이 없어 Light 로 고정한다.
+        (DayNight 로 두면 대비가 깨진 화면이 나온다. 다크 시안이 나오면 그때 전환.)
+    -->
+    <style name="Theme.DeunDeun" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/orange_primary</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="android:windowBackground">@color/white</item>
+
+        <!--
+            Material3 는 높이(elevation)에 비례해 표면에 colorPrimary 를 섞는다(tonal elevation).
+            그 탓에 흰 카드가 주황빛으로 뜬다. 시안의 카드는 순백 + 그림자뿐이므로 오버레이를 끈다.
+        -->
+        <item name="elevationOverlayEnabled">false</item>
+
+        <item name="materialAlertDialogTheme">@style/Dialog.Deundeun</item>
+
+        <!-- edge-to-edge : 시스템 바는 투명, 아이콘은 어둡게 -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
+
 </resources>

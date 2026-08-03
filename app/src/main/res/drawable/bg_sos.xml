@@ -1,0 +1,8 @@
+<!-- Figma 31:40 (Ellipse 8) — 지름 72, #FF0000. 흰 링으로 하단탭 노치와 분리한다. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/red_sos" />
+    <stroke
+        android:width="3dp"
+        android:color="@color/white" />
+</shape>

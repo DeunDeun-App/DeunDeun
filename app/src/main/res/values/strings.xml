@@ -1,3 +1,322 @@
 <resources>
-    <string name="app_name">DeunDeun</string>
+    <string name="app_name">든든</string>
+
+    <!-- 하단 탭 -->
+    <string name="nav_home">홈</string>
+    <string name="nav_training">훈련</string>
+    <string name="nav_record">기록</string>
+    <string name="nav_profile">내정보</string>
+    <string name="sos">SOS</string>
+    <string name="cd_sos">에스오에스 도움 요청</string>
+    <string name="cd_notification">알림</string>
+
+    <!-- 홈 -->
+    <string name="home_title">홈</string>
+    <string name="home_card_simulation">재난 시뮬레이션</string>
+    <string name="home_card_call">119 신고 연습</string>
+    <string name="home_weekly_title">이번 주 훈련 기록</string>
+    <string name="home_unit_minute">분</string>
+    <string name="home_recent_title">최근 훈련 기록</string>
+    <string name="home_see_all">전체 보기 ></string>
+    <string name="home_week_count">이번주 %1$d번 했어요</string>
+    <string name="score_format">%1$d점</string>
+    <string name="cd_chart_bar">%1$s요일 %2$d분</string>
+
+    <string-array name="weekday_labels">
+        <item>월</item>
+        <item>화</item>
+        <item>수</item>
+        <item>목</item>
+        <item>금</item>
+        <item>토</item>
+        <item>일</item>
+    </string-array>
+
+    <!-- 훈련 -->
+    <string name="training_title">무엇을 할까요?</string>
+    <string name="training_sim_eyebrow">카메라로 배우는 대피 방법</string>
+    <string name="training_sim_title">재난 시뮬레이션</string>
+    <string name="training_sim_desc">카메라로 재난 상황을 보여줘요.\n탁자 밑으로 대피하면 AI가 확인해줘요.</string>
+    <string name="training_call_eyebrow">위험할 때 신고하는 연습</string>
+    <string name="training_call_title">119 신고 연습</string>
+    <string name="training_call_desc">가짜 119 통화로 연습해요.\n장소 전달, 현재 상황을 말하는 훈련이에요.</string>
+    <string name="training_translate_eyebrow">어려운 재난문자를 쉽게</string>
+    <string name="training_translate_title">재난문자 번역</string>
+    <string name="training_translate_desc">어려운 재난문자를 버튼 하나로\n이해하기 쉽게 쉬운 말과 그림으로 바꿔줘요.</string>
+
+    <!-- ===== 기록탭 ===== -->
+    <string name="record_title">훈련 기록</string>
+    <string name="record_tab_history">훈련 이력</string>
+    <string name="record_tab_score">119 점수 변화</string>
+    <string name="record_legend_simulation">시뮬레이션</string>
+    <string name="record_legend_call">119 연습</string>
+    <string name="record_recent">최근 훈련</string>
+    <string name="record_achievement_title">항목별 달성률</string>
+    <string name="percent_format">%1$d%%</string>
+
+    <!-- ===== 내정보 ===== -->
+    <string name="profile_title">내 정보</string>
+    <string name="profile_edit">수정</string>
+    <string name="profile_birth">생년월일</string>
+    <string name="profile_disability">장애유형</string>
+    <string name="profile_guardian">보호자</string>
+    <string name="profile_share_title">공유 설정</string>
+    <string name="profile_share_location">위치 공유</string>
+    <string name="profile_share_location_desc">SOS 시 보호자에게 GPS 전송</string>
+    <string name="profile_share_result">훈련 결과 공유</string>
+    <string name="profile_share_result_desc">훈련 완료 시 점수 알림</string>
+    <string name="profile_share_sos">SOS 알림</string>
+    <string name="profile_share_sos_desc">도움 요청 즉시 보호자 알림</string>
+    <string name="profile_notice_title">보호자에게 보낸 알림</string>
+    <string name="profile_notice_count">최근 %1$d건</string>
+
+    <!-- 내 정보 수정 -->
+    <string name="profile_edit_title">내 정보 수정</string>
+    <string name="action_save">저장</string>
+    <string name="profile_section_basic">기본 정보</string>
+    <string name="profile_section_disability">장애 정보</string>
+    <string name="profile_section_guardian">보호자 정보</string>
+    <string name="field_name">이름</string>
+    <string name="field_phone">전화번호</string>
+    <string name="field_birth">생년월일</string>
+    <string name="field_disability_type">장애 유형</string>
+    <string name="field_disability_level">장애 정도</string>
+    <string name="field_relation">관계</string>
+    <string name="field_guardian_name">보호자 이름</string>
+    <string name="field_guardian_phone">보호자 연락처</string>
+    <string name="relation_mother">엄마</string>
+    <string name="relation_father">아빠</string>
+    <string name="relation_other">기타</string>
+    <string name="profile_edit_warning">SOS 문자가 이 번호로 갑니다. 꼭 확인해 주세요.</string>
+    <string name="profile_saved">저장되었습니다.</string>
+    <string name="cd_dropdown">선택</string>
+
+    <!-- 장애 정보 선택지 -->
+    <string-array name="disability_types">
+        <item>지적장애</item>
+        <item>자폐장애</item>
+    </string-array>
+    <string-array name="disability_levels">
+        <item>1급</item>
+        <item>2급</item>
+        <item>3급</item>
+    </string-array>
+    <string name="cd_switch_on">켜짐</string>
+    <string name="cd_switch_off">꺼짐</string>
+
+    <!-- ===== 재난 시뮬레이션 ===== -->
+    <string name="sim_eyebrow">재난 시뮬레이션</string>
+    <string name="sim_intro_title">어떤 훈련을 할까요?</string>
+    <string name="sim_scenario_earthquake">지진 대피</string>
+    <string name="sim_scenario_earthquake_desc">탁자 밑으로 대피해요</string>
+    <string name="sim_scenario_fire">화재 탈출</string>
+    <string name="sim_scenario_fire_desc">손으로 입과 코를 막아요</string>
+    <string name="sim_howto_title">이렇게 해요</string>
+    <string name="sim_howto_1">카메라로 주변을 비춰요</string>
+    <string name="sim_howto_2">탁자 같은 사물을 찾아요</string>
+    <string name="sim_howto_3">대피 자세를 취하면 AI가 인식해요</string>
+    <string name="sim_start">카메라 시작하기</string>
+    <string name="sim_running_badge">%1$s 훈련</string>
+    <string name="sim_ai_guide">AI 가이드</string>
+    <string name="sim_ai_guide_message">탁자가 있어요! 탁자 밑으로 들어가 몸을 낮추세요</string>
+    <string name="sim_detecting">대피 자세 인식 중</string>
+    <!-- 대피 자세 인식 성공 (시안 81:101) -->
+    <string name="sim_ai_guide_success">잘했어요! 탁자 밑 대피 자세가 완벽해요</string>
+    <string name="sim_finish">훈련 완료</string>
+    <string name="cd_sim_pose_detected">대피 자세를 바르게 취했어요</string>
+    <string name="cd_camera_preview">카메라 화면</string>
+    <string name="cd_selected">선택됨</string>
+
+    <!-- ===== 119 신고 연습 ===== -->
+    <string name="call_eyebrow">119 신고 연습</string>
+    <string name="call_intro_title">신고 연습을 해요</string>
+    <string name="call_intro_question">신고 연습을 시작할까요?</string>
+    <string name="call_intro_desc">실제 119 통화처럼 진행돼요\n말한 내용은 자동으로 기록·판정됩니다</string>
+    <string name="call_steps_title">진행 항목</string>
+    <string name="call_step_1">정보 확인 (장소·상황·상태 설명)</string>
+    <string name="call_step_2">가상 통화 진행</string>
+    <string name="call_step_3">정확도 판정·피드백</string>
+    <string name="call_start">신고 연습 시작하기</string>
+    <string name="call_ongoing">가상 통화 중 · %1$s</string>
+    <string name="call_hint_title">도움말</string>
+    <string name="call_listening">음성 인식 중 …</string>
+    <string name="call_end">통화 종료하기</string>
+    <string name="cd_mic">말하기</string>
+    <string name="cd_operator">119 상담원</string>
+    <string name="cd_me">나</string>
+
+    <!-- 통화 대본 (연습용 고정 시나리오) -->
+    <string name="call_line_1">네, 119입니다. 무엇을 도와드릴까요?</string>
+    <string name="call_line_2">"집에 불이 났어요. 강남구예요."</string>
+    <string name="call_line_3">정확한 주소를 말씀해주시겠어요?</string>
+    <string name="call_hint_1">동, 번지나 건물 이름을 말해주세요.\n예) "역삼동 123번지", "OO 아파트"</string>
+
+    <!-- ===== 훈련 완료 ===== -->
+    <string name="complete_training">훈련을 마쳤어요!</string>
+    <string name="complete_practice">연습을 마쳤어요!</string>
+    <string name="complete_desc">이 기록은 자동으로 저장돼요\n보호자도 확인 할 수 있어요</string>
+    <string name="complete_retry">다시 연습</string>
+    <string name="complete_close">닫기</string>
+    <string name="check_situation">상황</string>
+    <string name="check_address">주소</string>
+    <string name="check_condition">상태 설명</string>
+    <string name="cd_passed">통과</string>
+    <string name="cd_failed">미통과</string>
+
+    <!-- ===== 재난문자 번역 ===== -->
+    <string name="translate_eyebrow">재난문자 번역</string>
+    <string name="translate_title">재난문자 쉬운 말로 보기</string>
+    <string name="translate_recent">최근 재난문자</string>
+    <string name="translate_badge">AI 번역</string>
+    <string name="translate_badge_desc">쉬운 말로 바꿨어요</string>
+    <string name="translate_sample">[행정안전부] 경기 수원시 지역에 호우주의부 발효. 침수 위험지역 주민 대피 권고. 하천 인근 접근 금지. 안전한 곳으로 즉시 이동 바랍니다.</string>
+    <string name="translate_r1_title">비가 많이 와요</string>
+    <string name="translate_r1_desc">수원시에 비가 많이 내리고 있어요</string>
+    <string name="translate_r2_title">안전한 곳으로 가세요</string>
+    <string name="translate_r2_desc">낮은 곳이나 강 근처는 위험해요\n높고 안전한 곳으로 이동하세요</string>
+    <string name="translate_r3_title">강 근처에 가지 마세요</string>
+    <string name="translate_r3_desc">하천이나 강 근처에 가면 위험해요</string>
+    <string name="translate_action_title">지금 이렇게 하세요</string>
+    <string name="translate_action_desc">1층이나 지하 위층으로 올라가요\n밖에 있다면 건물 안으로 들어가요</string>
+
+    <!-- ===== SOS ===== -->
+    <string name="sos_title">도움이 필요한가요?</string>
+    <string name="sos_desc">보호자에게 위치와 상태를\n자동으로 전달해드려요</string>
+    <string name="sos_step_1">%1$s에게 GPS 위치 전송</string>
+    <string name="sos_step_2">간단한 상태 질문 3가지</string>
+    <string name="sos_step_3">상황 메시지 자동 전송</string>
+    <string name="sos_step_4">119 연결 선택 가능</string>
+    <string name="sos_action">도움 요청하기</string>
+    <string name="sos_footnote">위치 공유가 즉시 시작됩니다</string>
+    <string name="sos_requested">보호자에게 도움을 요청했어요.</string>
+    <string name="cd_close">닫기</string>
+
+    <!-- SOS 질문 (Figma 92:392) -->
+    <string name="sos_flow_title">도움 요청하기</string>
+    <string name="sos_q_where">지금 어디 있어요?</string>
+    <string name="sos_q_scared">무서워요?</string>
+    <string name="sos_q_hurt">다쳤어요?</string>
+    <string name="sos_where_subway">지하철역 근처예요</string>
+    <string name="sos_where_home">집 근처예요</string>
+    <string name="sos_where_school">학교 근처예요</string>
+    <string name="sos_where_unknown">모르겠어요</string>
+    <string name="sos_scared_yes">네, 무서워요</string>
+    <string name="sos_scared_no">괜찮아요</string>
+    <string name="sos_hurt_no">아니요, 안 다쳤어요</string>
+    <string name="sos_hurt_yes">네, 다쳤어요</string>
+    <string name="sos_next">다음</string>
+    <string name="cd_sos_progress">%1$d단계 중 %2$d단계 완료</string>
+
+    <!-- SOS 메시지 미리보기 (Figma 96:220) -->
+    <string name="sos_preview_eyebrow">보낼 메시지</string>
+    <string name="sos_preview_title">이렇게 보낼게요</string>
+    <!--
+        선택지 라벨("지하철역 근처예요")을 그대로 이어붙이면 "근처예요에 있어요"가 되어 어색하다.
+        보호자가 실제로 읽는 문장이므로 위치마다 문장형을 따로 둔다. 순서는 질문 화면 선택지와 같다.
+    -->
+    <string-array name="sos_where_sentences">
+        <item>지하철역 근처에 있어요.</item>
+        <item>집 근처에 있어요.</item>
+        <item>학교 근처에 있어요.</item>
+        <item>지금 어디인지 잘 모르겠어요.</item>
+    </string-array>
+    <string name="sos_preview_message">[%1$s에게] 저는 %2$s\n%3$s %4$s 도와주세요.</string>
+    <string name="sos_gps_title">GPS 위치 첨부됨</string>
+    <string name="sos_gps_value">서울 지하철 2호선 역삼역 근처</string>
+    <string name="sos_gps_badge">확인</string>
+    <string name="sos_edit">수정</string>
+    <string name="sos_send">전송하기</string>
+    <string name="sos_scared_line">무서워요.</string>
+    <string name="sos_not_scared_line">괜찮아요.</string>
+    <string name="sos_hurt_line">다쳤어요.</string>
+    <string name="sos_not_hurt_line">다치지는 않았어요.</string>
+
+    <!-- SOS 전송 완료 (Figma 108:69) -->
+    <string name="sos_sent_title">메시지를 보냈어요!</string>
+    <string name="sos_sent_desc">%1$s에게 위치와 상태가 전달됐어요.\n도움이 올 때까지 안전한 곳에 있어요.</string>
+    <string name="sos_call119_title">119도 연결할까요?</string>
+    <string name="sos_call119_desc">다쳤거나 더 위험하면 눌러요</string>
+    <string name="sos_ok">괜찮아요</string>
+    <string name="sos_call119">119 연결하기</string>
+
+    <!-- ===== 알림 ===== -->
+    <string name="notification_title">알림</string>
+    <string name="notification_1_title">재난문자 도착</string>
+    <string name="notification_1_desc">호우주의보 - 수원시</string>
+    <string name="notification_1_time">방금</string>
+    <string name="notification_2_title">오늘 훈련이 남았어요</string>
+    <string name="notification_2_desc">119 신고 연습 1개 남음</string>
+    <string name="notification_2_time">1시간 전</string>
+    <string name="cd_unread">읽지 않음</string>
+
+    <string name="placeholder_note">아직 만들지 않은 화면이에요.</string>
+
+    <!-- ===== 인증 공통 ===== -->
+    <string name="cd_back">뒤로 가기</string>
+    <string name="cd_show_password">비밀번호 표시</string>
+    <string name="cd_hide_password">비밀번호 숨기기</string>
+    <string name="label_name">이름</string>
+    <string name="label_email">이메일 주소</string>
+    <string name="label_password">비밀번호</string>
+    <string name="label_password_confirm">비밀번호 확인</string>
+    <string name="label_auth_code">인증번호</string>
+    <string name="hint_name">홍길동</string>
+    <string name="hint_email">abc@email.co.kr</string>
+    <string name="hint_password">영문, 숫자, 특수문자 조합으로 8~16자리의 비밀번호</string>
+    <string name="hint_password_confirm">비밀번호 재입력</string>
+    <string name="action_send_email">이메일 발송</string>
+    <string name="action_verify">확인</string>
+    <string name="action_confirm">확인</string>
+    <string name="action_next">다음</string>
+    <string name="action_done">완료</string>
+
+    <!-- 로그인 -->
+    <string name="login_title">로그인</string>
+    <string name="hint_password_login">8자 이상의 비밀번호</string>
+    <string name="action_login">로그인</string>
+    <string name="action_signup">회원가입</string>
+    <string name="action_find_email">이메일 찾기</string>
+    <string name="action_find_password">비밀번호 찾기</string>
+    <string name="cd_logo">든든 로고</string>
+    <string name="error_login_failed">이메일 또는 비밀번호가 올바르지 않습니다.</string>
+
+    <!-- 회원가입 -->
+    <string name="signup_title">회원가입</string>
+    <string name="action_signup_submit">가입하기</string>
+    <string name="agree_all">모두 동의합니다</string>
+    <string name="agree_age">[필수] 만 14세 이상입니다.</string>
+    <string name="agree_terms">[필수] 이용약관 동의</string>
+    <string name="agree_privacy">[선택] 개인 정보 수집 및 이용 동의</string>
+    <string name="agree_marketing">[선택] 광고성 정보 수신 모두 동의</string>
+    <string name="signup_complete_message">%1$s 님의 회원가입이\n완료되었습니다!</string>
+    <string name="cd_signup_complete">회원가입 완료</string>
+
+    <!-- 유효성 메시지 -->
+    <string name="error_name_required">이름을 입력해 주세요.</string>
+    <string name="error_email_required">이메일 주소를 입력해 주세요.</string>
+    <string name="error_email_format">이메일 주소 형식이 올바르지 않습니다.</string>
+    <string name="error_code_required">인증번호를 입력해 주세요.</string>
+    <string name="error_code_mismatch">인증번호가 일치하지 않습니다.</string>
+    <string name="error_password_length">8~16자리로 입력해 주세요.</string>
+    <string name="error_password_no_special">특수문자가 포함되지 않았습니다.</string>
+    <string name="error_password_no_digit">숫자가 포함되지 않았습니다.</string>
+    <string name="error_password_no_letter">영문이 포함되지 않았습니다.</string>
+    <string name="error_password_mismatch">비밀번호가 일치하지 않습니다.</string>
+    <string name="error_agreement_required">필수 약관에 동의해 주세요.</string>
+    <string name="success_email_sent">인증번호를 보냈어요. 메일함을 확인해 주세요.</string>
+    <string name="success_code_verified">인증이 완료되었습니다.</string>
+
+    <!-- 이메일 찾기 -->
+    <string name="find_email_title">이메일 찾기</string>
+    <string name="find_email_desc">회원 가입 시 입력한 이름과 본인이 생각하는 이메일 주소를 입력해 주세요.</string>
+    <string name="find_email_success">일치하는 이메일이 확인되었습니다.</string>
+    <string name="find_email_failed">일치하는 이메일이 없습니다.</string>
+    <string name="action_go_login">로그인하기</string>
+
+    <!-- 비밀번호 찾기 -->
+    <string name="find_password_title">비밀번호 찾기</string>
+    <string name="find_password_desc">가입 시 등록한 이메일 주소를 입력하시면 인증 코드를 발송해드립니다.</string>
+    <string name="label_new_password">새 비밀번호</string>
+    <string name="label_new_password_confirm">새 비밀번호 확인</string>
+    <string name="reset_password_done">비밀번호가 변경되었습니다.</string>
 </resources>

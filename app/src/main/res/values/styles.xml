@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+        원본 디자인은 Apple SD Gothic Neo(B00/SB00/EB00)를 쓰지만 Apple 전용 폰트라 배포가 불가하다.
+        자형이 가장 가까운 Pretendard(SIL OFL, docs/PRETENDARD_LICENSE.txt)로 대체한다.
+        res/font 에 굵기별 ttf 를 넣고 스타일마다 해당 굵기를 직접 가리킨다.
+        폰트 파일이 굵기를 담고 있으므로 textStyle="bold" 는 쓰지 않는다(이중 볼드가 된다).
+    -->
+
+    <!-- 화면 제목 : "홈", "무엇을 할까요?" -->
+    <style name="Text.ScreenTitle" parent="">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">25sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 섹션 제목 : "최근 훈련 기록", "이번 주 훈련 기록" -->
+    <style name="Text.SectionTitle" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 카드 대제목 : "재난 시뮬레이션" -->
+    <style name="Text.CardTitle" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 훈련탭 카드 대제목 (홈보다 한 단계 큼) -->
+    <style name="Text.CardTitle.Large" parent="Text.CardTitle">
+        <item name="android:textSize">22sp</item>
+    </style>
+
+    <!-- 카드 머리말 : "카메라로 배우는 대피 방법" -->
+    <style name="Text.Eyebrow" parent="">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/orange_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 카드 본문 설명 -->
+    <style name="Text.Body" parent="">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingExtra">5sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 목록 항목 제목 -->
+    <style name="Text.ItemTitle" parent="">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 목록 항목 메타 : "지진 대피 · 7월 17일 10:05" -->
+    <style name="Text.ItemMeta" parent="">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 점수 : "92점" -->
+    <style name="Text.Score" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">20sp</item>
+        <item name="android:textColor">@color/orange_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 통계 수치 : "110" (letterSpacing 2.7px @27sp = 0.1em) -->
+    <style name="Text.StatValue" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">27sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 통계 단위 : "분" -->
+    <style name="Text.StatUnit" parent="">
+        <item name="android:fontFamily">@font/pretendard_medium</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">@color/text_unit</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 요일 라벨 -->
+    <style name="Text.ChartLabel" parent="">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/text_tertiary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 성취 칩 : "✓ 대피 자세" -->
+    <style name="Text.Chip" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/green_success</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 링크 : "전체 보기 >" -->
+    <style name="Text.Link" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/orange_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 하단 탭 라벨 -->
+    <style name="Text.NavLabel" parent="">
+        <item name="android:fontFamily">@font/pretendard_bold</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/nav_item</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 인증 화면 제목 : "회원가입", "비밀번호 찾기" (홈의 25sp 보다 크다) -->
+    <style name="Text.AuthTitle" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">30sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 인증 화면 안내문 -->
+    <style name="Text.AuthDesc" parent="">
+        <item name="android:fontFamily">@font/pretendard_regular</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:lineSpacingExtra">4sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 필드 옆 작은 버튼 : "이메일 발송" -->
+    <style name="Button.Small" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:layout_height">@dimen/field_height</item>
+        <item name="android:minWidth">86dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="backgroundTint">@color/orange_primary</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!-- 필드 옆 작은 버튼(테두리형) : "확인" -->
+    <style name="Button.Small.Outlined" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:layout_height">@dimen/field_height</item>
+        <item name="android:minWidth">86dp</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/orange_primary</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:paddingEnd">10dp</item>
+        <item name="strokeColor">@color/orange_primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">8dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!-- 하단 고정 CTA : "가입하기", "확인", "다음" -->
+    <style name="Button.Cta" parent="Button.Primary">
+        <item name="android:textSize">20sp</item>
+    </style>
+
+    <!-- 약관 항목 라벨 -->
+    <style name="Text.Agreement" parent="">
+        <item name="android:fontFamily">@font/pretendard_extralight</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!--
+        선택 다이얼로그. 기본 M3 다이얼로그는 자체 색 역할을 쓰기 때문에
+        배경이 연보라, 라디오가 남보라로 나온다. 앱 색으로 되돌린다.
+    -->
+    <style name="Dialog.Deundeun" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorPrimary">@color/orange_primary</item>
+        <item name="colorSurface">@color/white</item>
+        <item name="colorOnSurface">@color/text_primary</item>
+        <item name="colorOnSurfaceVariant">@color/text_primary</item>
+        <item name="colorSecondary">@color/orange_primary</item>
+    </style>
+
+    <!-- SOS 질문 선택지 -->
+    <style name="Option.Sos" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">50dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:background">@drawable/bg_sos_option</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:paddingStart">18dp</item>
+        <item name="android:paddingEnd">18dp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 보호자 관계 선택 칩 -->
+    <style name="Chip.Relation" parent="">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">36dp</item>
+        <item name="android:minWidth">62dp</item>
+        <item name="android:background">@drawable/bg_chip_relation</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingStart">16dp</item>
+        <item name="android:paddingEnd">16dp</item>
+        <item name="android:textColor">@color/chip_relation_text</item>
+        <item name="android:textSize">14sp</item>
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
+    <!-- 카드 -->
+    <!--
+        여기에 android:layout_margin 을 두면 안 된다.
+        MarginLayoutParams 는 layout_margin 이 지정돼 있으면 개별 layout_marginTop/Bottom 을
+        아예 읽지 않는다. 스타일로 들어와도 마찬가지라, 이 스타일을 쓰는 모든 카드의
+        마진이 조용히 무시된다.
+    -->
+    <style name="Card.Deundeun" parent="Widget.Material3.CardView.Elevated">
+        <item name="cardCornerRadius">@dimen/card_radius</item>
+        <item name="cardElevation">@dimen/card_elevation</item>
+        <item name="cardBackgroundColor">@color/surface_card</item>
+        <item name="strokeColor">@color/card_stroke</item>
+        <item name="strokeWidth">@dimen/card_stroke_width</item>
+        <!-- API 28+ 에서만 먹는다. 그 아래에서는 시스템 기본 그림자 색이 쓰인다. -->
+        <item name="android:outlineAmbientShadowColor">@color/card_shadow</item>
+        <item name="android:outlineSpotShadowColor">@color/card_shadow</item>
+    </style>
+
+    <!-- 주 버튼 : 주황 채움 -->
+    <!-- 버튼 글씨는 "저장"과 같은 semibold. 지정하지 않으면 Pretendard 가 아닌 시스템 폰트로 그려진다. -->
+    <style name="Button.Primary" parent="Widget.Material3.Button">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="backgroundTint">@color/orange_primary</item>
+        <item name="cornerRadius">@dimen/button_radius</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+    <!-- 보조 버튼 : 주황 테두리 -->
+    <style name="Button.Secondary" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:fontFamily">@font/pretendard_semibold</item>
+        <item name="android:layout_height">@dimen/button_height</item>
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/orange_primary</item>
+        <item name="strokeColor">@color/orange_primary</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cornerRadius">@dimen/button_radius</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+    </style>
+
+</resources>

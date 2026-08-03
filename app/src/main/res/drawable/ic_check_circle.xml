@@ -1,0 +1,13 @@
+<!-- Figma 67:1077 — 시나리오 선택 표시 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="22dp" android:height="22dp"
+    android:viewportWidth="22" android:viewportHeight="22"
+    android:tint="@color/orange_primary">
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white" android:strokeWidth="1.4"
+        android:pathData="M11,1.2A9.8,9.8 0 1,1 11,20.8A9.8,9.8 0 1,1 11,1.2Z" />
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white" android:strokeWidth="1.6"
+        android:strokeLineCap="round" android:strokeLineJoin="round"
+        android:pathData="M6.6,11.2L9.6,14.2L15.4,8.4" />
+</vector>

@@ -1,0 +1,30 @@
+<!--
+    홈 "재난 시뮬레이션" 카드 아이콘.
+    Figma 20:37 에는 이 아이콘 노드가 없어 시안 스크린샷을 보고 그렸다.
+    지진으로 갈라진 집 : 집 외곽선과 같은 굵기의 지그재그 균열이 지붕에서 바닥까지 내려온다.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="39dp"
+    android:height="39dp"
+    android:viewportWidth="40"
+    android:viewportHeight="40">
+
+    <!-- 지붕 + 벽 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@color/orange_primary"
+        android:strokeWidth="3.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M5.5,17.5L20,5.5L34.5,17.5V34.5H5.5V17.5Z" />
+
+    <!-- 균열 -->
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@color/orange_primary"
+        android:strokeWidth="3.4"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M21,10L15,17.5L21.5,19L14.5,27L21,28.5L17,34.5" />
+
+</vector>

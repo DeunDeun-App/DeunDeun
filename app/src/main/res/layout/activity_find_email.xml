@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 104:281 / 107:345(실패) / 107:374(성공) — 이메일 찾기 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/find_email_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.auth.FindEmailActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/find_email_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="25dp"
+        android:paddingTop="@dimen/space_l"
+        android:paddingEnd="25dp"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/cta_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.example.deundeun.ui.common.AuthHeaderView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:authDesc="@string/find_email_desc"
+                app:authTitle="@string/find_email_title" />
+
+            <com.example.deundeun.ui.common.LabeledInputView
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:hint="@string/hint_name"
+                android:inputType="textPersonName"
+                app:labelText="@string/label_name"
+                app:required="true" />
+
+            <com.example.deundeun.ui.common.LabeledInputView
+                android:id="@+id/input_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:hint="@string/hint_email"
+                android:inputType="textEmailAddress"
+                app:labelText="@string/label_email"
+                app:required="true" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/cta_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <!-- 확인 성공 후 "로그인하기" 로 바뀐다 (시안 107:374) -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit"
+            style="@style/Button.Cta"
+            android:layout_width="match_parent"
+            android:text="@string/action_confirm" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 91:153 / 104:93 / 127:298 / 128:411 / 128:497 — 회원가입 (상태 변형 포함) -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/signup_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.auth.SignUpActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/signup_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="25dp"
+        android:paddingTop="@dimen/space_l"
+        android:paddingEnd="25dp"
+        android:paddingBottom="@dimen/space_l"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/cta_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <com.example.deundeun.ui.common.AuthHeaderView
+                android:id="@+id/header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:authTitle="@string/signup_title" />
+
+            <com.example.deundeun.ui.common.LabeledInputView
+                android:id="@+id/input_name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_xl"
+                android:hint="@string/hint_name"
+                android:inputType="textPersonName"
+                app:labelText="@string/label_name"
+                app:required="true" />
+
+            <!-- 이메일 + 발송 버튼 : 라벨/메시지 높이가 달라도 입력칸끼리 맞도록 baseline 대신 top 정렬 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <com.example.deundeun.ui.common.LabeledInputView
+                    android:id="@+id/input_email"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:hint="@string/hint_email"
+                    android:inputType="textEmailAddress"
+                    app:labelText="@string/label_email"
+                    app:required="true" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_send_email"
+                    style="@style/Button.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/space_s"
+                    android:layout_marginTop="26dp"
+                    android:text="@string/action_send_email" />
+
+            </LinearLayout>
+
+            <!-- 인증번호 : 이메일 발송 전에는 숨긴다 (시안 91:153 -> 127:298) -->
+            <LinearLayout
+                android:id="@+id/auth_code_row"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:baselineAligned="false"
+                android:orientation="horizontal"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <com.example.deundeun.ui.common.LabeledInputView
+                    android:id="@+id/input_auth_code"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:inputType="number"
+                    app:labelText="@string/label_auth_code"
+                    app:required="true" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_verify_code"
+                    style="@style/Button.Small.Outlined"
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="@dimen/space_s"
+                    android:layout_marginTop="26dp"
+                    android:text="@string/action_verify" />
+
+            </LinearLayout>
+
+            <com.example.deundeun.ui.common.LabeledInputView
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:hint="@string/hint_password"
+                android:inputType="textPassword"
+                app:labelText="@string/label_password"
+                app:password="true"
+                app:required="true" />
+
+            <com.example.deundeun.ui.common.LabeledInputView
+                android:id="@+id/input_password_confirm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:hint="@string/hint_password_confirm"
+                android:inputType="textPassword"
+                app:labelText="@string/label_password_confirm"
+                app:password="true"
+                app:required="true" />
+
+            <!-- 약관 -->
+            <LinearLayout
+                android:id="@+id/agree_all_row"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/min_touch_target"
+                android:layout_marginTop="@dimen/space_xl"
+                android:background="?attr/selectableItemBackground"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:id="@+id/agree_all_box"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:background="@drawable/bg_checkbox" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:includeFontPadding="false"
+                    android:text="@string/agree_all"
+                    android:textColor="@color/black"
+                    android:textSize="12sp"
+                    android:fontFamily="@font/pretendard_bold" />
+
+            </LinearLayout>
+
+            <com.example.deundeun.ui.common.AgreementRowView
+                android:id="@+id/agree_age"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                app:agreeLabel="@string/agree_age"
+                app:requiredAgreement="true" />
+
+            <com.example.deundeun.ui.common.AgreementRowView
+                android:id="@+id/agree_terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                app:agreeLabel="@string/agree_terms"
+                app:requiredAgreement="true" />
+
+            <com.example.deundeun.ui.common.AgreementRowView
+                android:id="@+id/agree_privacy"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                app:agreeLabel="@string/agree_privacy" />
+
+            <com.example.deundeun.ui.common.AgreementRowView
+                android:id="@+id/agree_marketing"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                app:agreeLabel="@string/agree_marketing" />
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- 하단 고정 CTA (시안 159:200) -->
+    <FrameLayout
+        android:id="@+id/cta_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="15dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="15dp"
+        android:paddingBottom="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_submit"
+            style="@style/Button.Cta"
+            android:layout_width="match_parent"
+            android:text="@string/action_signup_submit" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,10 @@
+<!-- Figma 110:72 — 닫기 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="18dp" android:height="18dp"
+    android:viewportWidth="18" android:viewportHeight="18"
+    android:tint="@color/white">
+    <path android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white" android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M4,4L14,14M14,4L4,14" />
+</vector>

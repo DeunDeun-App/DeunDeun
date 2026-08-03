@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 96:220 — 보낼 메시지 미리보기 -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sos_message_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.sos.SosMessageActivity">
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/message_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_h_margin"
+        android:paddingTop="@dimen/space_xl"
+        android:paddingEnd="@dimen/screen_h_margin"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/cta_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/Text.Eyebrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sos_preview_eyebrow"
+                android:textColor="@color/red_sos" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:includeFontPadding="false"
+                android:text="@string/sos_preview_title"
+                android:textColor="@color/text_primary"
+                android:textSize="20sp" />
+
+            <!-- 보호자 이름 + 메시지 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Card.Deundeun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:id="@+id/guardian_name"
+                        style="@style/Text.ItemMeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="엄마" />
+
+                    <TextView
+                        android:id="@+id/message_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/space_m"
+                        android:background="@drawable/bg_sos_tint"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:includeFontPadding="false"
+                        android:lineSpacingExtra="5sp"
+                        android:padding="16dp"
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        tools:text="[엄마에게] 저는 지하철역 근처예요에 있어요. 괜찮아요. 다치지는 않았어요. 도와주세요." />
+
+                </LinearLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- GPS 첨부 -->
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Card.Deundeun"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_m"
+                android:layout_marginBottom="@dimen/space_l">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:id="@+id/gps_badge"
+                        android:layout_width="wrap_content"
+                        android:layout_height="26dp"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@drawable/bg_badge_green"
+                        android:fontFamily="@font/pretendard_semibold"
+                        android:gravity="center"
+                        android:includeFontPadding="false"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:text="@string/sos_gps_badge"
+                        android:textColor="@color/green_success"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/gps_title"
+                        style="@style/Text.ItemTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/sos_gps_title"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/gps_value"
+                        style="@style/Text.ItemMeta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/gps_title"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginTop="5dp"
+                        android:text="@string/sos_gps_value"
+                        android:textColor="@color/text_muted"
+                        android:textSize="12sp" />
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:id="@+id/cta_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <TextView
+            android:id="@+id/btn_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/button_height"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_sos_muted_button"
+            android:fontFamily="@font/pretendard_semibold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:minWidth="88dp"
+            android:text="@string/sos_edit"
+            android:textColor="@color/sos_muted_text"
+            android:textSize="18sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_send"
+            style="@style/Button.Cta"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/sos_send"
+            app:backgroundTint="@color/red_sos" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

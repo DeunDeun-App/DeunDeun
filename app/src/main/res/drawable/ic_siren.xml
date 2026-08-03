@@ -1,0 +1,12 @@
+<!-- Figma 110:72 — SOS 경광등 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="88dp" android:height="80dp"
+    android:viewportWidth="88" android:viewportHeight="80"
+    android:tint="@color/red_sos">
+    <path android:fillColor="@android:color/white"
+        android:pathData="M44,22c-11,0 -20,9 -20,20v14h40V42C64,31 55,22 44,22z" />
+    <path android:fillColor="@android:color/white"
+        android:pathData="M16,62h56v10H16z" />
+    <path android:fillColor="@android:color/white"
+        android:pathData="M40,0h8v14h-8zM8,42h14v8H8zM66,42h14v8H66zM14.6,14.6l5.7,-5.7l9.9,9.9l-5.7,5.7zM57.8,18.8l9.9,-9.9l5.7,5.7l-9.9,9.9z" />
+</vector>

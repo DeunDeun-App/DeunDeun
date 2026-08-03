@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 83:176 — 내정보 -->
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/profile_scroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clipToPadding="false"
+    android:paddingBottom="100dp"
+    android:scrollbars="none">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="@dimen/screen_h_margin"
+        android:paddingTop="@dimen/space_l"
+        android:paddingEnd="@dimen/screen_h_margin">
+
+        <TextView
+            style="@style/Text.ScreenTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_s"
+            android:layout_marginBottom="@dimen/space_l"
+            android:text="@string/profile_title" />
+
+        <!-- 프로필 카드 -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Card.Deundeun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="22dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/profile_name"
+                            style="@style/Text.CardTitle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textSize="18sp"
+                            tools:text="김든든" />
+
+                        <TextView
+                            android:id="@+id/profile_phone"
+                            style="@style/Text.ItemMeta"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:textColor="@color/text_muted"
+                            android:textSize="14sp"
+                            tools:text="010-1234-5678" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/btn_edit_profile"
+                        android:layout_width="48dp"
+                        android:layout_height="29dp"
+                        android:layout_alignParentEnd="true"
+                        android:background="@drawable/bg_pill_subtle"
+                        android:fontFamily="@font/pretendard_extrabold"
+                        android:gravity="center"
+                        android:text="@string/profile_edit"
+                        android:textColor="@color/text_pill"
+                        android:textSize="13sp" />
+
+                </RelativeLayout>
+
+                <include
+                    android:id="@+id/row_birth"
+                    layout="@layout/view_profile_info_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_l" />
+
+                <include
+                    android:id="@+id/row_disability"
+                    layout="@layout/view_profile_info_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m" />
+
+                <include
+                    android:id="@+id/row_guardian"
+                    layout="@layout/view_profile_info_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_m" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 공유 설정 -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Card.Deundeun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_card_gap">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="22dp">
+
+                <TextView
+                    style="@style/Text.SectionTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/space_s"
+                    android:text="@string/profile_share_title"
+                    android:textSize="15sp" />
+
+                <include
+                    android:id="@+id/share_location"
+                    layout="@layout/view_profile_switch_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <include
+                    android:id="@+id/share_result"
+                    layout="@layout/view_profile_switch_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/divider" />
+
+                <include
+                    android:id="@+id/share_sos"
+                    layout="@layout/view_profile_switch_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 보호자에게 보낸 알림 -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/profile_notice_header_gap"
+            android:layout_marginBottom="@dimen/space_m">
+
+            <TextView
+                style="@style/Text.SectionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:text="@string/profile_notice_title"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/notice_count"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:textColor="@color/text_muted"
+                android:textSize="12sp"
+                tools:text="최근 5건" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/notice_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            tools:itemCount="2"
+            tools:listitem="@layout/item_guardian_notice" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

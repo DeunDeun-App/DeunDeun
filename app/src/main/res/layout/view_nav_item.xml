@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 하단탭 항목 하나. selected 상태가 아이콘 tint 와 라벨 색을 함께 바꾼다. -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <!--
+        크기를 지정하지 않고 벡터의 고유 크기를 쓴다. 각 벡터는 Figma 원본 dp
+        (홈 23x25, 책 28x23, 클립보드 23x27, 사람 24x26)로 선언돼 있어
+        일괄 크기를 주면 시안의 아이콘별 크기 차이가 사라진다.
+    -->
+    <ImageView
+        android:id="@+id/nav_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:duplicateParentState="true"
+        android:importantForAccessibility="no"
+        tools:src="@drawable/ic_nav_home" />
+
+    <TextView
+        android:id="@+id/nav_label"
+        style="@style/Text.NavLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="6dp"
+        android:duplicateParentState="true"
+        tools:text="홈" />
+
+</merge>

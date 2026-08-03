@@ -1,0 +1,5 @@
+<!-- Figma 121:257 (Ellipse 15) — 알림 뱃지 점, 6dp -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="oval">
+    <solid android:color="@color/orange_primary" />
+</shape>

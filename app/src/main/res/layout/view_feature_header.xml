@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Figma 67:1077 / 71:120 / 81:336 — 기능 화면 공통 머리말.
+
+    시안 좌표(67:1077 기준, 프레임 402 폭):
+      작은제목 68:46   x=67  y=57..76
+      큰제목   67:1078 x=65  y=72..108
+      뒤로가기 129:143 x=29..37  y=92..106
+    → 뒤로가기는 작은제목이 아니라 '큰제목'에 세로를 맞춘다.
+      가로는 아이콘과 제목 사이 23dp.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="androidx.constraintlayout.widget.ConstraintLayout">
+
+    <ImageButton
+        android:id="@+id/btn_back"
+        android:layout_width="@dimen/min_touch_target"
+        android:layout_height="@dimen/min_touch_target"
+        android:layout_marginStart="-16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/cd_back"
+        android:scaleType="center"
+        android:src="@drawable/ic_arrow_back"
+        app:layout_constraintBottom_toBottomOf="@id/feature_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/feature_title" />
+
+    <TextView
+        android:id="@+id/feature_eyebrow"
+        style="@style/Text.Eyebrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="@id/feature_title"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="재난 시뮬레이션" />
+
+    <!-- 아이콘 오른쪽 끝에서 23dp. 터치 영역(56dp) 안에 20dp 가 이미 비므로 마진은 3dp. -->
+    <TextView
+        android:id="@+id/feature_title"
+        style="@style/Text.CardTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/back_title_margin"
+        android:layout_marginTop="2dp"
+        android:textSize="22sp"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
+        app:layout_constraintTop_toBottomOf="@id/feature_eyebrow"
+        tools:text="어떤 훈련을 할까요?" />
+
+</merge>

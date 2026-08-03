@@ -1,0 +1,14 @@
+<!-- Figma 127:328 — 약관 동의 체크. tint 로 동의(주황)/미동의(회색)를 구분한다. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="20dp"
+    android:height="20dp"
+    android:viewportWidth="20"
+    android:viewportHeight="20"
+    android:tint="@color/agree_check">
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="0.75"
+        android:strokeLineCap="round"
+        android:pathData="M4.16667,10.8333L7.5,14.1667L15.8333,5.83333" />
+</vector>

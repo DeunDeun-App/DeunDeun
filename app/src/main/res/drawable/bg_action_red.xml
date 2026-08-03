@@ -1,0 +1,5 @@
+<!-- Figma 81:336 — "지금 이렇게 하세요" 카드 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/action_red_bg" />
+    <corners android:radius="@dimen/card_radius" />
+</shape>

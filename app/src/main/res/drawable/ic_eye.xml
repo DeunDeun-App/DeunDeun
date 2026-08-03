@@ -1,0 +1,20 @@
+<!-- Figma 128:391 (iconamoon:eye) — 원본 16.1667x11.9167, stroke 2 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="17dp"
+    android:height="13dp"
+    android:viewportWidth="16.1667"
+    android:viewportHeight="11.9167"
+    android:tint="@color/text_placeholder">
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M9.58594,7.46094C9.98445,7.06242 10.2083,6.52192 10.2083,5.95833C10.2083,5.39475 9.98445,4.85425 9.58594,4.45573C9.18742,4.05722 8.64692,3.83333 8.08333,3.83333C7.51975,3.83333 6.97925,4.05722 6.58073,4.45573C6.18222,4.85425 5.95833,5.39475 5.95833,5.95833C5.95833,6.52192 6.18222,7.06242 6.58073,7.46094C6.97925,7.85945 7.51975,8.08333 8.08333,8.08333C8.64692,8.08333 9.18742,7.85945 9.58594,7.46094Z" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:pathData="M1,5.95833C2.13333,3.05629 4.77967,1 8.08333,1C11.387,1 14.0333,3.05629 15.1667,5.95833C14.0333,8.86038 11.387,10.9167 8.08333,10.9167C4.77967,10.9167 2.13333,8.86038 1,5.95833Z" />
+</vector>

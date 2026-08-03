@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 63:197 의 훈련 메뉴 카드 (시뮬레이션 / 119 신고 / 재난문자 번역 공통) -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Card.Deundeun"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="24dp"
+        android:paddingTop="22dp"
+        android:paddingEnd="24dp"
+        android:paddingBottom="26dp">
+
+        <TextView
+            android:id="@+id/menu_eyebrow"
+            style="@style/Text.Eyebrow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="카메라로 배우는 대피 방법" />
+
+        <TextView
+            android:id="@+id/menu_title"
+            style="@style/Text.CardTitle.Large"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            tools:text="재난 시뮬레이션" />
+
+        <TextView
+            android:id="@+id/menu_desc"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            tools:text="카메라로 재난 상황을 보여줘요.\n탁자 밑으로 대피하면 AI가 확인해줘요." />
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

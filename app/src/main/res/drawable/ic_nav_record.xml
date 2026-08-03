@@ -1,0 +1,15 @@
+<!-- Figma 31:61 (Vector, 클립보드) — 원본 22.6667x26.5417, stroke 2 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="23dp"
+    android:height="27dp"
+    android:viewportWidth="22.6667"
+    android:viewportHeight="26.5417"
+    android:tint="@color/nav_item">
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M15.8542,3.58333H19.0833C19.7685,3.58333 20.4256,3.8555 20.91,4.33997C21.3945,4.82444 21.6667,5.48152 21.6667,6.16667V22.9583C21.6667,23.6435 21.3945,24.3006 20.91,24.785C20.4256,25.2695 19.7685,25.5417 19.0833,25.5417H3.58333C2.89819,25.5417 2.24111,25.2695 1.75664,24.785C1.27217,24.3006 1,23.6435 1,22.9583V6.16667C1,5.48152 1.27217,4.82444 1.75664,4.33997C2.24111,3.8555 2.89819,3.58333 3.58333,3.58333H6.8125M7.45833,13.9167H15.2083M7.45833,19.0833H15.2083M6.96879,2.95688C7.10849,2.398 7.43098,1.90185 7.88501,1.54729C8.33904,1.19272 8.89855,1.00009 9.47462,1H13.1908C13.7668,1.00009 14.3263,1.19272 14.7804,1.54729C15.2344,1.90185 15.5569,2.398 15.6966,2.95688L16.5,6.16667H6.16667L6.96879,2.95688Z" />
+</vector>

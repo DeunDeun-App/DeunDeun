@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 122:104 — "✓ 대피 자세" 성취 칩 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="25dp"
+    android:layout_marginEnd="@dimen/space_s"
+    android:background="@drawable/bg_chip_success"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingEnd="10dp">
+
+    <!-- Figma 31:78 : 바깥 14x14, 안쪽 체크 9.34x9.8 -->
+    <ImageView
+        android:layout_width="14dp"
+        android:layout_height="14dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_check" />
+
+    <TextView
+        android:id="@+id/chip_label"
+        style="@style/Text.Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        tools:text="대피 자세" />
+
+</LinearLayout>

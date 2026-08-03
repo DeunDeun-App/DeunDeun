@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 주간 차트의 하루치 막대. 회색 트랙 위에 값만큼 채운다. -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:layout_width="@dimen/chart_bar_width"
+        android:layout_height="@dimen/chart_track_height"
+        android:background="@color/track_gray">
+
+        <View
+            android:id="@+id/bar_fill"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_chart_bar"
+            tools:layout_height="60dp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/bar_label"
+        style="@style/Text.ChartLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        tools:text="월" />
+
+</LinearLayout>

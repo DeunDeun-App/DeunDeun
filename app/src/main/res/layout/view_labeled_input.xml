@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 127:300 — 라벨 + 입력칸 + 상태 메시지 한 벌 -->
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:parentTag="android.widget.LinearLayout">
+
+    <TextView
+        android:id="@+id/input_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="7dp"
+        android:includeFontPadding="false"
+        android:textColor="@color/black"
+        android:textSize="12sp"
+        android:fontFamily="@font/pretendard_bold"
+        tools:text="이메일 주소 *" />
+
+    <FrameLayout
+        android:id="@+id/input_box"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/field_height"
+        android:background="@drawable/bg_field">
+
+        <EditText
+            android:id="@+id/input_edit"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@null"
+            android:includeFontPadding="false"
+            android:paddingStart="12dp"
+            android:paddingEnd="40dp"
+            android:singleLine="true"
+            android:textColor="@color/black"
+            android:textColorHint="@color/text_placeholder"
+            android:textSize="14sp"
+            tools:hint="abc@email.co.kr"
+            tools:ignore="Autofill" />
+
+        <!-- 비밀번호 필드에서만 보인다 -->
+        <ImageButton
+            android:id="@+id/input_toggle"
+            android:layout_width="40dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_show_password"
+            android:scaleType="center"
+            android:src="@drawable/ic_eye_off"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/input_message"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
+        android:fontFamily="@font/pretendard_light"
+        android:includeFontPadding="false"
+        android:textSize="12sp"
+        android:visibility="gone"
+        tools:text="특수문자가 포함되지 않았습니다."
+        tools:textColor="@color/error_red"
+        tools:visibility="visible" />
+
+</merge>

@@ -1,0 +1,22 @@
+<!-- Figma 31:49 (proicons:person) — 원본 24x26.0625, stroke 2 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="26dp"
+    android:viewportWidth="24"
+    android:viewportHeight="26.0625"
+    android:tint="@color/nav_item">
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M22.5973,24.6598C22.3394,24.9176 21.9897,25.0625 21.625,25.0625H2.375C2.01033,25.0625 1.66059,24.9176 1.40273,24.6598C1.14487,24.4019 1,24.0522 1,23.6875V21.9742C1,18.116 6.46425,15.0938 12,15.0938C17.5358,15.0938 23.0055,18.116 23,21.9742V23.6875C23,24.0522 22.8551,24.4019 22.5973,24.6598Z" />
+    <path
+        android:fillColor="@android:color/transparent"
+        android:strokeColor="@android:color/white"
+        android:strokeWidth="2"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round"
+        android:pathData="M16.5783,7.85189C16.8273,7.25066 16.9555,6.60627 16.9555,5.9555C16.9555,4.64122 16.4334,3.38077 15.5041,2.45143C14.5747,1.5221 13.3143,1 12,1C10.6857,1 9.42527,1.5221 8.49593,2.45143C7.5666,3.38077 7.0445,4.64122 7.0445,5.9555C7.0445,6.60627 7.17268,7.25066 7.42171,7.85189C7.67075,8.45312 8.03577,8.99941 8.49593,9.45957C8.95609,9.91973 9.50238,10.2847 10.1036,10.5338C10.7048,10.7828 11.3492,10.911 12,10.911C12.6508,10.911 13.2952,10.7828 13.8964,10.5338C14.4976,10.2847 15.0439,9.91973 15.5041,9.45957C15.9642,8.99941 16.3292,8.45312 16.5783,7.85189Z" />
+</vector>

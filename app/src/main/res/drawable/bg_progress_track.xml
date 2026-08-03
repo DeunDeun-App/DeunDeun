@@ -1,0 +1,5 @@
+<!-- Figma 101:65 — 달성률 막대 트랙 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/track_gray" />
+    <corners android:radius="5dp" />
+</shape>

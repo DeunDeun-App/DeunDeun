@@ -1,0 +1,4 @@
+<!-- 번호 원, 아이콘 원 등 주황 원형 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="oval">
+    <solid android:color="@color/orange_primary" />
+</shape>

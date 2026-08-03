@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 104:210 — 회원가입 완료 다이얼로그 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="30dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp">
+
+    <ImageView
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        android:contentDescription="@string/cd_signup_complete"
+        android:src="@drawable/ic_success_badge" />
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_l"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="5sp"
+        android:textColor="@color/black"
+        android:textSize="15sp"
+        android:fontFamily="@font/pretendard_extrabold"
+        tools:text="홍길동 님의 회원가입이\n완료되었습니다!" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/dialog_confirm"
+        style="@style/Button.Primary"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/space_l"
+        android:text="@string/action_confirm"
+        android:textSize="16sp" />
+
+</LinearLayout>

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".MainActivity">
+
+    <!-- 탭 화면이 올라가는 자리. 하단탭 뒤로 스크롤되도록 바닥까지 채운다. -->
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- 하단탭 : 배경 벡터에 중앙 노치가 파여 있다 -->
+    <LinearLayout
+        android:id="@+id/bottom_bar"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/bottom_bar_height"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:paddingTop="@dimen/bottom_bar_icon_top"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.example.deundeun.ui.common.NavItemView
+            android:id="@+id/nav_home"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:navIcon="@drawable/ic_nav_home"
+            app:navLabel="@string/nav_home" />
+
+        <com.example.deundeun.ui.common.NavItemView
+            android:id="@+id/nav_training"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:navIcon="@drawable/ic_nav_book"
+            app:navLabel="@string/nav_training" />
+
+        <!-- SOS 버튼이 놓이는 노치 자리 -->
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+        <com.example.deundeun.ui.common.NavItemView
+            android:id="@+id/nav_record"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:navIcon="@drawable/ic_nav_record"
+            app:navLabel="@string/nav_record" />
+
+        <com.example.deundeun.ui.common.NavItemView
+            android:id="@+id/nav_profile"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            app:navIcon="@drawable/ic_nav_profile"
+            app:navLabel="@string/nav_profile" />
+
+    </LinearLayout>
+
+    <!-- SOS : 노치 중앙에 걸치도록 하단탭 상단선을 기준으로 위아래 정렬 -->
+    <TextView
+        android:id="@+id/btn_sos"
+        android:layout_width="@dimen/sos_size"
+        android:layout_height="@dimen/sos_size"
+        android:background="@drawable/bg_sos"
+        android:contentDescription="@string/cd_sos"
+        android:gravity="center"
+        android:letterSpacing="0.05"
+        android:text="@string/sos"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:fontFamily="@font/pretendard_extrabold"
+        app:layout_constraintBottom_toTopOf="@id/bottom_bar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/bottom_bar" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

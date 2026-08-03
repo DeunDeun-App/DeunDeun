@@ -1,0 +1,5 @@
+<!-- 선택된 세그먼트. 흰 알약이 트랙 위로 떠 보이게 한다. -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="@color/white" />
+    <corners android:radius="12dp" />
+</shape>

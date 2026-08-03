@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 67:1077 — 시나리오 선택 카드 -->
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    style="@style/Card.Deundeun"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:foreground="?attr/selectableItemBackground">
+
+    <RelativeLayout
+        android:id="@+id/scenario_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/scenario_check"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/cd_selected"
+            android:src="@drawable/ic_check_circle"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/scenario_title"
+            style="@style/Text.CardTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            tools:text="지진 대피" />
+
+        <TextView
+            android:id="@+id/scenario_desc"
+            style="@style/Text.ItemMeta"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/scenario_title"
+            android:layout_marginTop="5dp"
+            tools:text="탁자 밑으로 대피해요" />
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

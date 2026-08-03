@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Figma 92:392 / 121:82 / 121:110 — SOS 도움 요청하기(상태 질문 3가지) -->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/sos_questions_root"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ui.sos.SosQuestionsActivity">
+
+    <LinearLayout
+        android:id="@+id/top_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="4dp"
+        android:paddingTop="@dimen/space_s"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/btn_back"
+            android:layout_width="@dimen/min_touch_target"
+            android:layout_height="@dimen/min_touch_target"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/cd_back"
+            android:scaleType="center"
+            android:src="@drawable/ic_arrow_back" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/back_title_margin"
+            android:fontFamily="@font/pretendard_extrabold"
+            android:includeFontPadding="false"
+            android:text="@string/sos_flow_title"
+            android:textColor="@color/text_primary"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <!-- 3칸 진행 표시 -->
+    <LinearLayout
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="4dp"
+        android:layout_marginTop="@dimen/space_s"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/top_bar">
+
+        <View
+            android:id="@+id/progress_1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_progress_segment" />
+
+        <View
+            android:id="@+id/progress_2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:layout_marginEnd="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_progress_segment" />
+
+        <View
+            android:id="@+id/progress_3"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="3dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_progress_segment" />
+
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/questions_scroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:clipToPadding="false"
+        android:paddingStart="@dimen/screen_h_margin"
+        android:paddingTop="@dimen/space_l"
+        android:paddingEnd="@dimen/screen_h_margin"
+        android:scrollbars="none"
+        app:layout_constraintBottom_toTopOf="@id/cta_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/progress_bar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- 지금 어디 있어요? : 세로 목록 -->
+            <TextView
+                style="@style/Text.ItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_m"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="@string/sos_q_where"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/where_subway"
+                style="@style/Option.Sos"
+                android:text="@string/sos_where_subway" />
+
+            <TextView
+                android:id="@+id/where_home"
+                style="@style/Option.Sos"
+                android:text="@string/sos_where_home" />
+
+            <TextView
+                android:id="@+id/where_school"
+                style="@style/Option.Sos"
+                android:text="@string/sos_where_school" />
+
+            <TextView
+                android:id="@+id/where_unknown"
+                style="@style/Option.Sos"
+                android:text="@string/sos_where_unknown" />
+
+            <!-- 무서워요? : 좌우 2개 -->
+            <TextView
+                style="@style/Text.ItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginBottom="@dimen/space_m"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="@string/sos_q_scared"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/scared_yes"
+                    style="@style/Option.Sos"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1"
+                    android:text="@string/sos_scared_yes" />
+
+                <TextView
+                    android:id="@+id/scared_no"
+                    style="@style/Option.Sos"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_weight="1"
+                    android:text="@string/sos_scared_no" />
+
+            </LinearLayout>
+
+            <!-- 다쳤어요? -->
+            <TextView
+                style="@style/Text.ItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/space_l"
+                android:layout_marginBottom="@dimen/space_m"
+                android:fontFamily="@font/pretendard_extrabold"
+                android:text="@string/sos_q_hurt"
+                android:textSize="16sp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/space_l"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/hurt_no"
+                    style="@style/Option.Sos"
+                    android:layout_width="0dp"
+                    android:layout_marginEnd="7dp"
+                    android:layout_weight="1"
+                    android:text="@string/sos_hurt_no" />
+
+                <TextView
+                    android:id="@+id/hurt_yes"
+                    style="@style/Option.Sos"
+                    android:layout_width="0dp"
+                    android:layout_marginStart="7dp"
+                    android:layout_weight="1"
+                    android:text="@string/sos_hurt_yes" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <FrameLayout
+        android:id="@+id/cta_container"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_next"
+            style="@style/Button.Cta"
+            android:layout_width="match_parent"
+            android:text="@string/sos_next"
+            app:backgroundTint="@color/red_sos" />
+
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

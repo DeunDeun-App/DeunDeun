@@ -1,0 +1,7 @@
+<!-- Figma 108:69 — 전송 완료 말풍선 -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="80dp" android:height="72dp"
+    android:viewportWidth="80" android:viewportHeight="72">
+    <path android:fillColor="@color/red_sos"
+        android:pathData="M12,0h56a12,12 0 0,1 12,12v34a12,12 0 0,1 -12,12h-30l-20,14v-14h-6a12,12 0 0,1 -12,-12v-34a12,12 0 0,1 12,-12z" />
+</vector>
