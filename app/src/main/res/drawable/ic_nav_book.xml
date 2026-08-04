@@ -1,14 +1,9 @@
-<!-- Figma 31:47 (bi:book) — 원본 28x22.932 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="28dp"
     android:height="23dp"
     android:viewportWidth="28"
     android:viewportHeight="22.932"
     android:tint="@color/nav_item">
-    <!--
-        원본 SVG 는 선이 아주 얇은 외곽선 도형이라 다른 탭 아이콘(굵기 2)보다 가늘게 보인다.
-        같은 경로에 스트로크를 얹어 두께를 맞춘다.
-    -->
     <path
         android:fillColor="@android:color/white"
         android:strokeColor="@android:color/white"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 108:69 — "119도 연결할까요?" 강조 박스 -->
+<!-- "119도 연결할까요?" 강조 박스 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/sos_tint_bg" />
     <stroke android:width="1.5dp" android:color="@color/red_sos" />

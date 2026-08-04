@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 127:300 — 라벨 + 입력칸 + 상태 메시지 한 벌 -->
+<!--  라벨 + 입력칸 + 상태 메시지 한 벌 -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.LinearLayout">
@@ -36,7 +36,7 @@
             tools:hint="abc@email.co.kr"
             tools:ignore="Autofill" />
 
-        <!-- 비밀번호 필드에서만 보인다 -->
+        <!-- 비밀번호 필드에서만 보임 -->
         <ImageButton
             android:id="@+id/input_toggle"
             android:layout_width="40dp"

@@ -1,4 +1,4 @@
-<!-- Figma 127:328 — 약관 동의 체크. tint 로 동의(주황)/미동의(회색)를 구분한다. -->
+<!-- 약관 동의 체크 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="20dp"
     android:height="20dp"

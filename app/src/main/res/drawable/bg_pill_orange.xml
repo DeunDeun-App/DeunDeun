@@ -1,4 +1,4 @@
-<!-- Figma 81:336 — "AI 번역" 뱃지 -->
+<!-- "AI 번역" 뱃지 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/orange_primary" />
     <corners android:radius="13dp" />

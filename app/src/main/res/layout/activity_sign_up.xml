@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 91:153 / 104:93 / 127:298 / 128:411 / 128:497 — 회원가입 (상태 변형 포함) -->
+<!-- 회원가입  -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -46,7 +46,6 @@
                 app:labelText="@string/label_name"
                 app:required="true" />
 
-            <!-- 이메일 + 발송 버튼 : 라벨/메시지 높이가 달라도 입력칸끼리 맞도록 baseline 대신 top 정렬 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -74,7 +73,7 @@
 
             </LinearLayout>
 
-            <!-- 인증번호 : 이메일 발송 전에는 숨긴다 (시안 91:153 -> 127:298) -->
+            <!-- 인증번호 -->
             <LinearLayout
                 android:id="@+id/auth_code_row"
                 android:layout_width="match_parent"
@@ -188,7 +187,6 @@
 
     </androidx.core.widget.NestedScrollView>
 
-    <!-- 하단 고정 CTA (시안 159:200) -->
     <FrameLayout
         android:id="@+id/cta_container"
         android:layout_width="0dp"

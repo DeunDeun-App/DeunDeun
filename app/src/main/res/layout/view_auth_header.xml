@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 127:365 / 127:367 — 인증 화면 공통 머리말(뒤로가기 + 제목 + 안내문) -->
+<!-- 인증 화면 공통 머리말 -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.LinearLayout">

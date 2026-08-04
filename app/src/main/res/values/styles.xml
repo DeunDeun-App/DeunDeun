@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <!--
-        원본 디자인은 Apple SD Gothic Neo(B00/SB00/EB00)를 쓰지만 Apple 전용 폰트라 배포가 불가하다.
-        자형이 가장 가까운 Pretendard(SIL OFL, docs/PRETENDARD_LICENSE.txt)로 대체한다.
-        res/font 에 굵기별 ttf 를 넣고 스타일마다 해당 굵기를 직접 가리킨다.
-        폰트 파일이 굵기를 담고 있으므로 textStyle="bold" 는 쓰지 않는다(이중 볼드가 된다).
-    -->
-
     <!-- 화면 제목 : "홈", "무엇을 할까요?" -->
     <style name="Text.ScreenTitle" parent="">
         <item name="android:fontFamily">@font/pretendard_bold</item>
@@ -78,7 +71,7 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!-- 통계 수치 : "110" (letterSpacing 2.7px @27sp = 0.1em) -->
+    <!-- 통계 수치 : "110" -->
     <style name="Text.StatValue" parent="">
         <item name="android:fontFamily">@font/pretendard_extrabold</item>
         <item name="android:textSize">27sp</item>
@@ -127,7 +120,7 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!-- 인증 화면 제목 : "회원가입", "비밀번호 찾기" (홈의 25sp 보다 크다) -->
+    <!-- 인증 화면 제목 : "회원가입", "비밀번호 찾기" -->
     <style name="Text.AuthTitle" parent="">
         <item name="android:fontFamily">@font/pretendard_extrabold</item>
         <item name="android:textSize">30sp</item>
@@ -188,10 +181,6 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
-    <!--
-        선택 다이얼로그. 기본 M3 다이얼로그는 자체 색 역할을 쓰기 때문에
-        배경이 연보라, 라디오가 남보라로 나온다. 앱 색으로 되돌린다.
-    -->
     <style name="Dialog.Deundeun" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="colorPrimary">@color/orange_primary</item>
         <item name="colorSurface">@color/white</item>
@@ -231,25 +220,17 @@
     </style>
 
     <!-- 카드 -->
-    <!--
-        여기에 android:layout_margin 을 두면 안 된다.
-        MarginLayoutParams 는 layout_margin 이 지정돼 있으면 개별 layout_marginTop/Bottom 을
-        아예 읽지 않는다. 스타일로 들어와도 마찬가지라, 이 스타일을 쓰는 모든 카드의
-        마진이 조용히 무시된다.
-    -->
     <style name="Card.Deundeun" parent="Widget.Material3.CardView.Elevated">
         <item name="cardCornerRadius">@dimen/card_radius</item>
         <item name="cardElevation">@dimen/card_elevation</item>
         <item name="cardBackgroundColor">@color/surface_card</item>
         <item name="strokeColor">@color/card_stroke</item>
         <item name="strokeWidth">@dimen/card_stroke_width</item>
-        <!-- API 28+ 에서만 먹는다. 그 아래에서는 시스템 기본 그림자 색이 쓰인다. -->
         <item name="android:outlineAmbientShadowColor">@color/card_shadow</item>
         <item name="android:outlineSpotShadowColor">@color/card_shadow</item>
     </style>
 
     <!-- 주 버튼 : 주황 채움 -->
-    <!-- 버튼 글씨는 "저장"과 같은 semibold. 지정하지 않으면 Pretendard 가 아닌 시스템 폰트로 그려진다. -->
     <style name="Button.Primary" parent="Widget.Material3.Button">
         <item name="android:fontFamily">@font/pretendard_semibold</item>
         <item name="android:layout_height">@dimen/button_height</item>

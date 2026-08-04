@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 주간 차트의 하루치 막대. 회색 트랙 위에 값만큼 채운다. -->
+<!-- 주간 차트의 하루치 막대. 회색 트랙 위에 값만큼 채움. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"

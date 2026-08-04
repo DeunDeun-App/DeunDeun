@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 63:197 의 훈련 메뉴 카드 (시뮬레이션 / 119 신고 / 재난문자 번역 공통) -->
+<!-- 훈련 메뉴 카드 (시뮬레이션 / 119 신고 / 재난문자 번역 공통) -->
 <com.google.android.material.card.MaterialCardView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

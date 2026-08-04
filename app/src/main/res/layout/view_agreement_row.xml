@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 127:324 — 약관 동의 한 줄. 체크 아이콘의 tint 로 동의 여부를 표시한다. -->
+<!-- 약관 동의 한 줄. 체크 아이콘의 tint 로 동의 여부를 표시함. -->
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:parentTag="android.widget.LinearLayout">

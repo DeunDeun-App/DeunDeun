@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- 화면 여백 : Figma 402dp 기준 좌우 19~22dp -->
+    <!-- 화면 여백 -->
     <dimen name="screen_h_margin">20dp</dimen>
     <dimen name="card_padding">18dp</dimen>
     <dimen name="card_radius">20dp</dimen>
-    <!--
-        시안 그림자는 Y+4 / 흐림 16 / 검정 8% 로 옅다.
-        Android elevation 은 그림자를 직접 지정할 수 없어 근사치를 쓴다.
-        3dp 는 너무 진해 2dp 로 낮추고, 부족한 좌우 경계는 card_stroke 가 대신한다.
-    -->
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
     <dimen name="chip_radius">20dp</dimen>
@@ -24,19 +19,14 @@
     <dimen name="profile_notice_header_gap">21dp</dimen>
     <dimen name="profile_notice_item_gap">6dp</dimen>
 
-    <!-- 하단 탭 : Subtract 에셋이 414x97, 노치 반지름 40 -->
+    <!-- 하단 탭 -->
     <dimen name="bottom_bar_height">88dp</dimen>
     <dimen name="bottom_bar_icon_top">14dp</dimen>
     <dimen name="sos_size">72dp</dimen>
 
-    <!-- 발달장애인 대상 앱이므로 터치 영역을 권장 최소치보다 크게 잡는다 -->
+    <!-- 터치 영역을 권장 최소치보다 크게 잡음 -->
     <dimen name="min_touch_target">56dp</dimen>
 
-    <!--
-        뒤로가기 아이콘과 제목 사이는 23dp.
-        아이콘(16dp)이 터치 영역(56dp) 한가운데 있어 둘레로 이미 (56-16)/2 = 20dp 가 비므로
-        실제로 줄 마진은 23 - 20 = 3dp 다. 터치 영역 크기를 바꾸면 이 값도 다시 계산해야 한다.
-    -->
     <dimen name="back_title_margin">3dp</dimen>
     <dimen name="button_height">56dp</dimen>
     <dimen name="button_radius">12dp</dimen>

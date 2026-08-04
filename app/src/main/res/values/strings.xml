@@ -120,7 +120,7 @@
     <string name="sim_ai_guide">AI 가이드</string>
     <string name="sim_ai_guide_message">탁자가 있어요! 탁자 밑으로 들어가 몸을 낮추세요</string>
     <string name="sim_detecting">대피 자세 인식 중</string>
-    <!-- 대피 자세 인식 성공 (시안 81:101) -->
+    <!-- 대피 자세 인식 성공 -->
     <string name="sim_ai_guide_success">잘했어요! 탁자 밑 대피 자세가 완벽해요</string>
     <string name="sim_finish">훈련 완료</string>
     <string name="cd_sim_pose_detected">대피 자세를 바르게 취했어요</string>
@@ -191,7 +191,7 @@
     <string name="sos_requested">보호자에게 도움을 요청했어요.</string>
     <string name="cd_close">닫기</string>
 
-    <!-- SOS 질문 (Figma 92:392) -->
+    <!-- SOS 질문 -->
     <string name="sos_flow_title">도움 요청하기</string>
     <string name="sos_q_where">지금 어디 있어요?</string>
     <string name="sos_q_scared">무서워요?</string>
@@ -207,13 +207,9 @@
     <string name="sos_next">다음</string>
     <string name="cd_sos_progress">%1$d단계 중 %2$d단계 완료</string>
 
-    <!-- SOS 메시지 미리보기 (Figma 96:220) -->
+    <!-- SOS 메시지 미리보기 -->
     <string name="sos_preview_eyebrow">보낼 메시지</string>
     <string name="sos_preview_title">이렇게 보낼게요</string>
-    <!--
-        선택지 라벨("지하철역 근처예요")을 그대로 이어붙이면 "근처예요에 있어요"가 되어 어색하다.
-        보호자가 실제로 읽는 문장이므로 위치마다 문장형을 따로 둔다. 순서는 질문 화면 선택지와 같다.
-    -->
     <string-array name="sos_where_sentences">
         <item>지하철역 근처에 있어요.</item>
         <item>집 근처에 있어요.</item>
@@ -231,7 +227,7 @@
     <string name="sos_hurt_line">다쳤어요.</string>
     <string name="sos_not_hurt_line">다치지는 않았어요.</string>
 
-    <!-- SOS 전송 완료 (Figma 108:69) -->
+    <!-- SOS 전송 완료 -->
     <string name="sos_sent_title">메시지를 보냈어요!</string>
     <string name="sos_sent_desc">%1$s에게 위치와 상태가 전달됐어요.\n도움이 올 때까지 안전한 곳에 있어요.</string>
     <string name="sos_call119_title">119도 연결할까요?</string>

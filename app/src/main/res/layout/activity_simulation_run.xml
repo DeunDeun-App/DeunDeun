@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-    Figma 74:42 — 시뮬레이션 진행 화면.
-    카메라 프리뷰 자리는 지금 비어 있다. CameraX + 포즈 인식 연동은 별도 작업.
+    시뮬레이션 진행 화면.
+    카메라 프리뷰 자리는 지금 비어 있음. CameraX + 포즈 인식 연동은 별도 작업.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"

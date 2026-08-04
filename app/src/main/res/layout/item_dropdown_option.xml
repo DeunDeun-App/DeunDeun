@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 선택 드롭다운의 항목 한 줄. 현재 값은 주황으로 표시한다. -->
+<!-- 선택 드롭다운의 항목 한 줄. 현재 값은 주황으로 표시함. -->
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/option_label"

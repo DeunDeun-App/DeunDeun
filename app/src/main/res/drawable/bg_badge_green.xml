@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 96:220 — GPS "확인" 뱃지 -->
+<!--  GPS "확인" 뱃지 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/green_success_bg" />
     <corners android:radius="@dimen/chip_radius" />

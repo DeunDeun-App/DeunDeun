@@ -1,4 +1,4 @@
-<!-- Figma 101:65 — 세그먼트 탭 바깥 트랙 -->
+<!-- 세그먼트 탭 바깥 트랙 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/surface_subtle" />
     <corners android:radius="14dp" />

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 67:961(훈련 이력) / 101:65(119 점수 변화) — 기록탭 -->
+<!-- 기록탭 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -56,7 +56,7 @@
 
         </LinearLayout>
 
-        <!-- ===== 모드 A : 훈련 이력 ===== -->
+        <!-- ===== 훈련 이력 ===== -->
         <LinearLayout
             android:id="@+id/mode_history"
             android:layout_width="match_parent"
@@ -155,7 +155,7 @@
 
         </LinearLayout>
 
-        <!-- ===== 모드 B : 119 점수 변화 ===== -->
+        <!-- ===== 119 점수 변화 ===== -->
         <LinearLayout
             android:id="@+id/mode_score"
             android:layout_width="match_parent"
@@ -220,7 +220,7 @@
                         android:layout_marginBottom="@dimen/space_l"
                         android:text="@string/record_achievement_title" />
 
-                    <!-- 달성률 항목은 개수가 가변이라 코드에서 채운다 -->
+                    <!-- 달성률 항목은 개수가 가변이라 코드에서 채우도록 함 -->
                     <LinearLayout
                         android:id="@+id/achievement_list"
                         android:layout_width="match_parent"

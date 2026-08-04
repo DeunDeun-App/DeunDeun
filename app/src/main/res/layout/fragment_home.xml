@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 20:37 — 홈화면 -->
+<!-- 홈화면 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -129,7 +129,6 @@
                     android:paddingTop="26dp"
                     android:paddingEnd="16dp">
 
-                    <!-- Figma 129:151 : 바깥 39x39, 안쪽 아이콘 33x31 -->
                     <ImageView
                         android:layout_width="39dp"
                         android:layout_height="39dp"
@@ -199,7 +198,6 @@
 
                 </LinearLayout>
 
-                <!-- 요일 막대 7개는 코드에서 채운다 -->
                 <LinearLayout
                     android:id="@+id/weekly_chart"
                     android:layout_width="match_parent"

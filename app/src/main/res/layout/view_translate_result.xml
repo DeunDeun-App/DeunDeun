@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 81:336 — 쉬운 말 결과 카드 (그림 + 제목 + 설명) -->
+<!-- 쉬운 말 결과 카드 (그림 + 제목 + 설명) -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"

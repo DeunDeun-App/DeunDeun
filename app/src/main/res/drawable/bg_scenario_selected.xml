@@ -1,4 +1,4 @@
-<!-- Figma 67:1077 — 선택된 시나리오 카드 -->
+<!-- 선택된 시나리오 카드 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/orange_tint_bg" />
     <stroke android:width="2dp" android:color="@color/orange_primary" />

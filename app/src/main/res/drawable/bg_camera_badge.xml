@@ -1,4 +1,4 @@
-<!-- Figma 74:42 — 카메라 상단 훈련 뱃지 -->
+<!-- 카메라 상단 훈련 뱃지 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
     <solid android:color="@color/camera_badge" />
     <corners android:radius="20dp" />

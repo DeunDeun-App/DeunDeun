@@ -1,4 +1,4 @@
-<!-- Figma 29:57 — 주간 차트 막대. 상단만 7dp 라운드. -->
+<!-- 주간 차트 막대 -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android"
     android:shape="rectangle">
     <solid android:color="@color/orange_primary" />

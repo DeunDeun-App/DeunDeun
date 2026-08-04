@@ -7,9 +7,7 @@
 
     <declare-styleable name="LabeledInputView">
         <attr name="labelText" format="string" />
-        <!-- 라벨 뒤에 빨간 별표를 붙인다 -->
         <attr name="required" format="boolean" />
-        <!-- 눈 모양 표시/숨김 토글을 단다 -->
         <attr name="password" format="boolean" />
         <attr name="android:hint" />
         <attr name="android:inputType" />

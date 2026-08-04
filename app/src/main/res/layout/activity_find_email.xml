@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Figma 104:281 / 107:345(실패) / 107:374(성공) — 이메일 찾기 -->
+<!-- 이메일 찾기 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -73,7 +73,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
-        <!-- 확인 성공 후 "로그인하기" 로 바뀐다 (시안 107:374) -->
+        <!-- 확인 성공 후 "로그인하기" 로 바뀜 -->
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_submit"
             style="@style/Button.Cta"
