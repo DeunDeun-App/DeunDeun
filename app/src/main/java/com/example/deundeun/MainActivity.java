@@ -24,25 +24,14 @@ import com.example.deundeun.ui.training.TrainingFragment;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-/**
- * 4개 탭(홈·훈련·기록·내정보)을 담는 단일 Activity.
- *
- * <p>탭 전환은 show/hide 로 처리해 각 탭의 스크롤 위치와 상태를 유지한다.
- * (replace 로 갈아끼우면 탭을 옮길 때마다 화면이 처음부터 다시 그려진다.)
- */
 public class MainActivity extends AppCompatActivity {
 
     private static final String STATE_SELECTED_TAB = "selected_tab";
 
-    /**
-     * 열고 싶은 탭의 태그. 다른 화면에서 이 Activity 로 되돌아올 때 어느 탭을 볼지 정한다.
-     * 예) SOS 를 마치고 "괜찮아요" 를 누르면 홈으로 온다.
-     */
     public static final String EXTRA_TAB = "tab";
 
     private ActivityMainBinding binding;
 
-    /** 탭 뷰 → 해당 탭의 프래그먼트 태그. 순서가 곧 화면 순서다. */
     private final Map<Integer, String> tabs = new LinkedHashMap<>();
 
     private String selectedTag;
@@ -81,7 +70,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
-        // 이미 떠 있는 상태로 되돌아온 경우. onCreate 는 다시 불리지 않는다.
         showTab(requestedTab(intent, selectedTag));
     }
 
@@ -96,7 +84,6 @@ public class MainActivity extends AppCompatActivity {
         outState.putString(STATE_SELECTED_TAB, selectedTag);
     }
 
-    /** SOS 버튼 지름에서 노치 반지름을 계산해 배경을 만든다. 시안 기준 여유는 4dp. */
     private void applyBottomBarBackground() {
         float sosRadius = getResources().getDimensionPixelSize(R.dimen.sos_size) / 2f;
         float gap = getResources().getDisplayMetrics().density * 4f;

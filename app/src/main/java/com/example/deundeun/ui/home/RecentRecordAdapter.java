@@ -60,7 +60,6 @@ public class RecentRecordAdapter extends RecyclerView.Adapter<RecentRecordAdapte
 
             bindAchievements(record.getAchievements());
 
-            // 스크린리더가 카드 한 장을 한 덩어리로 읽도록 묶는다.
             itemView.setContentDescription(record.getTitle() + ", " + record.getMetaLine()
                     + ", " + record.getScore() + "점");
         }

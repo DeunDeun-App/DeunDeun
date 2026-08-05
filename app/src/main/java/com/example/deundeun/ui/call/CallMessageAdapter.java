@@ -14,7 +14,7 @@ import com.example.deundeun.databinding.ItemCallMessageBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Figma 125:187 — 통화 대화 목록. */
+/** 통화 대화 목록. */
 public class CallMessageAdapter extends RecyclerView.Adapter<CallMessageAdapter.MessageHolder> {
 
     private final List<CallMessage> items = new ArrayList<>();
@@ -63,7 +63,6 @@ public class CallMessageAdapter extends RecyclerView.Adapter<CallMessageAdapter.
             binding.messageBubble.setBackgroundResource(message.isMine()
                     ? R.drawable.bg_bubble_mine : R.drawable.bg_bubble_other);
 
-            // 말풍선을 보낸 쪽 아바타 옆에 붙인다.
             RelativeLayout.LayoutParams params =
                     (RelativeLayout.LayoutParams) binding.messageBubble.getLayoutParams();
             params.removeRule(RelativeLayout.END_OF);

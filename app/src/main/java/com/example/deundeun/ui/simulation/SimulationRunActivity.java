@@ -15,13 +15,10 @@ import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.TrainingCompleteActivity;
 
 /**
- * Figma 74:42(인식 중) / 81:101(인식 성공) — 시뮬레이션 진행 화면.
+ * 시뮬레이션 진행 화면.
  *
- * <p>두 시안은 같은 화면의 두 상태다. 대피 자세를 바르게 취하면 AI 가이드와 하단 버튼이
- * 주황에서 초록으로 바뀌고, 그때 "훈련 완료"를 눌러야 완료 화면으로 넘어간다.
- *
- * <p>카메라 프리뷰와 포즈 인식은 아직 붙지 않았다. 지금은 하단 버튼을 눌러 상태를 넘긴다.
- * MediaPipe 가 붙으면 {@link #onStatusClicked()} 의 첫 단계를 인식 결과로 바꾸면 된다.
+ * 카메라 프리뷰와 포즈 인식은 아직 붙지 않았다. 지금은 하단 버튼을 눌러 상태를 넘긴다
+ * MediaPipe 가 붙으면 {@link #onStatusClicked()} 의 첫 단계를 인식 결과로 바꾸면 된다
  */
 public class SimulationRunActivity extends AppCompatActivity {
 
@@ -90,7 +87,6 @@ public class SimulationRunActivity extends AppCompatActivity {
                         poseDetected ? R.color.camera_success : R.color.orange_primary));
 
         if (poseDetected) {
-            // 색만으로는 성공을 알 수 없다. 스크린리더에도 알리고 소리로도 짚어준다.
             binding.guideCard.announceForAccessibility(
                     getString(R.string.cd_sim_pose_detected));
         }

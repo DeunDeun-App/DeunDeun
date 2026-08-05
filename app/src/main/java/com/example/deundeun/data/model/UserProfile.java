@@ -62,8 +62,8 @@ public class UserProfile {
         return guardianRelation + " (" + guardianPhone + ")";
     }
 
-    /** 내정보 화면의 "발달장애 중증" 형태 한 줄. */
+    /** 내정보 화면의 "발달장애 중증" 형태 한 줄. 정도를 아직 고르지 않았으면 유형만 보인다. */
     public String getDisabilitySummary() {
-        return disabilityType + " " + disabilityLevel;
+        return (disabilityType + " " + disabilityLevel).trim();
     }
 }

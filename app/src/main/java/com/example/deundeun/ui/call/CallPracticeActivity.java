@@ -18,9 +18,9 @@ import com.example.deundeun.ui.common.TrainingCompleteActivity;
 import java.util.Locale;
 
 /**
- * Figma 96:121 / 125:187 — 가상 119 통화.
+ * 가상 119 통화
  *
- * <p>음성 인식은 아직 붙지 않았다. 마이크 버튼을 누르면 정해진 대본이 한 줄씩 진행되어
+ * 음성 인식은 아직 붙지 않음. 마이크 버튼을 누르면 정해진 대본이 한 줄씩 진행되어
  * 화면 흐름을 확인할 수 있다. STT 가 붙으면 {@link #onMicPressed()} 안에서
  * 인식 결과를 {@link CallMessage#fromMe} 로 넣고, 판정 결과를 완료 화면에 넘기면 된다.
  */

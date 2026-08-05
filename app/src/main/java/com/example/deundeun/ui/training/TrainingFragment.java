@@ -19,7 +19,7 @@ import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.simulation.SimulationIntroActivity;
 import com.example.deundeun.ui.translate.DisasterTranslateActivity;
 
-/** Figma 63:197 — 훈련탭 */
+/** 훈련탭 */
 public class TrainingFragment extends Fragment {
 
     public static final String TAG = "training";
@@ -71,7 +71,6 @@ public class TrainingFragment extends Fragment {
         card.menuTitle.setText(title);
         card.menuDesc.setText(description);
 
-        // 카드 전체를 한 번에 읽어주도록 묶는다. 개별 줄을 따로 읽으면 맥락이 끊긴다.
         card.getRoot().setContentDescription(
                 getString(title) + ". " + getString(eyebrow) + ". " + getString(description));
     }

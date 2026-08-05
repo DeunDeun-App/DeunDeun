@@ -6,10 +6,7 @@ import androidx.annotation.StringRes;
 import com.example.deundeun.R;
 
 /**
- * 회원가입 비밀번호 규칙. 시안(127:298 / 128:411 / 128:497)이 위반 종류별로
- * 서로 다른 문구를 보여주므로, 어떤 규칙을 어겼는지까지 알려준다.
- *
- * <p>서버에도 같은 규칙이 있어야 한다. 클라이언트 검증은 사용자 편의일 뿐 신뢰 경계가 아니다.
+ * 회원가입 비밀번호 규칙
  */
 public final class PasswordRule {
 

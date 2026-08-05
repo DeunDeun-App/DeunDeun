@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.deundeun.databinding.ActivityCallIntroBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
-/** Figma 71:120 — 119 신고 연습 진입. */
+/** 신고 연습 진입. */
 public class CallIntroActivity extends AppCompatActivity {
 
     private ActivityCallIntroBinding binding;

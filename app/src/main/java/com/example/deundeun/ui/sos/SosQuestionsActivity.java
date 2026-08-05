@@ -18,9 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Figma 92:392 / 121:82 / 121:110 — SOS "도움 요청하기".
- *
- * <p>시안 세 장은 답을 하나씩 채워가는 같은 화면이다. 상단 3칸이 답한 개수만큼 찬다.
+ * SOS "도움 요청하기"
  */
 public class SosQuestionsActivity extends AppCompatActivity {
 
@@ -97,7 +95,6 @@ public class SosQuestionsActivity extends AppCompatActivity {
 
     private void goNext() {
         if (!answers.isComplete()) {
-            // 절반만 채워진 메시지가 보호자에게 가면 상황 판단이 어려워진다.
             Toast.makeText(this, R.string.sos_q_where, Toast.LENGTH_SHORT).show();
             return;
         }

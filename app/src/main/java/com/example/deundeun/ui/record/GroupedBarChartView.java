@@ -14,14 +14,11 @@ import androidx.core.content.ContextCompat;
 import com.example.deundeun.R;
 
 /**
- * Figma 67:961 — 훈련 이력의 주차별 횟수 막대 차트.
- *
- * <p>가로축은 주 시작일, 세로축은 훈련 횟수. 계열 2개(시뮬레이션 / 119 연습)를
- * 한 주차 안에 나란히 그린다. 값이 0인 계열은 막대를 그리지 않는다.
+ * 훈련 이력의 주차별 횟수 막대 차트.
  */
 public class GroupedBarChartView extends View {
 
-    private static final int Y_TICK_COUNT = 5;   // 0, 2, 4, 6, 8
+    private static final int Y_TICK_COUNT = 5;
     private static final int Y_STEP = 2;
 
     private final Paint barPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -49,7 +46,6 @@ public class GroupedBarChartView extends View {
         barRadius = 3 * density;
         axisGap = 10 * density;
 
-        // 세로축 맨 위 눈금 라벨이 잘리지 않도록 위쪽을 비워 둔다.
         if (getPaddingTop() == 0) {
             setPadding(getPaddingLeft(), (int) (8 * density), getPaddingRight(), getPaddingBottom());
         }
@@ -66,7 +62,7 @@ public class GroupedBarChartView extends View {
     /**
      * @param xLabels   주차 라벨
      * @param primary   시뮬레이션 횟수
-     * @param secondary 119 연습 횟수 (없으면 0으로 채운 배열)
+     * @param secondary 119 연습 횟수
      */
     public void setData(String[] xLabels, int[] primary, int[] secondary) {
         if (xLabels.length != primary.length || xLabels.length != secondary.length) {
@@ -105,7 +101,6 @@ public class GroupedBarChartView extends View {
 
         int maxValue = (Y_TICK_COUNT - 1) * Y_STEP;
 
-        // 가로 격자 + 세로축 라벨
         for (int tick = 0; tick < Y_TICK_COUNT; tick++) {
             int value = tick * Y_STEP;
             float y = plotBottom - plotHeight * value / maxValue;

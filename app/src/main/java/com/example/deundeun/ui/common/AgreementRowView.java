@@ -13,7 +13,7 @@ import com.example.deundeun.R;
 import com.example.deundeun.databinding.ViewAgreementRowBinding;
 
 /**
- * 약관 동의 한 줄. 체크박스가 아니라 체크 아이콘의 색으로 동의 여부를 나타내는 시안이라
+ * 약관 동의 한 줄
  * {@link Checkable} 을 직접 구현해 상태를 자식 아이콘에 전파한다.
  */
 public class AgreementRowView extends LinearLayout implements Checkable {
@@ -83,7 +83,6 @@ public class AgreementRowView extends LinearLayout implements Checkable {
         }
     }
 
-    /** 리스너를 타지 않고 상태만 맞춘다. "모두 동의" 와 개별 항목이 서로를 무한히 부르는 것을 막는다. */
     public void setCheckedSilently(boolean checked) {
         OnCheckedChangeListener saved = listener;
         listener = null;

@@ -11,8 +11,8 @@ import com.example.deundeun.databinding.ActivityFindEmailBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
 /**
- * Figma 104:281 — 이메일 찾기.
- * 확인 결과에 따라 107:345(실패) / 107:374(성공) 상태로 갈린다.
+ * 이메일 찾기.
+ * 확인 결과에 따라 (실패) / (성공) 상태로 갈린다.
  */
 public class FindEmailActivity extends AppCompatActivity {
 

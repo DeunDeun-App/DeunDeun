@@ -111,7 +111,9 @@ public class FakeTrainingRepository {
     public UserProfile getUserProfile() {
         return new UserProfile(
                 "김든든", "010-1234-5678", "2000년 1월 1일",
-                "지적장애", "1급",
+                // 장애 정도는 사용자가 직접 고르게 비워 둔다. 미리 값이 박혀 있으면
+                // 고르지도 않은 등급이 저장될 수 있다.
+                "지적장애", "",
                 "엄마", "김든둔", "010-9876-5432");
     }
 

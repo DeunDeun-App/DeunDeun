@@ -13,10 +13,7 @@ import com.example.deundeun.databinding.ViewTranslateResultBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
 /**
- * Figma 81:336 — 재난문자 쉬운 말로 보기.
- *
- * <p>지금은 시안의 예시 문자를 고정으로 보여준다. 실제로는 수신한 재난문자를
- * 서버(또는 온디바이스 모델)에 넘겨 쉬운 말로 바꾼 결과를 받아 채운다.
+ * 재난문자 쉬운 말로 보기
  */
 public class DisasterTranslateActivity extends AppCompatActivity {
 
@@ -34,7 +31,6 @@ public class DisasterTranslateActivity extends AppCompatActivity {
 
         binding.header.setOnBackClickListener(v -> finish());
 
-        // 그림은 시안의 일러스트 자리. 에셋이 나오기 전까지 이모지로 대신한다.
         bindResult(binding.result1, "☔",
                 R.string.translate_r1_title, R.string.translate_r1_desc);
         bindResult(binding.result2, "🏃",
@@ -49,7 +45,6 @@ public class DisasterTranslateActivity extends AppCompatActivity {
         result.resultTitle.setText(titleRes);
         result.resultDesc.setText(descRes);
 
-        // 이모지가 따로 읽히면 방해가 되므로 카드 한 장을 한 덩어리로 묶는다.
         result.getRoot().setContentDescription(
                 getString(titleRes) + ". " + getString(descRes));
     }

@@ -12,9 +12,7 @@ import com.example.deundeun.R;
 import com.example.deundeun.databinding.ViewFeatureHeaderBinding;
 
 /**
- * 훈련 기능 화면 공통 머리말. 뒤로가기 옆에 작은 제목(eyebrow), 그 아래 큰 제목.
- *
- * <p>인증 화면의 {@link AuthHeaderView} 와 달리 eyebrow 가 있고 제목이 한 단계 작다.
+ * 훈련 기능 화면 공통 머리말
  */
 public class FeatureHeaderView extends ConstraintLayout {
 

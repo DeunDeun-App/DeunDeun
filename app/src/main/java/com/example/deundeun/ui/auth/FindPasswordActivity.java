@@ -13,10 +13,9 @@ import com.example.deundeun.databinding.ActivityFindPasswordBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
 /**
- * Figma 107:401 — 비밀번호 찾기.
+ * 비밀번호 찾기.
  *
- * <p>한 화면에서 두 단계를 오간다.
- * 1단계 본인 확인(107:401, 실패 107:487·107:535) → 2단계 재설정(107:575·107:621).
+ * 1단계 본인 확인 → 2단계 재설정
  */
 public class FindPasswordActivity extends AppCompatActivity {
 

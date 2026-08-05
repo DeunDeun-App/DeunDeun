@@ -12,7 +12,7 @@ import com.example.deundeun.R;
 import com.example.deundeun.databinding.ActivityLoginBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
-/** Figma 88:54 — 로그인. 앱의 진입 화면. */
+/** 로그인. 앱의 진입 화면. */
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
@@ -61,7 +61,6 @@ public class LoginActivity extends AppCompatActivity {
             if (success) {
                 goToMain();
             } else {
-                // 어느 쪽이 틀렸는지 알려주지 않는다. 계정 존재 여부가 새 나가면 안 된다.
                 binding.inputPassword.showError(getString(R.string.error_login_failed));
             }
         });
@@ -69,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
 
     private void goToMain() {
         Intent intent = new Intent(this, MainActivity.class);
-        // 뒤로 눌러 로그인 화면으로 되돌아오지 못하게 스택을 비운다.
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();

@@ -14,9 +14,9 @@ import com.example.deundeun.R;
 import com.example.deundeun.databinding.ViewNavItemBinding;
 
 /**
- * 하단탭 항목. 아이콘 + 라벨을 묶고 선택 상태를 자식에게 전파한다.
+ * 하단탭 항목
  *
- * <p>아이콘 tint 와 라벨 색은 모두 {@code @color/nav_item} 셀렉터를 쓰므로,
+ * 아이콘 tint 와 라벨 색은 모두 {@code @color/nav_item} 셀렉터를 쓰므로
  * 이 뷰의 selected 만 바꾸면 둘 다 함께 바뀐다.
  */
 public class NavItemView extends LinearLayout {
@@ -65,7 +65,6 @@ public class NavItemView extends LinearLayout {
 
     private void setLabel(CharSequence label) {
         binding.navLabel.setText(label);
-        // 아이콘은 importantForAccessibility=no 이므로 이 뷰가 라벨을 대신 읽어준다.
         setContentDescription(label);
     }
 }

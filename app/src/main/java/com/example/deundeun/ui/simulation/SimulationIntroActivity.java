@@ -15,10 +15,9 @@ import com.example.deundeun.databinding.ViewNumberedStepBinding;
 import com.example.deundeun.databinding.ViewScenarioCardBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
-/** Figma 67:1077 — 재난 시뮬레이션 시나리오 선택. */
+/** 재난 시뮬레이션 시나리오 선택 */
 public class SimulationIntroActivity extends AppCompatActivity {
 
-    /** 다음 화면에 넘길 시나리오 이름. */
     public static final String EXTRA_SCENARIO = "scenario";
 
     private static final String STATE_FIRE_SELECTED = "fire_selected";
@@ -96,7 +95,6 @@ public class SimulationIntroActivity extends AppCompatActivity {
                 selected ? R.drawable.bg_scenario_selected : 0);
         card.scenarioCheck.setVisibility(selected ? View.VISIBLE : View.GONE);
 
-        // 색과 체크 아이콘만으로는 선택 상태가 스크린리더에 전달되지 않는다.
         card.getRoot().setContentDescription(getString(titleRes) + ", " + getString(descRes)
                 + (selected ? ", " + getString(R.string.cd_selected) : ""));
     }

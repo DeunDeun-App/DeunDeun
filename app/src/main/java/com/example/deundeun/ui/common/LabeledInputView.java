@@ -23,12 +23,10 @@ import com.example.deundeun.databinding.ViewLabeledInputBinding;
 /**
  * 인증 화면 전반에서 쓰는 입력 한 벌 : 라벨(+필수 표시) · 입력칸 · 상태 메시지.
  *
- * <p>테두리 색과 메시지 색이 함께 움직이므로 상태를 이 뷰가 직접 들고 있는다.
  * 화면 쪽에서는 {@link #showError}/{@link #showSuccess}/{@link #clearState} 만 부른다.
  */
 public class LabeledInputView extends LinearLayout {
 
-    /** 시안의 필드 상태. 테두리와 메시지 색이 여기서 갈린다. */
     public enum State {NORMAL, ERROR, SUCCESS}
 
     private final ViewLabeledInputBinding binding;
@@ -72,7 +70,6 @@ public class LabeledInputView extends LinearLayout {
         applyLabel();
         setPasswordField(password);
 
-        // 사용자가 다시 입력하기 시작하면 이전 오류 표시는 의미가 없다.
         binding.inputEdit.addTextChangedListener(new SimpleWatcher() {
             @Override
             public void afterTextChanged(Editable s) {
@@ -89,7 +86,7 @@ public class LabeledInputView extends LinearLayout {
             binding.inputLabel.setText(label);
             return;
         }
-        // 필수 표시 별표만 빨간색. 라벨 전체를 빨갛게 하지 않는다.
+
         SpannableStringBuilder builder = new SpannableStringBuilder(label).append(" *");
         builder.setSpan(new ForegroundColorSpan(Color.RED),
                 builder.length() - 1, builder.length(), 0);
@@ -117,7 +114,7 @@ public class LabeledInputView extends LinearLayout {
                 passwordVisible ? R.drawable.ic_eye : R.drawable.ic_eye_off);
         binding.inputToggle.setContentDescription(getContext().getString(
                 passwordVisible ? R.string.cd_hide_password : R.string.cd_show_password));
-        // 표시 방식을 바꾸면 커서가 앞으로 튀므로 끝으로 되돌린다.
+
         binding.inputEdit.setSelection(binding.inputEdit.getText().length());
     }
 
@@ -151,20 +148,14 @@ public class LabeledInputView extends LinearLayout {
         binding.inputMessage.setTextColor(ContextCompat.getColor(getContext(), colorRes));
         binding.inputMessage.setVisibility(message == null || message.isEmpty() ? GONE : VISIBLE);
 
-        // 색만으로 상태를 알리면 저시력·색약 사용자가 놓친다. 스크린리더에도 상태를 실어준다.
         setContentDescription(labelText + ", " + message);
         binding.inputMessage.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
-    }
-
-    public State getState() {
-        return state;
     }
 
     public boolean isEmpty() {
         return getText().isEmpty();
     }
 
-    /** 입력 변화만 필요할 때 쓰는 빈 구현. */
     public abstract static class SimpleWatcher implements TextWatcher {
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count, int after) {

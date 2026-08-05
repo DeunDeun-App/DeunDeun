@@ -24,10 +24,7 @@ import com.example.deundeun.ui.home.RecentRecordAdapter;
 import java.util.List;
 
 /**
- * Figma 67:961 / 101:65 — 기록탭.
- *
- * <p>세그먼트 탭으로 "훈련 이력"(막대 차트 + 최근 훈련)과
- * "119 점수 변화"(꺾은선 + 항목별 달성률)를 오간다.
+ * 기록탭
  */
 public class RecordFragment extends Fragment {
 
@@ -82,7 +79,6 @@ public class RecordFragment extends Fragment {
         binding.modeHistory.setVisibility(scoreMode ? View.GONE : View.VISIBLE);
         binding.modeScore.setVisibility(scoreMode ? View.VISIBLE : View.GONE);
 
-        // 선택된 쪽만 흰 알약 배경과 진한 글자색을 갖는다.
         styleTab(binding.tabHistory, !scoreMode);
         styleTab(binding.tabScore, scoreMode);
     }
@@ -143,8 +139,6 @@ public class RecordFragment extends Fragment {
                     (ConstraintLayout.LayoutParams) row.rateFill.getLayoutParams();
             params.matchConstraintPercentWidth = rate.getPercent() / 100f;
             row.rateFill.setLayoutParams(params);
-
-            // 달성률이 낮을수록 옅게. 시안(95% 진한 주황 / 87% 중간 / 62% 옅음)을 따른다.
             ViewCompat.setBackgroundTintList(row.rateFill,
                     ContextCompat.getColorStateList(requireContext(), colorFor(rate.getPercent())));
 

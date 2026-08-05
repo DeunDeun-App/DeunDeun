@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/** Figma 121:154 — 알림 목록. */
+/** 알림 목록. */
 public class NotificationActivity extends AppCompatActivity {
 
     private ActivityNotificationBinding binding;
@@ -47,7 +47,6 @@ public class NotificationActivity extends AppCompatActivity {
                         R.string.notification_2_time, false)));
     }
 
-    /** 알림 한 건. 화면 밖으로 나갈 일이 없어 여기 둔다. */
     static class Item {
         final int titleRes;
         final int descRes;
@@ -108,7 +107,6 @@ public class NotificationActivity extends AppCompatActivity {
                         + itemView.getContext().getString(item.descRes) + ", "
                         + itemView.getContext().getString(item.timeRes);
                 if (item.unread) {
-                    // 점 하나로만 표시된 미확인 상태를 스크린리더에도 실어준다.
                     description += ", " + itemView.getContext().getString(R.string.cd_unread);
                 }
                 itemView.setContentDescription(description);

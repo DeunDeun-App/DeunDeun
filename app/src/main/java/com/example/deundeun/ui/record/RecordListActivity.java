@@ -13,9 +13,7 @@ import com.example.deundeun.ui.home.RecentRecordAdapter;
 
 /**
  * 홈의 "전체 보기" 화면. 훈련 기록을 최대
- * {@link FakeTrainingRepository#FULL_LIMIT}개까지 보여준다.
- *
- * <p>카드 모양은 홈·기록탭과 같아야 하므로 {@link RecentRecordAdapter}를 그대로 쓴다.
+ * {@link FakeTrainingRepository#FULL_LIMIT}개까지 보여줌
  */
 public class RecordListActivity extends AppCompatActivity {
 

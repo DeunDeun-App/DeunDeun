@@ -20,7 +20,7 @@ import com.example.deundeun.ui.notification.NotificationActivity;
 import com.example.deundeun.ui.record.RecordListActivity;
 import com.example.deundeun.ui.simulation.SimulationIntroActivity;
 
-/** Figma 20:37 — 홈화면 */
+/** 홈화면 */
 public class HomeFragment extends Fragment {
 
     public static final String TAG = "home";
@@ -42,7 +42,6 @@ public class HomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 하단탭에 가리지 않도록 내비게이션바 인셋만큼 더 띄운다.
         InsetsUtil.applyBottomInset(binding.homeScroll);
 
         WeeklySummary summary = repository.getWeeklySummary();
@@ -72,7 +71,6 @@ public class HomeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        // Fragment 는 뷰보다 오래 살아남으므로 바인딩을 놓아준다.
         binding = null;
     }
 }

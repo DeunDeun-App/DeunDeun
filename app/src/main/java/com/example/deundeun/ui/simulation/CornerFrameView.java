@@ -13,10 +13,7 @@ import androidx.core.content.ContextCompat;
 import com.example.deundeun.R;
 
 /**
- * Figma 74:42 — 카메라 프리뷰 위에 얹는 네 모서리 프레임.
- *
- * <p>사용자가 어디를 비춰야 하는지 알려주는 안내선이라 뷰 크기에 맞춰 그린다.
- * 이미지로 넣으면 화면 비율이 달라질 때 모서리가 늘어난다.
+ * 카메라 프리뷰 위에 얹는 네 모서리 프레임
  */
 public class CornerFrameView extends View {
 

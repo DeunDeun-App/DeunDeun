@@ -14,14 +14,10 @@ import androidx.core.content.ContextCompat;
 import com.example.deundeun.R;
 
 /**
- * Figma 101:65 — 119 점수 변화 꺾은선 차트.
- *
- * <p>세로축은 50~100점 고정(시안의 눈금이 50/60/80/100). 점 사이는 3차 베지어로
- * 부드럽게 잇고 선 아래를 옅은 주황으로 채운다.
+ * 119 점수 변화 꺾은선 차트.
  */
 public class ScoreLineChartView extends View {
 
-    /** 시안의 세로축 눈금. 등간격이 아니라 값 그대로 배치한다. */
     private static final int[] Y_TICKS = {50, 60, 80, 100};
     private static final int Y_MIN = 50;
     private static final int Y_MAX = 100;
@@ -48,7 +44,6 @@ public class ScoreLineChartView extends View {
         float density = getResources().getDisplayMetrics().density;
         axisGap = 10 * density;
 
-        // 세로축 맨 위 눈금(100) 라벨이 잘리지 않도록 위쪽을 비워 둔다.
         if (getPaddingTop() == 0) {
             setPadding(getPaddingLeft(), (int) (8 * density), getPaddingRight(), getPaddingBottom());
         }
@@ -134,7 +129,6 @@ public class ScoreLineChartView extends View {
         for (int i = 0; i < xLabels.length; i++) {
             String label = xLabels[i];
             float textWidth = labelPaint.measureText(label);
-            // 양 끝 라벨은 가운데 정렬하면 차트 밖으로 나가 잘린다.
             float labelX = Math.max(getPaddingLeft(),
                     Math.min(xs[i] - textWidth / 2f, getWidth() - getPaddingRight() - textWidth));
             canvas.drawText(label, labelX, plotBottom + labelHeight, labelPaint);
@@ -146,7 +140,6 @@ public class ScoreLineChartView extends View {
         return plotBottom - (plotBottom - plotTop) * ratio;
     }
 
-    /** 인접한 두 점의 중간 지점을 제어점으로 삼는 흔한 방식. 값이 튀지 않아 점수 추이에 적합하다. */
     private void buildSmoothPath(float[] xs, float[] ys) {
         linePath.reset();
         linePath.moveTo(xs[0], ys[0]);

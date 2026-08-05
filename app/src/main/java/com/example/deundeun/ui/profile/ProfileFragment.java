@@ -21,7 +21,7 @@ import com.example.deundeun.databinding.ViewProfileSwitchRowBinding;
 
 import java.util.List;
 
-/** Figma 83:176 — 내정보. */
+/** 내정보. */
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "profile";
@@ -53,7 +53,6 @@ public class ProfileFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        // 수정 화면에서 돌아왔을 수 있으므로 값을 다시 읽는다.
         bindProfile();
     }
 
@@ -92,8 +91,6 @@ public class ProfileFragment extends Fragment {
         // 시안은 셋 다 켜진 상태. TODO: 서버 설정값으로 대체
         row.switchToggle.setChecked(true);
         row.switchToggle.setContentDescription(getString(titleRes));
-
-        // 줄 전체를 눌러도 토글되게 한다. 토글만 누르기엔 표적이 작다.
         row.getRoot().setOnClickListener(v -> row.switchToggle.toggle());
     }
 

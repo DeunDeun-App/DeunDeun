@@ -12,7 +12,7 @@ import com.example.deundeun.databinding.ItemGuardianNoticeBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Figma 83:284 — 보호자에게 보낸 알림 목록. */
+/** 보호자에게 보낸 알림 목록. */
 public class GuardianNoticeAdapter
         extends RecyclerView.Adapter<GuardianNoticeAdapter.NoticeHolder> {
 
@@ -56,7 +56,6 @@ public class GuardianNoticeAdapter
             binding.noticeDate.setText(notice.getDate());
             binding.noticeTime.setText(notice.getTime());
 
-            // 날짜와 시각이 따로 읽히면 어색하므로 카드 한 장을 한 덩어리로 묶는다.
             itemView.setContentDescription(notice.getTitle() + ", " + notice.getDescription()
                     + ", " + notice.getDate() + " " + notice.getTime());
         }

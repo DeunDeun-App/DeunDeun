@@ -23,10 +23,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Figma 91:153 — 회원가입.
- *
- * <p>시안의 상태 변형 5종을 한 화면에서 처리한다.
- * 104:93(이메일 발송) · 127:298/128:411/128:497(비밀번호 규칙별 오류) · 104:210(완료).
+ * 회원가입
  */
 public class SignUpActivity extends AppCompatActivity {
 
@@ -202,7 +199,6 @@ public class SignUpActivity extends AppCompatActivity {
 
         Window window = dialog.getWindow();
         if (window != null) {
-            // 기본 다이얼로그 배경을 지워야 bg_dialog 의 둥근 모서리가 살아난다.
             window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             window.setLayout(
                     (int) (getResources().getDisplayMetrics().widthPixels * 0.78f),

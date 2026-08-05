@@ -1,6 +1,6 @@
 package com.example.deundeun.ui.call;
 
-/** Figma 125:187 — 가상 통화의 대화 한 줄. */
+/** 가상 통화의 대화 한 줄. */
 public class CallMessage {
 
     private final String text;
@@ -23,7 +23,6 @@ public class CallMessage {
         return text;
     }
 
-    /** true 면 오른쪽 주황 말풍선, false 면 왼쪽 회색 말풍선. */
     public boolean isMine() {
         return mine;
     }
