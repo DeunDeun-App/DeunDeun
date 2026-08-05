@@ -1,5 +1,6 @@
 package com.example.deundeun.ui.profile;
 
+import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.text.InputType;
@@ -12,7 +13,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.ArrayRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -28,14 +28,19 @@ import com.example.deundeun.ui.common.InsetsUtil;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.IntConsumer;
+import java.util.function.Supplier;
 
-/** Figma 127:76 — 내 정보 수정. */
+/** 내 정보 수정. */
 public class ProfileEditActivity extends AppCompatActivity {
 
     private ActivityProfileEditBinding binding;
     private final FakeTrainingRepository repository = new FakeTrainingRepository();
 
     private List<TextView> relationChips;
+
+    // 지금 고른 장애 유형의 순번
+    private int typeIndex;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,10 +66,6 @@ public class ProfileEditActivity extends AppCompatActivity {
         bindFields();
     }
 
-    /**
-     * "저장" 은 시안의 68dp 간격을 맞추려고 글자 폭에 딱 맞춰 놓았다.
-     * 그대로 두면 누를 곳이 너무 좁으므로 배치는 건드리지 않고 터치 영역만 넓힌다.
-     */
     private void expandSaveTouchArea() {
         View parent = (View) binding.btnSave.getParent();
         parent.post(() -> {
@@ -86,18 +87,15 @@ public class ProfileEditActivity extends AppCompatActivity {
                 InputType.TYPE_CLASS_PHONE, false);
         bindField(binding.fieldBirth, R.string.field_birth, profile.getBirthDate(),
                 InputType.TYPE_CLASS_TEXT, false);
-        // 기본 정보 카드의 마지막 줄은 카드 경계와 겹치므로 구분선을 숨긴다.
         binding.fieldBirth.fieldDivider.setVisibility(View.GONE);
 
-        // 장애 정보는 선택형이라 직접 입력을 막고 셰브런을 보인다.
         bindField(binding.fieldDisabilityType, R.string.field_disability_type,
                 profile.getDisabilityType(), InputType.TYPE_NULL, true);
         bindField(binding.fieldDisabilityLevel, R.string.field_disability_level,
                 profile.getDisabilityLevel(), InputType.TYPE_NULL, true);
         binding.fieldDisabilityLevel.fieldDivider.setVisibility(View.GONE);
 
-        bindPicker(binding.fieldDisabilityType, R.array.disability_types);
-        bindPicker(binding.fieldDisabilityLevel, R.array.disability_levels);
+        bindDisabilityPickers(profile);
 
         bindField(binding.fieldGuardianName, R.string.field_guardian_name,
                 profile.getGuardianName(),
@@ -120,27 +118,54 @@ public class ProfileEditActivity extends AppCompatActivity {
             field.fieldValue.setFocusable(false);
             field.fieldValue.setCursorVisible(false);
             field.fieldChevron.setVisibility(View.VISIBLE);
+            field.fieldValue.setHint(R.string.hint_select);
         }
     }
 
-    /**
-     * 선택형 필드에 드롭다운을 붙인다.
-     *
-     * <p>셰브런이 아래를 가리키므로 목록도 필드 바로 아래로 펼쳐져야 한다.
-     * 가운데 뜨는 다이얼로그는 어느 필드를 고르는 중인지 알기 어렵다.
-     */
-    private void bindPicker(ViewEditFieldBinding field, @ArrayRes int optionsRes) {
-        String[] options = getResources().getStringArray(optionsRes);
+    // 장애 유형·정도 드롭다운
+    private void bindDisabilityPickers(UserProfile profile) {
+        String[] types = getResources().getStringArray(R.array.disability_types);
+        typeIndex = Math.max(0, indexOf(types, profile.getDisabilityType()));
 
-        View.OnClickListener open = v -> showDropdown(field, options);
+        bindPicker(binding.fieldDisabilityType, () -> types, position -> {
+            typeIndex = position;
+            binding.fieldDisabilityType.fieldValue.setText(types[position]);
+            binding.fieldDisabilityLevel.fieldValue.setText("");
+        });
 
-        // 값과 셰브런 어디를 눌러도 열리게 한다.
+        bindPicker(binding.fieldDisabilityLevel, this::levelsForCurrentType, position ->
+                binding.fieldDisabilityLevel.fieldValue.setText(
+                        levelsForCurrentType()[position]));
+    }
+
+    // 값이 목록의 몇 번째인지
+    private int indexOf(String[] options, String value) {
+        for (int i = 0; i < options.length; i++) {
+            if (options[i].equals(value)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    // 지금 고른 유형에 맞는 정도 선택지
+    private String[] levelsForCurrentType() {
+        TypedArray byType = getResources().obtainTypedArray(R.array.disability_levels_by_type);
+        int arrayRes = byType.getResourceId(typeIndex, 0);
+        byType.recycle();
+        return getResources().getStringArray(arrayRes);
+    }
+    private void bindPicker(ViewEditFieldBinding field, Supplier<String[]> options,
+                            IntConsumer onSelected) {
+        View.OnClickListener open = v -> showDropdown(field, options.get(), onSelected);
+
         field.fieldValue.setOnClickListener(open);
         field.fieldChevron.setOnClickListener(open);
         field.getRoot().setOnClickListener(open);
     }
 
-    private void showDropdown(ViewEditFieldBinding field, String[] options) {
+    private void showDropdown(ViewEditFieldBinding field, String[] options,
+                              IntConsumer onSelected) {
         String current = field.fieldValue.getText().toString();
 
         ListPopupWindow popup = new ListPopupWindow(this);
@@ -156,7 +181,6 @@ public class ProfileEditActivity extends AppCompatActivity {
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
                 TextView view = (TextView) super.getView(position, convertView, parent);
                 boolean selected = options[position].equals(current);
-                // 지금 값이 어느 것인지 색으로 알려준다.
                 view.setTextColor(ContextCompat.getColor(ProfileEditActivity.this,
                         selected ? R.color.orange_primary : R.color.text_primary));
                 return view;
@@ -164,11 +188,10 @@ public class ProfileEditActivity extends AppCompatActivity {
         });
 
         popup.setOnItemClickListener((parent, view, position, id) -> {
-            field.fieldValue.setText(options[position]);
+            onSelected.accept(position);
             popup.dismiss();
         });
 
-        // 열려 있는 동안 셰브런을 위로 뒤집어 상태를 보여준다.
         field.fieldChevron.setRotation(90f);
         popup.setOnDismissListener(() -> field.fieldChevron.setRotation(-90f));
 

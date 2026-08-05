@@ -90,17 +90,32 @@
     <string name="profile_edit_warning">SOS 문자가 이 번호로 갑니다. 꼭 확인해 주세요.</string>
     <string name="profile_saved">저장되었습니다.</string>
     <string name="cd_dropdown">선택</string>
+    <string name="hint_select">선택해 주세요</string>
 
     <!-- 장애 정보 선택지 -->
     <string-array name="disability_types">
         <item>지적장애</item>
         <item>자폐장애</item>
+        <item>발달장애</item>
     </string-array>
-    <string-array name="disability_levels">
-        <item>1급</item>
-        <item>2급</item>
-        <item>3급</item>
+
+    <string-array name="disability_levels_intellectual">
+        <item>중증</item>
     </string-array>
+    <string-array name="disability_levels_autism">
+        <item>중증</item>
+        <item>경증</item>
+    </string-array>
+    <string-array name="disability_levels_developmental">
+        <item>중증</item>
+        <item>경증</item>
+    </string-array>
+
+    <array name="disability_levels_by_type">
+        <item>@array/disability_levels_intellectual</item>
+        <item>@array/disability_levels_autism</item>
+        <item>@array/disability_levels_developmental</item>
+    </array>
     <string name="cd_switch_on">켜짐</string>
     <string name="cd_switch_off">꺼짐</string>
 
