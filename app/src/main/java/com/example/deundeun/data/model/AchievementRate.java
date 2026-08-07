@@ -1,6 +1,6 @@
 package com.example.deundeun.data.model;
 
-/** Figma 101:65 — "항목별 달성률" 한 줄. */
+/** "항목별 달성률" 한 줄. */
 public class AchievementRate {
 
     private final String label;

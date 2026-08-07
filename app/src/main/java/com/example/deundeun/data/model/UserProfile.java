@@ -1,6 +1,6 @@
 package com.example.deundeun.data.model;
 
-/** Figma 83:176 / 127:76 — 내 정보. */
+/** 내 정보. */
 public class UserProfile {
 
     private final String name;

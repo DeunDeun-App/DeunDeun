@@ -11,16 +11,11 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 화면 개발용 임시 데이터 소스. 값은 Figma 화면설계서의 더미와 동일하다.
- *
- * <p>API 스펙이 확정되면 이 클래스만 Retrofit 구현으로 갈아끼우고
- * 화면 코드는 건드리지 않는다. 그래서 반환 타입을 서버 응답 DTO 가 아니라
- * 화면이 쓰는 도메인 모델로 두었다.
+ * 화면 개발용 임시 데이터 소스
  */
 public class FakeTrainingRepository {
 
     public WeeklySummary getWeeklySummary() {
-        // Figma 29:57 / 29:58 / 29:59 의 막대 높이 비율(68.2 / 46 / 85.5)에 맞춘 값
         return new WeeklySummary(new int[]{35, 24, 44, 7, 0, 0, 0}, 3, 5);
     }
 
@@ -76,14 +71,12 @@ public class FakeTrainingRepository {
         return new String[]{"6/16", "6/23", "6/30", "7/7", "7/14"};
     }
 
-    /** 주차별 시뮬레이션 횟수 (시안 67:961 의 막대 높이). */
     public int[] getSimulationCounts() {
         return new int[]{2, 3, 1, 4, 3};
     }
 
     /**
-     * 주차별 119 연습 횟수. 시안에는 막대가 그려져 있지 않아 0으로 둔다.
-     * 값이 들어오면 시뮬레이션 막대 옆에 나란히 그려진다.
+     * 주차별 119 연습 횟수
      */
     public int[] getEmergencyCallCounts() {
         return new int[]{0, 0, 0, 0, 0};
@@ -93,7 +86,6 @@ public class FakeTrainingRepository {
         return new String[]{"6/20", "6/25", "6/30", "7/5", "7/10", "7/14"};
     }
 
-    /** 119 점수 추이 (시안 101:65 의 꺾은선). */
     public int[] getScoreTrend() {
         return new int[]{62, 68, 64, 78, 85, 88};
     }
@@ -111,8 +103,6 @@ public class FakeTrainingRepository {
     public UserProfile getUserProfile() {
         return new UserProfile(
                 "김든든", "010-1234-5678", "2000년 1월 1일",
-                // 장애 정도는 사용자가 직접 고르게 비워 둔다. 미리 값이 박혀 있으면
-                // 고르지도 않은 등급이 저장될 수 있다.
                 "지적장애", "",
                 "엄마", "김든둔", "010-9876-5432");
     }
