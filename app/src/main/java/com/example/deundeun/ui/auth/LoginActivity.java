@@ -10,9 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.MainActivity;
 import com.example.deundeun.R;
+import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivityLoginBinding;
-import com.example.deundeun.network.HealthCheckResponse;
-import com.example.deundeun.network.RetrofitClient;
+import com.example.deundeun.data.network.HealthCheckResponse;
+import com.example.deundeun.data.network.RetrofitClient;
 import com.example.deundeun.ui.common.InsetsUtil;
 
 import retrofit2.Call;
@@ -23,7 +24,8 @@ import retrofit2.Response;
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
-    private final FakeAuthRepository repository = new FakeAuthRepository();
+
+    private final AuthRepository repository = new AuthRepository();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,11 +81,15 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        repository.login(email, password, success -> {
-            if (success) {
+        binding.btnLogin.setEnabled(false);
+
+        repository.login(email, password, getString(R.string.error_login_failed), result -> {
+            binding.btnLogin.setEnabled(true);
+
+            if (result.isSuccess()) {
                 goToMain();
             } else {
-                binding.inputPassword.showError(getString(R.string.error_login_failed));
+                binding.inputPassword.showError(result.getMessage());
             }
         });
     }

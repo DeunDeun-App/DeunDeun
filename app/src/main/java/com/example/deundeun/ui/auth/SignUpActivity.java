@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.repository.FakeAuthRepository;
 import com.example.deundeun.databinding.ActivitySignUpBinding;
 import com.example.deundeun.databinding.DialogSignupCompleteBinding;
 import com.example.deundeun.ui.common.AgreementRowView;

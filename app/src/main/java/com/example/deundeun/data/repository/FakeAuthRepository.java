@@ -1,4 +1,4 @@
-package com.example.deundeun.ui.auth;
+package com.example.deundeun.data.repository;
 
 import android.util.Patterns;
 

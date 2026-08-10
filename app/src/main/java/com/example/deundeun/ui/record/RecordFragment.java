@@ -13,7 +13,7 @@ import androidx.core.view.ViewCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.data.model.AchievementRate;
 import com.example.deundeun.data.model.TrainingRecord;
 import com.example.deundeun.databinding.FragmentRecordBinding;

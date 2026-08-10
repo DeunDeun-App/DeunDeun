@@ -1,4 +1,4 @@
-package com.example.deundeun.data;
+package com.example.deundeun.data.repository;
 
 import com.example.deundeun.data.model.AchievementRate;
 import com.example.deundeun.data.model.GuardianNotice;

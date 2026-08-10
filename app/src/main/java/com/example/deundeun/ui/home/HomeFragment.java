@@ -11,7 +11,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.data.model.WeeklySummary;
 import com.example.deundeun.databinding.FragmentHomeBinding;
 import com.example.deundeun.ui.call.CallIntroActivity;

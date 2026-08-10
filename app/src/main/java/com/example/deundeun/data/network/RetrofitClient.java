@@ -1,16 +1,14 @@
-package com.example.deundeun.network;
+package com.example.deundeun.data.network;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import javax.net.SocketFactory;
-
 import okhttp3.OkHttpClient;
 
 public class RetrofitClient {
-    private static final String BASE_URL = "http://127.0.0.1:8080/";
+    private static final String BASE_URL = "http://192.168.170.117:8080/";
     private static Retrofit retrofit = null;
 
     public static ApiService getApiService() {

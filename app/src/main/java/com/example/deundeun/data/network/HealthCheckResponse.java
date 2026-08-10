@@ -1,4 +1,4 @@
-package com.example.deundeun.network;
+package com.example.deundeun.data.network;
 
 public class HealthCheckResponse {
     private String status;

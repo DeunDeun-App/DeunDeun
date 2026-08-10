@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.MainActivity;
 import com.example.deundeun.R;
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.databinding.ActivitySosSentBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.home.HomeFragment;

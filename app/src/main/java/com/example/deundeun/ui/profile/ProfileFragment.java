@@ -12,7 +12,7 @@ import androidx.annotation.StringRes;
 import androidx.fragment.app.Fragment;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.data.model.GuardianNotice;
 import com.example.deundeun.data.model.UserProfile;
 import com.example.deundeun.databinding.FragmentProfileBinding;

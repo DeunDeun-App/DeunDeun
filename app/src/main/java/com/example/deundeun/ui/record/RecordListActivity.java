@@ -6,7 +6,7 @@ import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.databinding.ActivityRecordListBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.home.RecentRecordAdapter;

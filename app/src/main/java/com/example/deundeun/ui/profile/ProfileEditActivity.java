@@ -20,7 +20,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.FakeTrainingRepository;
+import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.data.model.UserProfile;
 import com.example.deundeun.databinding.ActivityProfileEditBinding;
 import com.example.deundeun.databinding.ViewEditFieldBinding;
