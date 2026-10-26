@@ -9,7 +9,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.network.dto.auth.ResetTokenResponse;
 import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivityFindPasswordBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
@@ -173,10 +172,8 @@ public class FindPasswordActivity extends AppCompatActivity {
         binding.btnSubmit.setEnabled(false);
         repository.issueResetToken(binding.inputName.getText(), verifiedEmail, result -> {
             binding.btnSubmit.setEnabled(true);
-            ResetTokenResponse data = result.getData();
-
-            if (result.isSuccess() && data != null) {
-                resetToken = data.getResetToken();
+            if (result.isSuccess() && result.getData() != null) {
+                resetToken = result.getData();
                 step = Step.RESET;
                 applyStep();
                 binding.inputNewPassword.getEditView().requestFocus();

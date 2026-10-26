@@ -7,16 +7,8 @@ import androidx.annotation.Nullable;
 import com.example.deundeun.data.network.ApiResponse;
 import com.example.deundeun.data.network.ApiService;
 import com.example.deundeun.data.network.RetrofitClient;
-import com.example.deundeun.data.network.dto.auth.EmailCodeRequest;
-import com.example.deundeun.data.network.dto.auth.EmailVerifyRequest;
-import com.example.deundeun.data.network.dto.auth.FindEmailRequest;
-import com.example.deundeun.data.network.dto.auth.LoginRequest;
-import com.example.deundeun.data.network.dto.auth.LoginResponse;
-import com.example.deundeun.data.network.dto.auth.PasswordResetRequest;
-import com.example.deundeun.data.network.dto.auth.ResetTokenRequest;
-import com.example.deundeun.data.network.dto.auth.ResetTokenResponse;
-import com.example.deundeun.data.network.dto.auth.SignUpRequest;
-import com.example.deundeun.data.network.dto.auth.SignUpResponse;
+import com.example.deundeun.data.network.dto.auth.AuthRequest;
+import com.example.deundeun.data.network.dto.auth.UserResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -73,43 +65,44 @@ public class AuthRepository {
         return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    public void login(String email, String password, Callback<Result<LoginResponse>> callback) {
-        enqueue(api.login(new LoginRequest(email, password)), callback);
+    public void login(String email, String password, Callback<Result<UserResponse>> callback) {
+        enqueue(api.login(new AuthRequest(null, email, password, null, null)), callback);
     }
 
     public void sendSignUpCode(String email, Callback<Result<Void>> callback) {
-        enqueue(api.sendSignUpCode(new EmailCodeRequest(email)), callback);
+        enqueue(api.sendSignUpCode(new AuthRequest(null, email, null, null, null)), callback);
     }
 
     public void verifySignUpCode(String email, String code, Callback<Result<Void>> callback) {
-        enqueue(api.verifySignUpCode(new EmailVerifyRequest(email, code)), callback);
+        enqueue(api.verifySignUpCode(new AuthRequest(null, email, null, code, null)), callback);
     }
 
     public void signUp(String name, String email, String password,
-                       Callback<Result<SignUpResponse>> callback) {
-        enqueue(api.signUp(new SignUpRequest(name, email, password)), callback);
+                       Callback<Result<UserResponse>> callback) {
+        enqueue(api.signUp(new AuthRequest(name, email, password, null, null)), callback);
     }
 
     public void findEmail(String name, String email, Callback<Result<Void>> callback) {
-        enqueue(api.findEmail(new FindEmailRequest(name, email)), callback);
+        enqueue(api.findEmail(new AuthRequest(name, email, null, null, null)), callback);
     }
 
     public void sendPasswordResetCode(String email, Callback<Result<Void>> callback) {
-        enqueue(api.sendPasswordResetCode(new EmailCodeRequest(email)), callback);
+        enqueue(api.sendPasswordResetCode(new AuthRequest(null, email, null, null, null)), callback);
     }
 
     public void verifyPasswordResetCode(String email, String code, Callback<Result<Void>> callback) {
-        enqueue(api.verifyPasswordResetCode(new EmailVerifyRequest(email, code)), callback);
+        enqueue(api.verifyPasswordResetCode(new AuthRequest(null, email, null, code, null)),
+                callback);
     }
 
-    public void issueResetToken(String name, String email,
-                                Callback<Result<ResetTokenResponse>> callback) {
-        enqueue(api.issueResetToken(new ResetTokenRequest(name, email)), callback);
+    public void issueResetToken(String name, String email, Callback<Result<String>> callback) {
+        enqueue(api.issueResetToken(new AuthRequest(name, email, null, null, null)), callback);
     }
 
     public void resetPassword(String resetToken, String newPassword,
                               Callback<Result<Void>> callback) {
-        enqueue(api.resetPassword(new PasswordResetRequest(resetToken, newPassword)), callback);
+        enqueue(api.resetPassword(new AuthRequest(null, null, newPassword, null, resetToken)),
+                callback);
     }
 
     private <T> void enqueue(Call<ApiResponse<T>> call, Callback<Result<T>> callback) {

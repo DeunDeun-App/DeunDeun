@@ -1,6 +1,6 @@
 package com.example.deundeun.data.network.dto.auth;
 
-public class LoginResponse {
+public class UserResponse {
 
     private long userId;
     private String email;

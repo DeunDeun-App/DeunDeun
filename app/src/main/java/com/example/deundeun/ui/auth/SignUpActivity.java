@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.network.dto.auth.SignUpResponse;
+import com.example.deundeun.data.network.dto.auth.UserResponse;
 import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivitySignUpBinding;
 import com.example.deundeun.databinding.DialogSignupCompleteBinding;
@@ -203,7 +203,7 @@ public class SignUpActivity extends AppCompatActivity {
         });
     }
 
-    private void showSignUpError(AuthRepository.Result<SignUpResponse> result) {
+    private void showSignUpError(AuthRepository.Result<UserResponse> result) {
         String message = result.getMessageOr(getString(R.string.error_network));
 
         if (result.hasCode("NAME")) {
