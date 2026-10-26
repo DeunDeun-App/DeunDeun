@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.repository.FakeAuthRepository;
+import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivityFindEmailBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
@@ -18,7 +18,7 @@ import com.example.deundeun.ui.common.InsetsUtil;
 public class FindEmailActivity extends AppCompatActivity {
 
     private ActivityFindEmailBinding binding;
-    private final FakeAuthRepository repository = new FakeAuthRepository();
+    private final AuthRepository repository = new AuthRepository();
 
     private boolean confirmed;
 
@@ -64,13 +64,18 @@ public class FindEmailActivity extends AppCompatActivity {
             return;
         }
 
-        repository.findEmail(name, email, found -> {
-            if (found) {
+        binding.btnSubmit.setEnabled(false);
+        repository.findEmail(name, email, result -> {
+            binding.btnSubmit.setEnabled(true);
+
+            if (result.isSuccess()) {
                 confirmed = true;
                 binding.inputEmail.showSuccess(getString(R.string.find_email_success));
                 binding.btnSubmit.setText(R.string.action_go_login);
+            } else if (result.hasCode("NAME")) {
+                binding.inputName.showError(result.getMessageOr(getString(R.string.error_network)));
             } else {
-                binding.inputEmail.showError(getString(R.string.find_email_failed));
+                binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
             }
         });
     }

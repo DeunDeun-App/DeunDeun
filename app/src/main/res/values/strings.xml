@@ -290,6 +290,7 @@
     <string name="action_find_password">비밀번호 찾기</string>
     <string name="cd_logo">든든 로고</string>
     <string name="error_login_failed">이메일 또는 비밀번호가 올바르지 않습니다.</string>
+    <string name="error_network">서버와 연결할 수 없어요. 잠시 후 다시 시도해 주세요.</string>
 
     <!-- 회원가입 -->
     <string name="signup_title">회원가입</string>
@@ -308,6 +309,7 @@
     <string name="error_email_format">이메일 주소 형식이 올바르지 않습니다.</string>
     <string name="error_code_required">인증번호를 입력해 주세요.</string>
     <string name="error_code_mismatch">인증번호가 일치하지 않습니다.</string>
+    <string name="error_email_not_verified">이메일 인증을 먼저 완료해 주세요.</string>
     <string name="error_password_length">8~16자리로 입력해 주세요.</string>
     <string name="error_password_no_special">특수문자가 포함되지 않았습니다.</string>
     <string name="error_password_no_digit">숫자가 포함되지 않았습니다.</string>

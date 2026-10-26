@@ -9,7 +9,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.repository.FakeAuthRepository;
+import com.example.deundeun.data.network.dto.auth.ResetTokenResponse;
+import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivityFindPasswordBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
@@ -21,14 +22,17 @@ import com.example.deundeun.ui.common.InsetsUtil;
 public class FindPasswordActivity extends AppCompatActivity {
 
     private static final String STATE_STEP = "step";
+    private static final String STATE_RESET_TOKEN = "resetToken";
 
     private enum Step {VERIFY, RESET}
 
     private ActivityFindPasswordBinding binding;
-    private final FakeAuthRepository repository = new FakeAuthRepository();
+    private final AuthRepository repository = new AuthRepository();
 
     private Step step = Step.VERIFY;
     private boolean codeVerified;
+    private String verifiedEmail;
+    private String resetToken;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -42,7 +46,10 @@ public class FindPasswordActivity extends AppCompatActivity {
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
         if (savedInstanceState != null) {
-            step = Step.values()[savedInstanceState.getInt(STATE_STEP, 0)];
+            resetToken = savedInstanceState.getString(STATE_RESET_TOKEN);
+            step = resetToken == null
+                    ? Step.VERIFY
+                    : Step.values()[savedInstanceState.getInt(STATE_STEP, 0)];
         }
 
         binding.header.setOnBackClickListener(v -> onBackPressed());
@@ -57,14 +64,14 @@ public class FindPasswordActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(STATE_STEP, step.ordinal());
+        outState.putString(STATE_RESET_TOKEN, resetToken);
     }
 
     @Override
     public void onBackPressed() {
         // 재설정 단계에서 뒤로 가면 화면을 닫지 않고 본인 확인으로 되돌린다.
         if (step == Step.RESET) {
-            step = Step.VERIFY;
-            applyStep();
+            backToVerifyStep();
             return;
         }
         super.onBackPressed();
@@ -75,6 +82,16 @@ public class FindPasswordActivity extends AppCompatActivity {
         binding.stepVerify.setVisibility(verifying ? View.VISIBLE : View.GONE);
         binding.stepReset.setVisibility(verifying ? View.GONE : View.VISIBLE);
         binding.btnSubmit.setText(verifying ? R.string.action_next : R.string.action_done);
+    }
+
+    private void backToVerifyStep() {
+        step = Step.VERIFY;
+        resetToken = null;
+        codeVerified = false;
+        verifiedEmail = null;
+        binding.inputAuthCode.setText("");
+        binding.inputAuthCode.clearState();
+        applyStep();
     }
 
     private void sendAuthCode() {
@@ -90,8 +107,20 @@ public class FindPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        repository.sendAuthCode(email, sent ->
-                binding.inputEmail.showSuccess(getString(R.string.success_email_sent)));
+        binding.btnSendEmail.setEnabled(false);
+        repository.sendPasswordResetCode(email, result -> {
+            binding.btnSendEmail.setEnabled(true);
+
+            if (result.isSuccess()) {
+                codeVerified = false;
+                verifiedEmail = null;
+                binding.inputEmail.showSuccess(getString(R.string.success_email_sent));
+                binding.authCodeRow.setVisibility(View.VISIBLE);
+                binding.inputAuthCode.getEditView().requestFocus();
+            } else {
+                binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
+            }
+        });
     }
 
     private void verifyAuthCode() {
@@ -103,12 +132,19 @@ public class FindPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        repository.verifyAuthCode(code, verified -> {
-            codeVerified = verified;
-            if (verified) {
+        String email = binding.inputEmail.getText();
+
+        binding.btnVerifyCode.setEnabled(false);
+        repository.verifyPasswordResetCode(email, code, result -> {
+            binding.btnVerifyCode.setEnabled(true);
+            codeVerified = result.isSuccess();
+            verifiedEmail = codeVerified ? email : null;
+
+            if (codeVerified) {
                 binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
             } else {
-                binding.inputAuthCode.showError(getString(R.string.error_code_mismatch));
+                binding.inputAuthCode.showError(
+                        result.getMessageOr(getString(R.string.error_network)));
             }
         });
     }
@@ -129,13 +165,34 @@ public class FindPasswordActivity extends AppCompatActivity {
             binding.inputName.showError(getString(R.string.error_name_required));
             return;
         }
-        if (!codeVerified) {
-            binding.inputAuthCode.showError(getString(R.string.error_code_mismatch));
+        if (!codeVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
+            binding.inputAuthCode.showError(getString(R.string.error_email_not_verified));
             return;
         }
 
-        step = Step.RESET;
-        applyStep();
+        binding.btnSubmit.setEnabled(false);
+        repository.issueResetToken(binding.inputName.getText(), verifiedEmail, result -> {
+            binding.btnSubmit.setEnabled(true);
+            ResetTokenResponse data = result.getData();
+
+            if (result.isSuccess() && data != null) {
+                resetToken = data.getResetToken();
+                step = Step.RESET;
+                applyStep();
+                binding.inputNewPassword.getEditView().requestFocus();
+                return;
+            }
+
+            String message = result.getMessageOr(getString(R.string.error_network));
+            if (result.hasCode("EMAIL_NOT_VERIFIED")) {
+                codeVerified = false;
+                binding.inputAuthCode.showError(message);
+            } else if (result.hasCode("EMAIL")) {
+                binding.inputEmail.showError(message);
+            } else {
+                binding.inputName.showError(message);
+            }
+        });
     }
 
     private void submitNewPassword() {
@@ -154,9 +211,22 @@ public class FindPasswordActivity extends AppCompatActivity {
             return;
         }
 
-        repository.resetPassword(binding.inputEmail.getText(), password, success -> {
-            Toast.makeText(this, R.string.reset_password_done, Toast.LENGTH_SHORT).show();
-            finish();
+        binding.btnSubmit.setEnabled(false);
+        repository.resetPassword(resetToken, password, result -> {
+            binding.btnSubmit.setEnabled(true);
+            String message = result.getMessageOr(getString(R.string.error_network));
+
+            if (result.isSuccess()) {
+                Toast.makeText(this, R.string.reset_password_done, Toast.LENGTH_SHORT).show();
+                finish();
+            } else if (result.hasCode("PASSWORD")) {
+                binding.inputNewPassword.showError(message);
+            } else if (result.hasCode("RESET_TOKEN")) {
+                Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+                backToVerifyStep();
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+            }
         });
     }
 }

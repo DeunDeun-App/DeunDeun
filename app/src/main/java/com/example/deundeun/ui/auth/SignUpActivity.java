@@ -7,13 +7,15 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.repository.FakeAuthRepository;
+import com.example.deundeun.data.network.dto.auth.SignUpResponse;
+import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivitySignUpBinding;
 import com.example.deundeun.databinding.DialogSignupCompleteBinding;
 import com.example.deundeun.ui.common.AgreementRowView;
@@ -29,10 +31,11 @@ import java.util.List;
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;
-    private final FakeAuthRepository repository = new FakeAuthRepository();
+    private final AuthRepository repository = new AuthRepository();
 
     private List<AgreementRowView> agreements;
     private boolean emailVerified;
+    private String verifiedEmail;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -112,12 +115,18 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        repository.sendAuthCode(email, sent -> {
-            if (sent) {
+        binding.btnSendEmail.setEnabled(false);
+        repository.sendSignUpCode(email, result -> {
+            binding.btnSendEmail.setEnabled(true);
+
+            if (result.isSuccess()) {
+                emailVerified = false;
+                verifiedEmail = null;
                 binding.inputEmail.showSuccess(getString(R.string.success_email_sent));
                 binding.authCodeRow.setVisibility(View.VISIBLE);
+                binding.inputAuthCode.getEditView().requestFocus();
             } else {
-                binding.inputEmail.showError(getString(R.string.error_email_format));
+                binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
             }
         });
     }
@@ -131,12 +140,19 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        repository.verifyAuthCode(code, verified -> {
-            emailVerified = verified;
-            if (verified) {
+        String email = binding.inputEmail.getText();
+
+        binding.btnVerifyCode.setEnabled(false);
+        repository.verifySignUpCode(email, code, result -> {
+            binding.btnVerifyCode.setEnabled(true);
+            emailVerified = result.isSuccess();
+            verifiedEmail = emailVerified ? email : null;
+
+            if (emailVerified) {
                 binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
             } else {
-                binding.inputAuthCode.showError(getString(R.string.error_code_mismatch));
+                binding.inputAuthCode.showError(
+                        result.getMessageOr(getString(R.string.error_network)));
             }
         });
     }
@@ -150,9 +166,9 @@ public class SignUpActivity extends AppCompatActivity {
             focusWithError(binding.inputName, R.string.error_name_required);
             return;
         }
-        if (!emailVerified) {
-            focusWithError(binding.inputAuthCode, R.string.error_code_mismatch);
+        if (!emailVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
             binding.authCodeRow.setVisibility(View.VISIBLE);
+            focusWithError(binding.inputAuthCode, R.string.error_email_not_verified);
             return;
         }
 
@@ -173,8 +189,36 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        repository.signUp(binding.inputName.getText(), binding.inputEmail.getText(), password,
-                success -> showCompleteDialog(binding.inputName.getText()));
+        String name = binding.inputName.getText();
+
+        binding.btnSubmit.setEnabled(false);
+        repository.signUp(name, binding.inputEmail.getText(), password, result -> {
+            binding.btnSubmit.setEnabled(true);
+
+            if (result.isSuccess()) {
+                showCompleteDialog(name);
+            } else {
+                showSignUpError(result);
+            }
+        });
+    }
+
+    private void showSignUpError(AuthRepository.Result<SignUpResponse> result) {
+        String message = result.getMessageOr(getString(R.string.error_network));
+
+        if (result.hasCode("NAME")) {
+            binding.inputName.showError(message);
+        } else if (result.hasCode("PASSWORD")) {
+            binding.inputPassword.showError(message);
+        } else if (result.hasCode("EMAIL_NOT_VERIFIED")) {
+            emailVerified = false;
+            binding.authCodeRow.setVisibility(View.VISIBLE);
+            binding.inputAuthCode.showError(message);
+        } else if (result.hasCode("EMAIL")) {
+            binding.inputEmail.showError(message);
+        } else {
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void clearAllStates() {

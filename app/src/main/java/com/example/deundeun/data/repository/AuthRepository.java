@@ -5,9 +5,18 @@ import android.util.Patterns;
 import androidx.annotation.Nullable;
 
 import com.example.deundeun.data.network.ApiResponse;
+import com.example.deundeun.data.network.ApiService;
+import com.example.deundeun.data.network.RetrofitClient;
+import com.example.deundeun.data.network.dto.auth.EmailCodeRequest;
+import com.example.deundeun.data.network.dto.auth.EmailVerifyRequest;
+import com.example.deundeun.data.network.dto.auth.FindEmailRequest;
 import com.example.deundeun.data.network.dto.auth.LoginRequest;
 import com.example.deundeun.data.network.dto.auth.LoginResponse;
-import com.example.deundeun.data.network.RetrofitClient;
+import com.example.deundeun.data.network.dto.auth.PasswordResetRequest;
+import com.example.deundeun.data.network.dto.auth.ResetTokenRequest;
+import com.example.deundeun.data.network.dto.auth.ResetTokenResponse;
+import com.example.deundeun.data.network.dto.auth.SignUpRequest;
+import com.example.deundeun.data.network.dto.auth.SignUpResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -18,80 +27,126 @@ import retrofit2.Call;
 import retrofit2.Response;
 
 public class AuthRepository {
+
     public interface Callback<T> {
         void onResult(T result);
     }
 
-    /** 로그인 결과. 성공 여부와 함께 화면에 띄울 문구를 담는다. */
-    public static class LoginResult {
+    public static class Result<T> {
 
         private final boolean success;
+        private final String code;
         private final String message;
-        private final LoginResponse user;
+        private final T data;
 
-        private LoginResult(boolean success, String message, @Nullable LoginResponse user) {
+        private Result(boolean success, @Nullable String code, @Nullable String message,
+                       @Nullable T data) {
             this.success = success;
+            this.code = code;
             this.message = message;
-            this.user = user;
+            this.data = data;
         }
 
         public boolean isSuccess() { return success; }
 
-        /** 실패 사유. 서버가 준 문구를 그대로 쓸 수 있다. */
-        public String getMessage() { return message; }
+        @Nullable
+        public String getCode() { return code; }
+
+        public String getMessageOr(String fallback) {
+            return message == null || message.isEmpty() ? fallback : message;
+        }
 
         @Nullable
-        public LoginResponse getUser() { return user; }
+        public T getData() { return data; }
+
+        public boolean hasCode(String prefix) {
+            return code != null && code.startsWith(prefix);
+        }
     }
 
+    private static final Type ERROR_TYPE = new TypeToken<ApiResponse<Object>>() {}.getType();
+
     private final Gson gson = new Gson();
+    private final ApiService api = RetrofitClient.getApiService();
 
     public boolean isEmailFormatValid(String email) {
         return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    public void login(String email, String password, String fallbackMessage,
-                      Callback<LoginResult> callback) {
+    public void login(String email, String password, Callback<Result<LoginResponse>> callback) {
+        enqueue(api.login(new LoginRequest(email, password)), callback);
+    }
 
-        RetrofitClient.getApiService()
-                .login(new LoginRequest(email, password))
-                .enqueue(new retrofit2.Callback<ApiResponse<LoginResponse>>() {
+    public void sendSignUpCode(String email, Callback<Result<Void>> callback) {
+        enqueue(api.sendSignUpCode(new EmailCodeRequest(email)), callback);
+    }
 
-                    @Override
-                    public void onResponse(Call<ApiResponse<LoginResponse>> call,
-                                           Response<ApiResponse<LoginResponse>> response) {
+    public void verifySignUpCode(String email, String code, Callback<Result<Void>> callback) {
+        enqueue(api.verifySignUpCode(new EmailVerifyRequest(email, code)), callback);
+    }
 
-                        ApiResponse<LoginResponse> body = response.body();
+    public void signUp(String name, String email, String password,
+                       Callback<Result<SignUpResponse>> callback) {
+        enqueue(api.signUp(new SignUpRequest(name, email, password)), callback);
+    }
 
-                        if (response.isSuccessful() && body != null && body.isSuccess()) {
-                            callback.onResult(new LoginResult(true, body.getMessage(), body.getData()));
-                            return;
-                        }
+    public void findEmail(String name, String email, Callback<Result<Void>> callback) {
+        enqueue(api.findEmail(new FindEmailRequest(name, email)), callback);
+    }
 
-                        String message = parseErrorMessage(response);
-                        callback.onResult(new LoginResult(
-                                false, message != null ? message : fallbackMessage, null));
-                    }
+    public void sendPasswordResetCode(String email, Callback<Result<Void>> callback) {
+        enqueue(api.sendPasswordResetCode(new EmailCodeRequest(email)), callback);
+    }
 
-                    @Override
-                    public void onFailure(Call<ApiResponse<LoginResponse>> call, Throwable t) {
-                        callback.onResult(new LoginResult(false, fallbackMessage, null));
-                    }
-                });
+    public void verifyPasswordResetCode(String email, String code, Callback<Result<Void>> callback) {
+        enqueue(api.verifyPasswordResetCode(new EmailVerifyRequest(email, code)), callback);
+    }
+
+    public void issueResetToken(String name, String email,
+                                Callback<Result<ResetTokenResponse>> callback) {
+        enqueue(api.issueResetToken(new ResetTokenRequest(name, email)), callback);
+    }
+
+    public void resetPassword(String resetToken, String newPassword,
+                              Callback<Result<Void>> callback) {
+        enqueue(api.resetPassword(new PasswordResetRequest(resetToken, newPassword)), callback);
+    }
+
+    private <T> void enqueue(Call<ApiResponse<T>> call, Callback<Result<T>> callback) {
+        call.enqueue(new retrofit2.Callback<ApiResponse<T>>() {
+
+            @Override
+            public void onResponse(Call<ApiResponse<T>> call, Response<ApiResponse<T>> response) {
+                ApiResponse<T> body = response.body();
+
+                if (response.isSuccessful() && body != null && body.isSuccess()) {
+                    callback.onResult(new Result<>(true, body.getCode(), body.getMessage(),
+                            body.getData()));
+                    return;
+                }
+
+                ApiResponse<Object> error = parseError(response.errorBody());
+                callback.onResult(new Result<>(false,
+                        error == null ? null : error.getCode(),
+                        error == null ? null : error.getMessage(),
+                        null));
+            }
+
+            @Override
+            public void onFailure(Call<ApiResponse<T>> call, Throwable t) {
+                callback.onResult(new Result<>(false, null, null, null));
+            }
+        });
     }
 
     @Nullable
-    private String parseErrorMessage(Response<ApiResponse<LoginResponse>> response) {
-        ResponseBody errorBody = response.errorBody();
+    private ApiResponse<Object> parseError(@Nullable ResponseBody errorBody) {
         if (errorBody == null) {
             return null;
         }
 
         try {
-            Type type = new TypeToken<ApiResponse<LoginResponse>>() {}.getType();
-            ApiResponse<LoginResponse> parsed = gson.fromJson(errorBody.charStream(), type);
-
-            return parsed == null ? null : parsed.getMessage();
+            return gson.fromJson(errorBody.charStream(), ERROR_TYPE);
 
         } catch (Exception e) {
             return null;
@@ -99,6 +154,4 @@ public class AuthRepository {
             errorBody.close();
         }
     }
-
-
 }

@@ -61,13 +61,14 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnLogin.setEnabled(false);
 
-        repository.login(email, password, getString(R.string.error_login_failed), result -> {
+        repository.login(email, password, result -> {
             binding.btnLogin.setEnabled(true);
 
             if (result.isSuccess()) {
                 goToMain();
             } else {
-                binding.inputPassword.showError(result.getMessage());
+                binding.inputPassword.showError(
+                        result.getMessageOr(getString(R.string.error_network)));
             }
         });
     }
