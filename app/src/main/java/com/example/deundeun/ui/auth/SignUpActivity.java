@@ -183,8 +183,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         if (!requiredAgreed()) {
-            binding.agreeAllRow.announceForAccessibility(
-                    getString(R.string.error_agreement_required));
+            Toast.makeText(this, R.string.error_agreement_required, Toast.LENGTH_SHORT).show();
             binding.signupScroll.smoothScrollTo(0, binding.agreeAllRow.getTop());
             return;
         }

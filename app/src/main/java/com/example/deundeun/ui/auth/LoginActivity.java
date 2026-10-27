@@ -55,7 +55,7 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
         if (password.isEmpty()) {
-            binding.inputPassword.showError(getString(R.string.error_password_length));
+            binding.inputPassword.showError(getString(R.string.error_password_required));
             return;
         }
 
