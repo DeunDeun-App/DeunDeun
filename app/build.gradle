@@ -2,13 +2,6 @@ plugins {
     alias(libs.plugins.android.application)
 }
 
-def localProps = new Properties()
-def localPropsFile = rootProject.file('local.properties')
-if (localPropsFile.exists()) {
-    localPropsFile.withInputStream { localProps.load(it) }
-}
-def apiBaseUrl = localProps.getProperty('api.base.url', 'http://10.0.2.2:8080/')
-
 android {
     namespace 'com.example.deundeun'
     compileSdk {
@@ -23,8 +16,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        buildConfigField "String", "API_BASE_URL", "\"${apiBaseUrl}\""
     }
 
     buildTypes {
@@ -40,7 +31,6 @@ android {
     }
     buildFeatures {
         viewBinding true
-        buildConfig true
     }
 }
 

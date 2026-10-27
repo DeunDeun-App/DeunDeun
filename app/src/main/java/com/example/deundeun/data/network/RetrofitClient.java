@@ -1,7 +1,5 @@
 package com.example.deundeun.data.network;
 
-import com.example.deundeun.BuildConfig;
-
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
@@ -10,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.OkHttpClient;
 
 public class RetrofitClient {
-    private static final String BASE_URL = BuildConfig.API_BASE_URL;
+    private static final String BASE_URL = "http://localhost:8080/";
     private static Retrofit retrofit = null;
 
     public static ApiService getApiService() {
