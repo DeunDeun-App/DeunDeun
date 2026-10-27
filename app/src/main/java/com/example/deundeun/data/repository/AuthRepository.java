@@ -69,7 +69,7 @@ public class AuthRepository {
         enqueue(api.login(new AuthRequest(null, email, password, null, null)), callback);
     }
 
-    public void sendSignUpCode(String email, Callback<Result<Void>> callback) {
+    public void sendSignUpCode(String email, Callback<Result<Long>> callback) {
         enqueue(api.sendSignUpCode(new AuthRequest(null, email, null, null, null)), callback);
     }
 
@@ -86,8 +86,8 @@ public class AuthRepository {
         enqueue(api.findEmail(new AuthRequest(name, email, null, null, null)), callback);
     }
 
-    public void sendPasswordResetCode(String email, Callback<Result<Void>> callback) {
-        enqueue(api.sendPasswordResetCode(new AuthRequest(null, email, null, null, null)), callback);
+    public void sendPasswordResetCode(String name, String email, Callback<Result<Long>> callback) {
+        enqueue(api.sendPasswordResetCode(new AuthRequest(name, email, null, null, null)), callback);
     }
 
     public void verifyPasswordResetCode(String email, String code, Callback<Result<Void>> callback) {

@@ -276,6 +276,7 @@
     <string name="hint_password">영문, 숫자, 특수문자 조합으로 8~16자리의 비밀번호</string>
     <string name="hint_password_confirm">비밀번호 재입력</string>
     <string name="action_send_email">이메일 발송</string>
+    <string name="action_resend_email">재발송</string>
     <string name="action_verify">확인</string>
     <string name="action_confirm">확인</string>
     <string name="action_next">다음</string>
@@ -308,6 +309,8 @@
     <string name="error_email_format">이메일 주소 형식이 올바르지 않습니다.</string>
     <string name="error_code_required">인증번호를 입력해 주세요.</string>
     <string name="error_code_mismatch">인증번호가 일치하지 않습니다.</string>
+    <string name="error_code_expired">인증 시간이 만료되었습니다. 인증번호를 다시 받아 주세요.</string>
+    <string name="auth_code_remaining">%1$s\n남은 시간 %2$d분 %3$02d초</string>
     <string name="error_email_not_verified">이메일 인증을 먼저 완료해 주세요.</string>
     <string name="error_password_required">비밀번호를 입력해 주세요.</string>
     <string name="error_password_length">비밀번호는 8~16자로 입력해 주세요.</string>

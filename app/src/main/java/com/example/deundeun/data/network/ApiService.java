@@ -13,7 +13,7 @@ public interface ApiService {
     Call<ApiResponse<UserResponse>> login(@Body AuthRequest request);
 
     @POST("api/auth/signup/email-code")
-    Call<ApiResponse<Void>> sendSignUpCode(@Body AuthRequest request);
+    Call<ApiResponse<Long>> sendSignUpCode(@Body AuthRequest request);
 
     @POST("api/auth/signup/email-verify")
     Call<ApiResponse<Void>> verifySignUpCode(@Body AuthRequest request);
@@ -25,7 +25,7 @@ public interface ApiService {
     Call<ApiResponse<Void>> findEmail(@Body AuthRequest request);
 
     @POST("api/auth/password/email-code")
-    Call<ApiResponse<Void>> sendPasswordResetCode(@Body AuthRequest request);
+    Call<ApiResponse<Long>> sendPasswordResetCode(@Body AuthRequest request);
 
     @POST("api/auth/password/email-verify")
     Call<ApiResponse<Void>> verifyPasswordResetCode(@Body AuthRequest request);

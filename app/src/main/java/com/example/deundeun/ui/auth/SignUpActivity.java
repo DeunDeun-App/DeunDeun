@@ -36,6 +36,7 @@ public class SignUpActivity extends AppCompatActivity {
     private List<AgreementRowView> agreements;
     private boolean emailVerified;
     private String verifiedEmail;
+    private AuthCodeTimer codeTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -55,9 +56,19 @@ public class SignUpActivity extends AppCompatActivity {
                 binding.agreePrivacy, binding.agreeMarketing);
         setUpAgreements();
 
+        codeTimer = new AuthCodeTimer(this, binding.inputAuthCode);
+        binding.inputEmail.alignWithField(binding.btnSendEmail);
+        binding.inputAuthCode.alignWithField(binding.btnVerifyCode);
+
         binding.btnSendEmail.setOnClickListener(v -> sendAuthCode());
         binding.btnVerifyCode.setOnClickListener(v -> verifyAuthCode());
         binding.btnSubmit.setOnClickListener(v -> attemptSignUp());
+    }
+
+    @Override
+    protected void onDestroy() {
+        codeTimer.cancel();
+        super.onDestroy();
     }
 
     // ----- 약관 -----
@@ -122,8 +133,10 @@ public class SignUpActivity extends AppCompatActivity {
             if (result.isSuccess()) {
                 emailVerified = false;
                 verifiedEmail = null;
-                binding.inputEmail.showSuccess(getString(R.string.success_email_sent));
+                binding.btnSendEmail.setText(R.string.action_resend_email);
                 binding.authCodeRow.setVisibility(View.VISIBLE);
+                binding.inputAuthCode.setText("");
+                codeTimer.start(result.getData());
                 binding.inputAuthCode.getEditView().requestFocus();
             } else {
                 binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
@@ -132,11 +145,14 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void verifyAuthCode() {
-        binding.inputAuthCode.clearState();
         String code = binding.inputAuthCode.getText();
 
+        if (codeTimer.isExpired()) {
+            binding.inputAuthCode.showError(getString(R.string.error_code_expired));
+            return;
+        }
         if (code.isEmpty()) {
-            binding.inputAuthCode.showError(getString(R.string.error_code_required));
+            codeTimer.showError(getString(R.string.error_code_required));
             return;
         }
 
@@ -149,10 +165,17 @@ public class SignUpActivity extends AppCompatActivity {
             verifiedEmail = emailVerified ? email : null;
 
             if (emailVerified) {
+                codeTimer.stop();
                 binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
+                return;
+            }
+
+            String message = result.getMessageOr(getString(R.string.error_network));
+            if (result.hasCode("CODE_EXPIRED") || result.hasCode("CODE_ATTEMPTS")) {
+                codeTimer.stop();
+                binding.inputAuthCode.showError(message);
             } else {
-                binding.inputAuthCode.showError(
-                        result.getMessageOr(getString(R.string.error_network)));
+                codeTimer.showError(message);
             }
         });
     }
@@ -168,7 +191,8 @@ public class SignUpActivity extends AppCompatActivity {
         }
         if (!emailVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
             binding.authCodeRow.setVisibility(View.VISIBLE);
-            focusWithError(binding.inputAuthCode, R.string.error_email_not_verified);
+            codeTimer.showError(getString(R.string.error_email_not_verified));
+            binding.inputAuthCode.getEditView().requestFocus();
             return;
         }
 
@@ -212,7 +236,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else if (result.hasCode("EMAIL_NOT_VERIFIED")) {
             emailVerified = false;
             binding.authCodeRow.setVisibility(View.VISIBLE);
-            binding.inputAuthCode.showError(message);
+            codeTimer.showError(message);
         } else if (result.hasCode("EMAIL")) {
             binding.inputEmail.showError(message);
         } else {

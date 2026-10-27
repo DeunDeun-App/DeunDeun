@@ -152,6 +152,23 @@ public class LabeledInputView extends LinearLayout {
         binding.inputMessage.setImportantForAccessibility(IMPORTANT_FOR_ACCESSIBILITY_YES);
     }
 
+    public State getState() {
+        return state;
+    }
+
+    public void alignWithField(View view) {
+        binding.inputBox.addOnLayoutChangeListener((v, left, top, right, bottom,
+                                                   oldLeft, oldTop, oldRight, oldBottom) -> {
+            MarginLayoutParams params = (MarginLayoutParams) view.getLayoutParams();
+            int height = bottom - top;
+            if (params.topMargin != top || params.height != height) {
+                params.topMargin = top;
+                params.height = height;
+                view.post(() -> view.setLayoutParams(params));
+            }
+        });
+    }
+
     public boolean isEmpty() {
         return getText().isEmpty();
     }

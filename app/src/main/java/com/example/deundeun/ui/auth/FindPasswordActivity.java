@@ -32,6 +32,7 @@ public class FindPasswordActivity extends AppCompatActivity {
     private boolean codeVerified;
     private String verifiedEmail;
     private String resetToken;
+    private AuthCodeTimer codeTimer;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,6 +44,10 @@ public class FindPasswordActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.findPasswordScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
+
+        codeTimer = new AuthCodeTimer(this, binding.inputAuthCode);
+        binding.inputEmail.alignWithField(binding.btnSendEmail);
+        binding.inputAuthCode.alignWithField(binding.btnVerifyCode);
 
         if (savedInstanceState != null) {
             resetToken = savedInstanceState.getString(STATE_RESET_TOKEN);
@@ -57,6 +62,12 @@ public class FindPasswordActivity extends AppCompatActivity {
         binding.btnSubmit.setOnClickListener(v -> onSubmit());
 
         applyStep();
+    }
+
+    @Override
+    protected void onDestroy() {
+        codeTimer.cancel();
+        super.onDestroy();
     }
 
     @Override
@@ -88,15 +99,22 @@ public class FindPasswordActivity extends AppCompatActivity {
         resetToken = null;
         codeVerified = false;
         verifiedEmail = null;
+        codeTimer.stop();
         binding.inputAuthCode.setText("");
         binding.inputAuthCode.clearState();
         applyStep();
     }
 
     private void sendAuthCode() {
+        binding.inputName.clearState();
         binding.inputEmail.clearState();
+        String name = binding.inputName.getText();
         String email = binding.inputEmail.getText();
 
+        if (name.isEmpty()) {
+            binding.inputName.showError(getString(R.string.error_name_required));
+            return;
+        }
         if (email.isEmpty()) {
             binding.inputEmail.showError(getString(R.string.error_email_required));
             return;
@@ -107,15 +125,19 @@ public class FindPasswordActivity extends AppCompatActivity {
         }
 
         binding.btnSendEmail.setEnabled(false);
-        repository.sendPasswordResetCode(email, result -> {
+        repository.sendPasswordResetCode(name, email, result -> {
             binding.btnSendEmail.setEnabled(true);
 
             if (result.isSuccess()) {
                 codeVerified = false;
                 verifiedEmail = null;
-                binding.inputEmail.showSuccess(getString(R.string.success_email_sent));
+                binding.btnSendEmail.setText(R.string.action_resend_email);
                 binding.authCodeRow.setVisibility(View.VISIBLE);
+                binding.inputAuthCode.setText("");
+                codeTimer.start(result.getData());
                 binding.inputAuthCode.getEditView().requestFocus();
+            } else if (result.hasCode("NAME")) {
+                binding.inputName.showError(result.getMessageOr(getString(R.string.error_network)));
             } else {
                 binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
             }
@@ -123,11 +145,14 @@ public class FindPasswordActivity extends AppCompatActivity {
     }
 
     private void verifyAuthCode() {
-        binding.inputAuthCode.clearState();
         String code = binding.inputAuthCode.getText();
 
+        if (codeTimer.isExpired()) {
+            binding.inputAuthCode.showError(getString(R.string.error_code_expired));
+            return;
+        }
         if (code.isEmpty()) {
-            binding.inputAuthCode.showError(getString(R.string.error_code_required));
+            codeTimer.showError(getString(R.string.error_code_required));
             return;
         }
 
@@ -140,10 +165,17 @@ public class FindPasswordActivity extends AppCompatActivity {
             verifiedEmail = codeVerified ? email : null;
 
             if (codeVerified) {
+                codeTimer.stop();
                 binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
+                return;
+            }
+
+            String message = result.getMessageOr(getString(R.string.error_network));
+            if (result.hasCode("CODE_EXPIRED") || result.hasCode("CODE_ATTEMPTS")) {
+                codeTimer.stop();
+                binding.inputAuthCode.showError(message);
             } else {
-                binding.inputAuthCode.showError(
-                        result.getMessageOr(getString(R.string.error_network)));
+                codeTimer.showError(message);
             }
         });
     }
@@ -158,14 +190,13 @@ public class FindPasswordActivity extends AppCompatActivity {
 
     private void goToResetStep() {
         binding.inputName.clearState();
-        binding.inputAuthCode.clearState();
 
         if (binding.inputName.isEmpty()) {
             binding.inputName.showError(getString(R.string.error_name_required));
             return;
         }
         if (!codeVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
-            binding.inputAuthCode.showError(getString(R.string.error_email_not_verified));
+            codeTimer.showError(getString(R.string.error_email_not_verified));
             return;
         }
 
@@ -183,7 +214,7 @@ public class FindPasswordActivity extends AppCompatActivity {
             String message = result.getMessageOr(getString(R.string.error_network));
             if (result.hasCode("EMAIL_NOT_VERIFIED")) {
                 codeVerified = false;
-                binding.inputAuthCode.showError(message);
+                codeTimer.showError(message);
             } else if (result.hasCode("EMAIL")) {
                 binding.inputEmail.showError(message);
             } else {
