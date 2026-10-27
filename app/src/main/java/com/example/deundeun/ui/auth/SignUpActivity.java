@@ -126,6 +126,11 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
+        boolean codeRowShown = binding.authCodeRow.getVisibility() == View.VISIBLE;
+        binding.inputAuthCode.setText("");
+        binding.authCodeRow.setVisibility(View.VISIBLE);
+        codeTimer.showSending();
+
         binding.btnSendEmail.setEnabled(false);
         repository.sendSignUpCode(email, result -> {
             binding.btnSendEmail.setEnabled(true);
@@ -134,14 +139,22 @@ public class SignUpActivity extends AppCompatActivity {
                 emailVerified = false;
                 verifiedEmail = null;
                 binding.btnSendEmail.setText(R.string.action_resend_email);
-                binding.authCodeRow.setVisibility(View.VISIBLE);
-                binding.inputAuthCode.setText("");
                 codeTimer.start(result.getData());
                 binding.inputAuthCode.getEditView().requestFocus();
-            } else {
-                binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
+                return;
             }
+
+            restoreCodeRow(codeRowShown);
+            binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
         });
+    }
+
+    private void restoreCodeRow(boolean shown) {
+        codeTimer.stop();
+        binding.inputAuthCode.clearState();
+        if (!shown) {
+            binding.authCodeRow.setVisibility(View.GONE);
+        }
     }
 
     private void verifyAuthCode() {

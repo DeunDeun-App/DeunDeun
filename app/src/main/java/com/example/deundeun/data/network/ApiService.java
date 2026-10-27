@@ -9,30 +9,30 @@ import retrofit2.http.POST;
 
 public interface ApiService {
 
-    @POST("api/auth/login")
+    @POST("auth/login")
     Call<ApiResponse<UserResponse>> login(@Body AuthRequest request);
 
-    @POST("api/auth/signup/email-code")
+    @POST("auth/signup/email-code")
     Call<ApiResponse<Long>> sendSignUpCode(@Body AuthRequest request);
 
-    @POST("api/auth/signup/email-verify")
+    @POST("auth/signup/email-verify")
     Call<ApiResponse<Void>> verifySignUpCode(@Body AuthRequest request);
 
-    @POST("api/auth/signup")
+    @POST("auth/signup")
     Call<ApiResponse<UserResponse>> signUp(@Body AuthRequest request);
 
-    @POST("api/auth/find-email")
+    @POST("auth/find-email")
     Call<ApiResponse<Void>> findEmail(@Body AuthRequest request);
 
-    @POST("api/auth/password/email-code")
+    @POST("auth/password/email-code")
     Call<ApiResponse<Long>> sendPasswordResetCode(@Body AuthRequest request);
 
-    @POST("api/auth/password/email-verify")
+    @POST("auth/password/email-verify")
     Call<ApiResponse<Void>> verifyPasswordResetCode(@Body AuthRequest request);
 
-    @POST("api/auth/password/reset-token")
+    @POST("auth/password/reset-token")
     Call<ApiResponse<String>> issueResetToken(@Body AuthRequest request);
 
-    @POST("api/auth/password/reset")
+    @POST("auth/password/reset")
     Call<ApiResponse<Void>> resetPassword(@Body AuthRequest request);
 }

@@ -63,6 +63,13 @@ public class AuthCodeTimer {
         timer.start();
     }
 
+    public void showSending() {
+        cancel();
+        running = false;
+        expired = false;
+        input.showSuccess(context.getString(R.string.auth_code_sending));
+    }
+
     public void showError(String errorMessage) {
         if (!running) {
             input.showError(errorMessage);

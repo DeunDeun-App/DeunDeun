@@ -320,6 +320,7 @@
     <string name="error_password_mismatch">비밀번호가 일치하지 않습니다.</string>
     <string name="error_agreement_required">필수 약관에 동의해 주세요.</string>
     <string name="success_email_sent">인증번호를 보냈습니다. 메일함을 확인해 주세요.</string>
+    <string name="auth_code_sending">인증번호를 보내는 중입니다.</string>
     <string name="success_code_verified">인증이 완료되었습니다.</string>
 
     <!-- 이메일 찾기 -->
