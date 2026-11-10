@@ -213,15 +213,18 @@
     <string name="translate_recent">최근 재난문자</string>
     <string name="translate_badge">AI 번역</string>
     <string name="translate_badge_desc">쉬운 말로 바꿨어요</string>
-    <string name="translate_sample">[행정안전부] 경기 수원시 지역에 호우주의부 발효. 침수 위험지역 주민 대피 권고. 하천 인근 접근 금지. 안전한 곳으로 즉시 이동 바랍니다.</string>
-    <string name="translate_r1_title">비가 많이 와요</string>
-    <string name="translate_r1_desc">수원시에 비가 많이 내리고 있어요</string>
-    <string name="translate_r2_title">안전한 곳으로 가세요</string>
-    <string name="translate_r2_desc">낮은 곳이나 강 근처는 위험해요\n높고 안전한 곳으로 이동하세요</string>
-    <string name="translate_r3_title">강 근처에 가지 마세요</string>
-    <string name="translate_r3_desc">하천이나 강 근처에 가면 위험해요</string>
     <string name="translate_action_title">지금 이렇게 하세요</string>
-    <string name="translate_action_desc">1층이나 지하 위층으로 올라가요\n밖에 있다면 건물 안으로 들어가요</string>
+    <string name="translate_basic_badge">안전 안내</string>
+    <string name="translate_basic_desc">행동 요령을 알려 드려요</string>
+    <string name="translate_list_loading">최근 재난문자를 불러오는 중입니다.</string>
+    <string name="translate_loading">쉬운 말로 바꾸는 중입니다.</string>
+    <string name="translate_empty">최근 재난문자가 없습니다.</string>
+    <string name="translate_retry">%1$s\n다시 시도하려면 여기를 눌러 주세요.</string>
+    <string name="translate_meta">%1$s · %2$s</string>
+    <string name="translate_position">%1$d / %2$d</string>
+    <string name="translate_sent_at">%1$d월 %2$d일 %3$02d:%4$02d</string>
+    <string name="cd_prev_message">이전 재난문자</string>
+    <string name="cd_next_message">다음 재난문자</string>
 
     <!-- ===== SOS ===== -->
     <string name="sos_title">도움이 필요한가요?</string>

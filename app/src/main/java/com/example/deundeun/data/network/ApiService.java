@@ -3,6 +3,8 @@ package com.example.deundeun.data.network;
 import com.example.deundeun.data.network.dto.auth.AuthRequest;
 import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
+import com.example.deundeun.data.network.dto.disaster.DisasterMessageResponse;
+import com.example.deundeun.data.network.dto.disaster.EasyMessageResponse;
 import com.example.deundeun.data.network.dto.user.NotificationResponse;
 import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.network.dto.user.ProfileUpdateRequest;
@@ -18,6 +20,8 @@ import retrofit2.http.Header;
 import retrofit2.http.PATCH;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
 
@@ -74,4 +78,11 @@ public interface ApiService {
 
     @DELETE("users/me")
     Call<ApiResponse<Void>> withdraw(@Header("Authorization") String authorization);
+
+    @GET("disaster-messages")
+    Call<ApiResponse<List<DisasterMessageResponse>>> getRecentDisasterMessages(
+            @Query("refresh") boolean refresh);
+
+    @POST("disaster-messages/{id}/easy")
+    Call<ApiResponse<EasyMessageResponse>> toEasyMessage(@Path("id") String id);
 }
