@@ -15,7 +15,7 @@ public final class PictogramEmoji {
         EMOJI.put("RAIN", "☔");
         EMOJI.put("TYPHOON", "🌀");
         EMOJI.put("WATER", "🌊");
-        EMOJI.put("EARTHQUAKE", "🏚️");
+        EMOJI.put("EARTHQUAKE", "⚠️");
         EMOJI.put("FIRE", "🔥");
         EMOJI.put("SMOKE", "💨");
         EMOJI.put("HOT", "☀️");
@@ -31,7 +31,7 @@ public final class PictogramEmoji {
         EMOJI.put("RUN", "🏃");
         EMOJI.put("HOUSE", "🏠");
         EMOJI.put("UP", "⬆️");
-        EMOJI.put("TABLE", "🪑");
+        EMOJI.put("TABLE", "🙇");
         EMOJI.put("WINDOW", "🚪");
         EMOJI.put("DRINK", "💧");
         EMOJI.put("CLOTHES", "🧥");
