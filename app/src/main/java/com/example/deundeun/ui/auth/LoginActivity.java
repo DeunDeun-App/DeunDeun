@@ -4,12 +4,16 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.MainActivity;
 import com.example.deundeun.R;
+import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.repository.AuthRepository;
+import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.databinding.ActivityLoginBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
@@ -20,9 +24,29 @@ public class LoginActivity extends AppCompatActivity {
 
     private final AuthRepository repository = new AuthRepository();
 
+    private SessionManager sessionManager;
+
+    private final ActivityResultLauncher<Intent> findIdLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                Intent data = result.getData();
+                String loginId = data == null ? null
+                        : data.getStringExtra(FindIdActivity.EXTRA_LOGIN_ID);
+                if (result.getResultCode() == RESULT_OK && loginId != null) {
+                    binding.inputLoginId.setText(loginId);
+                    binding.inputPassword.getEditView().requestFocus();
+                }
+            });
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = new SessionManager(this);
+        if (sessionManager.isLoggedIn()) {
+            goToMain();
+            return;
+        }
+
         EdgeToEdge.enable(this);
 
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
@@ -33,25 +57,21 @@ public class LoginActivity extends AppCompatActivity {
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.btnSignup.setOnClickListener(v ->
                 startActivity(new Intent(this, SignUpActivity.class)));
-        binding.btnFindEmail.setOnClickListener(v ->
-                startActivity(new Intent(this, FindEmailActivity.class)));
+        binding.btnFindId.setOnClickListener(v ->
+                findIdLauncher.launch(new Intent(this, FindIdActivity.class)));
         binding.btnFindPassword.setOnClickListener(v ->
                 startActivity(new Intent(this, FindPasswordActivity.class)));
     }
 
     private void attemptLogin() {
-        binding.inputEmail.clearState();
+        binding.inputLoginId.clearState();
         binding.inputPassword.clearState();
 
-        String email = binding.inputEmail.getText();
+        String loginId = binding.inputLoginId.getText();
         String password = binding.inputPassword.getText();
 
-        if (email.isEmpty()) {
-            binding.inputEmail.showError(getString(R.string.error_email_required));
-            return;
-        }
-        if (!repository.isEmailFormatValid(email)) {
-            binding.inputEmail.showError(getString(R.string.error_email_format));
+        if (loginId.isEmpty()) {
+            binding.inputLoginId.showError(getString(R.string.error_login_id_required));
             return;
         }
         if (password.isEmpty()) {
@@ -61,10 +81,14 @@ public class LoginActivity extends AppCompatActivity {
 
         binding.btnLogin.setEnabled(false);
 
-        repository.login(email, password, result -> {
+        repository.login(loginId, password, result -> {
             binding.btnLogin.setEnabled(true);
 
-            if (result.isSuccess()) {
+            LoginResponse data = result.getData();
+            if (result.isSuccess() && data != null && data.getToken() != null) {
+                String userName = data.getUser() == null ? null : data.getUser().getUserName();
+                String savedLoginId = data.getUser() == null ? loginId : data.getUser().getLoginId();
+                sessionManager.save(data.getToken(), savedLoginId, userName);
                 goToMain();
             } else {
                 binding.inputPassword.showError(

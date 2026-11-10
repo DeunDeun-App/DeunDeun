@@ -37,7 +37,7 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
-            android:name=".ui.auth.FindEmailActivity"
+            android:name=".ui.auth.FindIdActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 

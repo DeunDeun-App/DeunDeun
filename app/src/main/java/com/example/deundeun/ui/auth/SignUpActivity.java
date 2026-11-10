@@ -202,6 +202,14 @@ public class SignUpActivity extends AppCompatActivity {
             focusWithError(binding.inputName, R.string.error_name_required);
             return;
         }
+        if (binding.inputLoginId.isEmpty()) {
+            focusWithError(binding.inputLoginId, R.string.error_login_id_required);
+            return;
+        }
+        if (!repository.isLoginIdFormatValid(binding.inputLoginId.getText())) {
+            focusWithError(binding.inputLoginId, R.string.error_login_id_format);
+            return;
+        }
         if (!emailVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
             binding.authCodeRow.setVisibility(View.VISIBLE);
             codeTimer.showError(getString(R.string.error_email_not_verified));
@@ -228,7 +236,8 @@ public class SignUpActivity extends AppCompatActivity {
         String name = binding.inputName.getText();
 
         binding.btnSubmit.setEnabled(false);
-        repository.signUp(name, binding.inputEmail.getText(), password, result -> {
+        repository.signUp(binding.inputLoginId.getText(), name, binding.inputEmail.getText(),
+                password, result -> {
             binding.btnSubmit.setEnabled(true);
 
             if (result.isSuccess()) {
@@ -244,6 +253,9 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (result.hasCode("NAME")) {
             binding.inputName.showError(message);
+        } else if (result.hasCode("LOGIN_ID")) {
+            binding.inputLoginId.showError(message);
+            binding.inputLoginId.getEditView().requestFocus();
         } else if (result.hasCode("PASSWORD")) {
             binding.inputPassword.showError(message);
         } else if (result.hasCode("EMAIL_NOT_VERIFIED")) {
@@ -259,6 +271,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void clearAllStates() {
         binding.inputName.clearState();
+        binding.inputLoginId.clearState();
         binding.inputPassword.clearState();
         binding.inputPasswordConfirm.clearState();
     }

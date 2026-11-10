@@ -106,13 +106,17 @@ public class FindPasswordActivity extends AppCompatActivity {
     }
 
     private void sendAuthCode() {
-        binding.inputName.clearState();
+        binding.inputLoginId.clearState();
         binding.inputEmail.clearState();
-        String name = binding.inputName.getText();
+        String loginId = binding.inputLoginId.getText();
         String email = binding.inputEmail.getText();
 
-        if (name.isEmpty()) {
-            binding.inputName.showError(getString(R.string.error_name_required));
+        if (loginId.isEmpty()) {
+            binding.inputLoginId.showError(getString(R.string.error_login_id_required));
+            return;
+        }
+        if (!repository.isLoginIdFormatValid(loginId)) {
+            binding.inputLoginId.showError(getString(R.string.error_login_id_format));
             return;
         }
         if (email.isEmpty()) {
@@ -130,7 +134,7 @@ public class FindPasswordActivity extends AppCompatActivity {
         codeTimer.showSending();
 
         binding.btnSendEmail.setEnabled(false);
-        repository.sendPasswordResetCode(name, email, result -> {
+        repository.sendPasswordResetCode(loginId, email, result -> {
             binding.btnSendEmail.setEnabled(true);
 
             if (result.isSuccess()) {
@@ -143,8 +147,8 @@ public class FindPasswordActivity extends AppCompatActivity {
             }
 
             restoreCodeRow(codeRowShown);
-            if (result.hasCode("NAME")) {
-                binding.inputName.showError(result.getMessageOr(getString(R.string.error_network)));
+            if (result.hasCode("LOGIN_ID")) {
+                binding.inputLoginId.showError(result.getMessageOr(getString(R.string.error_network)));
             } else {
                 binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
             }
@@ -204,10 +208,10 @@ public class FindPasswordActivity extends AppCompatActivity {
     }
 
     private void goToResetStep() {
-        binding.inputName.clearState();
+        binding.inputLoginId.clearState();
 
-        if (binding.inputName.isEmpty()) {
-            binding.inputName.showError(getString(R.string.error_name_required));
+        if (binding.inputLoginId.isEmpty()) {
+            binding.inputLoginId.showError(getString(R.string.error_login_id_required));
             return;
         }
         if (!codeVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
@@ -216,7 +220,7 @@ public class FindPasswordActivity extends AppCompatActivity {
         }
 
         binding.btnSubmit.setEnabled(false);
-        repository.issueResetToken(binding.inputName.getText(), verifiedEmail, result -> {
+        repository.issueResetToken(binding.inputLoginId.getText(), verifiedEmail, result -> {
             binding.btnSubmit.setEnabled(true);
             if (result.isSuccess() && result.getData() != null) {
                 resetToken = result.getData();
@@ -232,8 +236,10 @@ public class FindPasswordActivity extends AppCompatActivity {
                 codeTimer.showError(message);
             } else if (result.hasCode("EMAIL")) {
                 binding.inputEmail.showError(message);
+            } else if (result.hasCode("LOGIN_ID")) {
+                binding.inputLoginId.showError(message);
             } else {
-                binding.inputName.showError(message);
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
         });
     }

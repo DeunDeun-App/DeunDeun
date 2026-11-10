@@ -3,6 +3,7 @@ package com.example.deundeun;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -11,7 +12,10 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.deundeun.data.repository.AuthRepository;
+import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.databinding.ActivityMainBinding;
+import com.example.deundeun.ui.auth.LoginActivity;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.NavItemView;
 import com.example.deundeun.ui.common.NotchedBarDrawable;
@@ -36,9 +40,18 @@ public class MainActivity extends AppCompatActivity {
 
     private String selectedTag;
 
+    private SessionManager sessionManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = new SessionManager(this);
+        if (!sessionManager.isLoggedIn()) {
+            goToLogin(false);
+            return;
+        }
+
         EdgeToEdge.enable(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -64,6 +77,30 @@ public class MainActivity extends AppCompatActivity {
                 ? savedInstanceState.getString(STATE_SELECTED_TAB, HomeFragment.TAG)
                 : HomeFragment.TAG;
         showTab(requestedTab(getIntent(), initialTag));
+
+        checkSession();
+    }
+
+    private void checkSession() {
+        new AuthRepository().me(sessionManager.getAuthorization(), result -> {
+            if (result.isSuccess() && result.getData() != null) {
+                sessionManager.updateUser(result.getData().getLoginId(),
+                        result.getData().getUserName());
+            } else if (result.hasCode("SESSION_EXPIRED")) {
+                goToLogin(true);
+            }
+        });
+    }
+
+    private void goToLogin(boolean expired) {
+        sessionManager.clear();
+        if (expired) {
+            Toast.makeText(this, R.string.error_session_expired, Toast.LENGTH_LONG).show();
+        }
+        Intent intent = new Intent(this, LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        finish();
     }
 
     @Override
