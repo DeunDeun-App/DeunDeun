@@ -126,11 +126,6 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        boolean codeRowShown = binding.authCodeRow.getVisibility() == View.VISIBLE;
-        binding.inputAuthCode.setText("");
-        binding.authCodeRow.setVisibility(View.VISIBLE);
-        codeTimer.showSending();
-
         binding.btnSendEmail.setEnabled(false);
         repository.sendSignUpCode(email, result -> {
             binding.btnSendEmail.setEnabled(true);
@@ -139,21 +134,25 @@ public class SignUpActivity extends AppCompatActivity {
                 emailVerified = false;
                 verifiedEmail = null;
                 binding.btnSendEmail.setText(R.string.action_resend_email);
+                binding.inputAuthCode.setText("");
+                binding.inputAuthCode.clearState();
+                binding.authCodeRow.setVisibility(View.VISIBLE);
                 codeTimer.start(result.getData());
                 binding.inputAuthCode.getEditView().requestFocus();
                 return;
             }
 
-            restoreCodeRow(codeRowShown);
             binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
         });
     }
 
-    private void restoreCodeRow(boolean shown) {
-        codeTimer.stop();
-        binding.inputAuthCode.clearState();
-        if (!shown) {
-            binding.authCodeRow.setVisibility(View.GONE);
+    private void showNotVerified(String message) {
+        if (binding.authCodeRow.getVisibility() == View.VISIBLE) {
+            codeTimer.showError(message);
+            binding.inputAuthCode.getEditView().requestFocus();
+        } else {
+            binding.inputEmail.showError(message);
+            binding.inputEmail.getEditView().requestFocus();
         }
     }
 
@@ -211,9 +210,7 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
         if (!emailVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
-            binding.authCodeRow.setVisibility(View.VISIBLE);
-            codeTimer.showError(getString(R.string.error_email_not_verified));
-            binding.inputAuthCode.getEditView().requestFocus();
+            showNotVerified(getString(R.string.error_email_not_verified));
             return;
         }
 
@@ -260,8 +257,7 @@ public class SignUpActivity extends AppCompatActivity {
             binding.inputPassword.showError(message);
         } else if (result.hasCode("EMAIL_NOT_VERIFIED")) {
             emailVerified = false;
-            binding.authCodeRow.setVisibility(View.VISIBLE);
-            codeTimer.showError(message);
+            showNotVerified(message);
         } else if (result.hasCode("EMAIL")) {
             binding.inputEmail.showError(message);
         } else {

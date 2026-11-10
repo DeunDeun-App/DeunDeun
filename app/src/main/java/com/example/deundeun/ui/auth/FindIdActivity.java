@@ -81,11 +81,6 @@ public class FindIdActivity extends AppCompatActivity {
             return;
         }
 
-        boolean codeRowShown = binding.authCodeRow.getVisibility() == View.VISIBLE;
-        binding.inputAuthCode.setText("");
-        binding.authCodeRow.setVisibility(View.VISIBLE);
-        codeTimer.showSending();
-
         binding.btnSendEmail.setEnabled(false);
         repository.sendFindLoginIdCode(name, email, result -> {
             binding.btnSendEmail.setEnabled(true);
@@ -94,12 +89,14 @@ public class FindIdActivity extends AppCompatActivity {
                 foundLoginId = null;
                 sentEmail = email;
                 binding.btnSendEmail.setText(R.string.action_resend_email);
+                binding.inputAuthCode.setText("");
+                binding.inputAuthCode.clearState();
+                binding.authCodeRow.setVisibility(View.VISIBLE);
                 codeTimer.start(result.getData());
                 binding.inputAuthCode.getEditView().requestFocus();
                 return;
             }
 
-            restoreCodeRow(codeRowShown);
             String message = result.getMessageOr(getString(R.string.error_network));
             if (result.hasCode("NAME")) {
                 binding.inputName.showError(message);
@@ -107,14 +104,6 @@ public class FindIdActivity extends AppCompatActivity {
                 binding.inputEmail.showError(message);
             }
         });
-    }
-
-    private void restoreCodeRow(boolean shown) {
-        codeTimer.stop();
-        binding.inputAuthCode.clearState();
-        if (!shown) {
-            binding.authCodeRow.setVisibility(View.GONE);
-        }
     }
 
     private void verifyAuthCode() {
