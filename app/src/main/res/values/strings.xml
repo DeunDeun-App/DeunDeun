@@ -89,6 +89,35 @@
     <string name="relation_other">기타</string>
     <string name="profile_edit_warning">SOS 문자가 이 번호로 갑니다. 꼭 확인해 주세요.</string>
     <string name="profile_saved">저장되었습니다.</string>
+    <string name="profile_empty">미등록</string>
+    <string name="profile_notice_empty">아직 보호자에게 보낸 알림이 없습니다.</string>
+    <string name="profile_birth_format">%1$d년 %2$d월 %3$d일</string>
+    <string name="profile_guardian_format">%1$s (%2$s)</string>
+    <string name="action_logout">로그아웃</string>
+    <string name="action_withdraw">회원탈퇴</string>
+    <string name="action_cancel">취소</string>
+    <string name="withdraw_title">정말 탈퇴하시겠습니까?</string>
+    <string name="withdraw_message">탈퇴하면 내 정보와 훈련 기록이 모두 삭제되며 되돌릴 수 없습니다.</string>
+    <string name="withdraw_confirm">탈퇴하기</string>
+    <string name="withdraw_done">회원탈퇴가 완료되었습니다.</string>
+    <string name="logout_done">로그아웃되었습니다.</string>
+    <string name="error_phone_format">전화번호 형식이 올바르지 않습니다.</string>
+    <string name="error_guardian_name_required">보호자 이름을 입력해 주세요.</string>
+    <string name="error_guardian_phone_required">보호자 연락처를 입력해 주세요.</string>
+    <string name="error_guardian_phone_format">보호자 연락처 형식이 올바르지 않습니다.</string>
+    <string-array name="disability_type_codes">
+        <item>INTELLECTUAL</item>
+        <item>AUTISM</item>
+        <item>DEVELOPMENTAL</item>
+    </string-array>
+    <string-array name="severity_labels">
+        <item>중증</item>
+        <item>경증</item>
+    </string-array>
+    <string-array name="severity_codes">
+        <item>SEVERE</item>
+        <item>MILD</item>
+    </string-array>
     <string name="cd_dropdown">선택</string>
     <string name="hint_select">선택해 주세요</string>
 

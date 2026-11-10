@@ -3,7 +3,6 @@ package com.example.deundeun;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -15,10 +14,10 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.databinding.ActivityMainBinding;
-import com.example.deundeun.ui.auth.LoginActivity;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.NavItemView;
 import com.example.deundeun.ui.common.NotchedBarDrawable;
+import com.example.deundeun.ui.common.SessionNavigator;
 import com.example.deundeun.ui.home.HomeFragment;
 import com.example.deundeun.ui.profile.ProfileFragment;
 import com.example.deundeun.ui.record.RecordFragment;
@@ -48,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         sessionManager = new SessionManager(this);
         if (!sessionManager.isLoggedIn()) {
-            goToLogin(false);
+            SessionNavigator.toLogin(this, null);
             return;
         }
 
@@ -87,21 +86,11 @@ public class MainActivity extends AppCompatActivity {
                 sessionManager.updateUser(result.getData().getLoginId(),
                         result.getData().getUserName());
             } else if (result.hasCode("SESSION_EXPIRED")) {
-                goToLogin(true);
+                SessionNavigator.toLogin(this, R.string.error_session_expired);
             }
         });
     }
 
-    private void goToLogin(boolean expired) {
-        sessionManager.clear();
-        if (expired) {
-            Toast.makeText(this, R.string.error_session_expired, Toast.LENGTH_LONG).show();
-        }
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
-    }
 
     @Override
     protected void onNewIntent(Intent intent) {
