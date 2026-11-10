@@ -148,9 +148,10 @@ public class ProfileEditActivity extends AppCompatActivity {
 
     private void showBirthPicker() {
         int[] current = ProfileLabels.parseDate(birthDate);
-        int year = current == null ? 2000 : current[0];
-        int month = current == null ? 0 : current[1] - 1;
-        int day = current == null ? 1 : current[2];
+        Calendar today = Calendar.getInstance();
+        int year = current == null ? today.get(Calendar.YEAR) : current[0];
+        int month = current == null ? today.get(Calendar.MONTH) : current[1] - 1;
+        int day = current == null ? today.get(Calendar.DAY_OF_MONTH) : current[2];
 
         DatePickerDialog dialog = new DatePickerDialog(this, (view, y, m, d) -> {
             birthDate = ProfileLabels.isoDate(y, m + 1, d);
