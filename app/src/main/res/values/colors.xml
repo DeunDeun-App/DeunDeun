@@ -53,4 +53,8 @@
     <color name="text_placeholder">#FFD9D9D9</color>
     <color name="checkbox_stroke">#FFD9D9D9</color>
     <color name="agree_check_off">#FFCCCCCC</color>
+
+    <!-- 지진 시뮬레이션 화면 효과 -->
+    <color name="quake_dust">#CCB5ADA3</color>
+    <color name="quake_vignette">#99000000</color>
 </resources>

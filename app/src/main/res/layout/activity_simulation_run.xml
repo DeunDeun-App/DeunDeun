@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
     시뮬레이션 진행 화면.
-    카메라 프리뷰 자리는 지금 비어 있음. CameraX + 포즈 인식 연동은 별도 작업.
+    CameraX 프리뷰 위에 MediaPipe 로 인식한 관절을 겹쳐 그린다.
 -->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
@@ -62,6 +62,32 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/badge_scenario">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/preview_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no" />
+
+        <!-- 지진 시나리오에서만 보인다: 실제 방 대신 지진 난 방 사진 위에 오려낸 사람을 그리고,
+             사진 속 책상은 사람 앞에 다시 그려 책상 밑에 들어간 것처럼 보이게 한다 -->
+        <com.example.deundeun.ui.simulation.VirtualBackgroundView
+            android:id="@+id/virtual_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <!-- 지진 시나리오에서만 보인다: 금 간 자국·먼지·흔들림 -->
+        <com.example.deundeun.ui.simulation.EarthquakeEffectView
+            android:id="@+id/quake_effect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <com.example.deundeun.ui.simulation.pose.PoseOverlayView
+            android:id="@+id/pose_overlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
         <!-- 시안의 네 모서리 프레임 -->
         <com.example.deundeun.ui.simulation.CornerFrameView
