@@ -19,6 +19,8 @@ import com.example.deundeun.ui.common.InsetsUtil;
 public class SimulationIntroActivity extends AppCompatActivity {
 
     public static final String EXTRA_SCENARIO = "scenario";
+    /** true 면 화재, false 면 지진. 포즈 판정 기준이 달라진다. */
+    public static final String EXTRA_FIRE = "fire";
 
     private static final String STATE_FIRE_SELECTED = "fire_selected";
 
@@ -105,6 +107,7 @@ public class SimulationIntroActivity extends AppCompatActivity {
 
         Intent intent = new Intent(this, SimulationRunActivity.class);
         intent.putExtra(EXTRA_SCENARIO, scenario);
+        intent.putExtra(EXTRA_FIRE, fireSelected);
         startActivity(intent);
     }
 }

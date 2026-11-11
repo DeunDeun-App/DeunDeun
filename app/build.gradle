@@ -16,6 +16,12 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        // MediaPipe 는 x86_64 용 네이티브 라이브러리를 주지 않는다.
+        // ARM 만 넣으면 x86_64 에뮬레이터도 ARM 변환으로 실행한다.
+        ndk {
+            abiFilters 'arm64-v8a', 'armeabi-v7a'
+        }
     }
 
     buildTypes {
@@ -47,7 +53,31 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+    implementation libs.androidx.camera.core
+    implementation libs.androidx.camera.camera2
+    implementation libs.androidx.camera.lifecycle
+    implementation libs.androidx.camera.view
+    implementation libs.mediapipe.tasks.vision
     testImplementation libs.junit
     androidTestImplementation libs.androidx.espresso.core
     androidTestImplementation libs.androidx.junit
 }
+
+// MediaPipe 모델은 용량이 커서 저장소에 올리지 않는다. 빌드 전에 한 번만 받아 assets 에 둔다.
+// 포즈 모델은 지진·화재 공통, 손 모델은 화재에서 손이 코와 입을 덮었는지 볼 때 쓴다.
+def mediapipeModels = [
+        "pose_landmarker_lite.task": "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/latest/pose_landmarker_lite.task",
+        "hand_landmarker.task"     : "https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/latest/hand_landmarker.task",
+]
+tasks.register('downloadMediapipeModels') {
+    def modelFiles = mediapipeModels.collectEntries { name, url -> [(file("src/main/assets/$name")): url] }
+    outputs.files(modelFiles.keySet())
+    doLast {
+        modelFiles.each { modelFile, url ->
+            if (modelFile.exists()) return
+            modelFile.parentFile.mkdirs()
+            new URL(url).withInputStream { input -> modelFile.withOutputStream { it << input } }
+        }
+    }
+}
+tasks.named('preBuild') { dependsOn 'downloadMediapipeModels' }

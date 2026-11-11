@@ -169,6 +169,20 @@
     <string name="sim_finish">훈련 완료</string>
     <string name="cd_sim_pose_detected">대피 자세를 바르게 취했어요</string>
     <string name="cd_camera_preview">카메라 화면</string>
+    <!-- 포즈 인식 안내. 짧고 분명하게 -->
+    <string name="sim_pose_no_person">몸 전체가 화면에 보이게 서 주세요</string>
+    <string name="sim_pose_quake_low">책상 밑으로 피하여 몸을 낮추세요</string>
+    <string name="sim_pose_quake_protect">두 팔로 머리를 감싸 보호하세요</string>
+    <string name="sim_pose_fire_no_person">얼굴이 화면에 보이게 해 주세요</string>
+    <string name="sim_pose_fire_protect">손으로 코와 입을 막으세요</string>
+    <string name="sim_pose_hold">좋아요! 그대로 %1$d초 유지하세요</string>
+    <string name="sim_fire_success">잘했어요! 화재 대피 자세가 완벽해요</string>
+    <string name="sim_retry_message">자세가 정확하지 않았어요. 다시 해볼까요?</string>
+    <string name="sim_retry">다시 훈련하기</string>
+    <string name="sim_camera_loading">카메라를 준비하고 있어요</string>
+    <string name="sim_camera_permission_denied">카메라 권한이 있어야 자세를 확인할 수 있어요</string>
+    <string name="sim_camera_permission_retry">카메라 권한 허용하기</string>
+    <string name="sim_pose_error">자세 인식을 시작하지 못했어요</string>
     <string name="cd_selected">선택됨</string>
 
     <!-- ===== 119 신고 연습 ===== -->
