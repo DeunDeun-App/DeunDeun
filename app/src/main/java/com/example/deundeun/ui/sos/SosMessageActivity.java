@@ -32,7 +32,7 @@ public class SosMessageActivity extends AppCompatActivity {
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
         SosAnswers answers = (SosAnswers) getIntent().getSerializableExtra(SosAnswers.EXTRA);
-        String guardian = repository.getUserProfile().getGuardianRelation();
+        String guardian = repository.getGuardianRelation();
 
         binding.guardianName.setText(guardian);
         binding.messageBody.setText(buildMessage(guardian, answers));

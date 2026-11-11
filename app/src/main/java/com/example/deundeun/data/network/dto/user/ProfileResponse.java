@@ -14,7 +14,7 @@ public class ProfileResponse {
     private boolean shareLocation;
     private boolean shareResult;
     private boolean sosAlert;
-    private GuardianResponse guardian;
+    private Guardian guardian;
 
     public String getLoginId() { return loginId; }
     public String getEmail() { return email; }
@@ -26,5 +26,16 @@ public class ProfileResponse {
     public boolean isShareLocation() { return shareLocation; }
     public boolean isShareResult() { return shareResult; }
     public boolean isSosAlert() { return sosAlert; }
-    @Nullable public GuardianResponse getGuardian() { return guardian; }
+    @Nullable public Guardian getGuardian() { return guardian; }
+
+    public static class Guardian {
+
+        private String relation;
+        private String name;
+        private String phone;
+
+        public String getRelation() { return relation; }
+        public String getName() { return name; }
+        public String getPhone() { return phone; }
+    }
 }

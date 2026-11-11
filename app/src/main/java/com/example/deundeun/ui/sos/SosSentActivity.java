@@ -32,7 +32,7 @@ public class SosSentActivity extends AppCompatActivity {
         InsetsUtil.applyTopInset(binding.sosSentRoot);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
-        String guardian = repository.getUserProfile().getGuardianRelation();
+        String guardian = repository.getGuardianRelation();
         binding.sentDesc.setText(getString(R.string.sos_sent_desc, guardian));
 
         binding.btnOk.setOnClickListener(v -> goHome());

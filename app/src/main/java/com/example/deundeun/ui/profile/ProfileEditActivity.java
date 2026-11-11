@@ -21,7 +21,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.network.dto.user.GuardianResponse;
 import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.network.dto.user.ProfileUpdateRequest;
 import com.example.deundeun.data.repository.BaseRepository;
@@ -128,7 +127,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         bindDisabilityPickers(typeLabel);
 
-        GuardianResponse guardian = profile.getGuardian();
+        ProfileResponse.Guardian guardian = profile.getGuardian();
         bindField(binding.fieldGuardianName, R.string.field_guardian_name,
                 guardian == null ? null : guardian.getName(),
                 InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PERSON_NAME, false);

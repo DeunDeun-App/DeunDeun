@@ -1,7 +1,5 @@
 package com.example.deundeun.data.repository;
 
-import android.util.Patterns;
-
 import com.example.deundeun.data.network.dto.auth.AuthRequest;
 import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
@@ -11,10 +9,6 @@ import java.util.regex.Pattern;
 public class AuthRepository extends BaseRepository {
 
     private static final Pattern LOGIN_ID_PATTERN = Pattern.compile("^[A-Za-z][A-Za-z0-9]{3,19}$");
-
-    public boolean isEmailFormatValid(String email) {
-        return email != null && Patterns.EMAIL_ADDRESS.matcher(email).matches();
-    }
 
     public boolean isLoginIdFormatValid(String loginId) {
         return loginId != null && LOGIN_ID_PATTERN.matcher(loginId).matches();

@@ -2,13 +2,10 @@ package com.example.deundeun.ui.profile;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -18,7 +15,6 @@ import androidx.fragment.app.Fragment;
 
 import com.example.deundeun.R;
 import com.example.deundeun.data.model.GuardianNotice;
-import com.example.deundeun.data.network.dto.user.GuardianResponse;
 import com.example.deundeun.data.network.dto.user.NotificationResponse;
 import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.network.dto.user.SettingsRequest;
@@ -28,6 +24,7 @@ import com.example.deundeun.databinding.DialogConfirmBinding;
 import com.example.deundeun.databinding.FragmentProfileBinding;
 import com.example.deundeun.databinding.ViewProfileInfoRowBinding;
 import com.example.deundeun.databinding.ViewProfileSwitchRowBinding;
+import com.example.deundeun.ui.common.DialogHelper;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.SessionNavigator;
 
@@ -124,7 +121,7 @@ public class ProfileFragment extends Fragment {
         bindInfoRow(binding.rowDisability, R.string.profile_disability,
                 disability.isEmpty() ? empty : disability);
 
-        GuardianResponse guardian = profile.getGuardian();
+        ProfileResponse.Guardian guardian = profile.getGuardian();
         String guardianText = guardian == null ? empty
                 : getString(R.string.profile_guardian_format,
                         ProfileLabels.relation(requireContext(), guardian.getRelation()),
@@ -234,18 +231,7 @@ public class ProfileFragment extends Fragment {
         dialogBinding.dialogMessage.setText(R.string.withdraw_message);
         dialogBinding.dialogConfirm.setText(R.string.withdraw_confirm);
 
-        Dialog dialog = new Dialog(requireContext());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(dialogBinding.getRoot());
-
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            window.setLayout(
-                    (int) (getResources().getDisplayMetrics().widthPixels * 0.84f),
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
+        Dialog dialog = DialogHelper.show(requireContext(), dialogBinding.getRoot(), 0.84f, true);
         dialogBinding.dialogCancel.setOnClickListener(v -> dialog.dismiss());
         dialogBinding.dialogConfirm.setOnClickListener(v -> {
             dialogBinding.dialogConfirm.setEnabled(false);
@@ -261,7 +247,6 @@ public class ProfileFragment extends Fragment {
                 }
             });
         });
-        dialog.show();
     }
 
     private void handleFailure(BaseRepository.Result<?> result) {
