@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 회원가입 완료 다이얼로그 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,7 +14,7 @@
     <ImageView
         android:layout_width="52dp"
         android:layout_height="52dp"
-        android:contentDescription="@string/cd_signup_complete"
+        android:contentDescription="@string/cd_complete"
         android:src="@drawable/ic_success_badge" />
 
     <TextView

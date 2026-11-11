@@ -5,11 +5,13 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
 import com.example.deundeun.data.repository.AuthRepository;
+import com.example.deundeun.data.repository.BaseRepository.Result;
 import com.example.deundeun.databinding.ActivityFindPasswordBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
@@ -20,19 +22,20 @@ import com.example.deundeun.ui.common.InsetsUtil;
  */
 public class FindPasswordActivity extends AppCompatActivity {
 
-    private static final String STATE_STEP = "step";
     private static final String STATE_RESET_TOKEN = "resetToken";
-
-    private enum Step {VERIFY, RESET}
 
     private ActivityFindPasswordBinding binding;
     private final AuthRepository repository = new AuthRepository();
 
-    private Step step = Step.VERIFY;
-    private boolean codeVerified;
-    private String verifiedEmail;
+    private EmailCodeForm emailForm;
     private String resetToken;
-    private AuthCodeTimer codeTimer;
+
+    private final OnBackPressedCallback backToVerify = new OnBackPressedCallback(false) {
+        @Override
+        public void handleOnBackPressed() {
+            backToVerifyStep();
+        }
+    };
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -45,71 +48,62 @@ public class FindPasswordActivity extends AppCompatActivity {
         InsetsUtil.applyTopInset(binding.findPasswordScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
-        codeTimer = new AuthCodeTimer(this, binding.inputAuthCode);
-        binding.inputEmail.alignWithField(binding.btnSendEmail);
-        binding.inputAuthCode.alignWithField(binding.btnVerifyCode);
+        emailForm = new EmailCodeForm(this, binding.inputEmail, binding.btnSendEmail,
+                binding.authCodeRow, binding.inputAuthCode, binding.btnVerifyCode);
 
         if (savedInstanceState != null) {
             resetToken = savedInstanceState.getString(STATE_RESET_TOKEN);
-            step = resetToken == null
-                    ? Step.VERIFY
-                    : Step.values()[savedInstanceState.getInt(STATE_STEP, 0)];
         }
 
-        binding.header.setOnBackClickListener(v -> onBackPressed());
+        getOnBackPressedDispatcher().addCallback(this, backToVerify);
+        binding.header.setOnBackClickListener(v -> getOnBackPressedDispatcher().onBackPressed());
         binding.btnSendEmail.setOnClickListener(v -> sendAuthCode());
-        binding.btnVerifyCode.setOnClickListener(v -> verifyAuthCode());
-        binding.btnSubmit.setOnClickListener(v -> onSubmit());
+        binding.btnVerifyCode.setOnClickListener(v ->
+                emailForm.verify(repository::verifyPasswordResetCode, data -> { }, result -> false));
+        binding.btnSubmit.setOnClickListener(v -> {
+            if (isResetStep()) {
+                submitNewPassword();
+            } else {
+                goToResetStep();
+            }
+        });
 
         applyStep();
     }
 
     @Override
     protected void onDestroy() {
-        codeTimer.cancel();
+        emailForm.release();
         super.onDestroy();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(STATE_STEP, step.ordinal());
         outState.putString(STATE_RESET_TOKEN, resetToken);
     }
 
-    @Override
-    public void onBackPressed() {
-        // 재설정 단계에서 뒤로 가면 화면을 닫지 않고 본인 확인으로 되돌린다.
-        if (step == Step.RESET) {
-            backToVerifyStep();
-            return;
-        }
-        super.onBackPressed();
+    private boolean isResetStep() {
+        return resetToken != null;
     }
 
     private void applyStep() {
-        boolean verifying = step == Step.VERIFY;
-        binding.stepVerify.setVisibility(verifying ? View.VISIBLE : View.GONE);
-        binding.stepReset.setVisibility(verifying ? View.GONE : View.VISIBLE);
-        binding.btnSubmit.setText(verifying ? R.string.action_next : R.string.action_done);
+        boolean reset = isResetStep();
+        binding.stepVerify.setVisibility(reset ? View.GONE : View.VISIBLE);
+        binding.stepReset.setVisibility(reset ? View.VISIBLE : View.GONE);
+        binding.btnSubmit.setText(reset ? R.string.action_done : R.string.action_next);
+        backToVerify.setEnabled(reset);
     }
 
     private void backToVerifyStep() {
-        step = Step.VERIFY;
         resetToken = null;
-        codeVerified = false;
-        verifiedEmail = null;
-        codeTimer.stop();
-        binding.inputAuthCode.setText("");
-        binding.inputAuthCode.clearState();
+        emailForm.reset();
         applyStep();
     }
 
     private void sendAuthCode() {
         binding.inputLoginId.clearState();
-        binding.inputEmail.clearState();
         String loginId = binding.inputLoginId.getText();
-        String email = binding.inputEmail.getText();
 
         if (loginId.isEmpty()) {
             binding.inputLoginId.showError(getString(R.string.error_login_id_required));
@@ -119,81 +113,17 @@ public class FindPasswordActivity extends AppCompatActivity {
             binding.inputLoginId.showError(getString(R.string.error_login_id_format));
             return;
         }
-        if (email.isEmpty()) {
-            binding.inputEmail.showError(getString(R.string.error_email_required));
-            return;
-        }
-        if (!repository.isEmailFormatValid(email)) {
-            binding.inputEmail.showError(getString(R.string.error_email_format));
-            return;
-        }
 
-        binding.btnSendEmail.setEnabled(false);
-        repository.sendPasswordResetCode(loginId, email, result -> {
-            binding.btnSendEmail.setEnabled(true);
-
-            if (result.isSuccess()) {
-                codeVerified = false;
-                verifiedEmail = null;
-                binding.btnSendEmail.setText(R.string.action_resend_email);
-                binding.inputAuthCode.setText("");
-                binding.inputAuthCode.clearState();
-                binding.authCodeRow.setVisibility(View.VISIBLE);
-                codeTimer.start(result.getData());
-                binding.inputAuthCode.getEditView().requestFocus();
-                return;
-            }
-
-            if (result.hasCode("LOGIN_ID")) {
-                binding.inputLoginId.showError(result.getMessageOr(getString(R.string.error_network)));
-            } else {
-                binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
-            }
-        });
+        emailForm.send((email, callback) -> repository.sendPasswordResetCode(loginId, email, callback),
+                this::showLoginIdError);
     }
 
-    private void verifyAuthCode() {
-        String code = binding.inputAuthCode.getText();
-
-        if (codeTimer.isExpired()) {
-            binding.inputAuthCode.showError(getString(R.string.error_code_expired));
-            return;
+    private boolean showLoginIdError(Result<?> result) {
+        if (!result.hasCode("LOGIN_ID")) {
+            return false;
         }
-        if (code.isEmpty()) {
-            codeTimer.showError(getString(R.string.error_code_required));
-            return;
-        }
-
-        String email = binding.inputEmail.getText();
-
-        binding.btnVerifyCode.setEnabled(false);
-        repository.verifyPasswordResetCode(email, code, result -> {
-            binding.btnVerifyCode.setEnabled(true);
-            codeVerified = result.isSuccess();
-            verifiedEmail = codeVerified ? email : null;
-
-            if (codeVerified) {
-                codeTimer.stop();
-                binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
-                return;
-            }
-
-            String message = result.getMessageOr(getString(R.string.error_network));
-            if (result.hasCode("CODE_EXPIRED") || result.hasCode("CODE_ATTEMPTS")) {
-                codeTimer.stop();
-                binding.inputAuthCode.showError(message);
-            } else {
-                codeTimer.showError(message);
-            }
-        });
-    }
-
-    private void onSubmit() {
-        if (step == Step.VERIFY) {
-            goToResetStep();
-        } else {
-            submitNewPassword();
-        }
+        binding.inputLoginId.showError(result.getMessageOr(getString(R.string.error_network)));
+        return true;
     }
 
     private void goToResetStep() {
@@ -203,17 +133,16 @@ public class FindPasswordActivity extends AppCompatActivity {
             binding.inputLoginId.showError(getString(R.string.error_login_id_required));
             return;
         }
-        if (!codeVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
-            codeTimer.showError(getString(R.string.error_email_not_verified));
+        if (!emailForm.isVerified()) {
+            emailForm.showNotVerified(getString(R.string.error_email_not_verified));
             return;
         }
 
         binding.btnSubmit.setEnabled(false);
-        repository.issueResetToken(binding.inputLoginId.getText(), verifiedEmail, result -> {
+        repository.issueResetToken(binding.inputLoginId.getText(), emailForm.getVerifiedEmail(), result -> {
             binding.btnSubmit.setEnabled(true);
             if (result.isSuccess() && result.getData() != null) {
                 resetToken = result.getData();
-                step = Step.RESET;
                 applyStep();
                 binding.inputNewPassword.getEditView().requestFocus();
                 return;
@@ -221,13 +150,10 @@ public class FindPasswordActivity extends AppCompatActivity {
 
             String message = result.getMessageOr(getString(R.string.error_network));
             if (result.hasCode("EMAIL_NOT_VERIFIED")) {
-                codeVerified = false;
-                codeTimer.showError(message);
+                emailForm.showNotVerified(message);
             } else if (result.hasCode("EMAIL")) {
                 binding.inputEmail.showError(message);
-            } else if (result.hasCode("LOGIN_ID")) {
-                binding.inputLoginId.showError(message);
-            } else {
+            } else if (!showLoginIdError(result)) {
                 Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
             }
         });
@@ -244,8 +170,7 @@ public class FindPasswordActivity extends AppCompatActivity {
             return;
         }
         if (!password.equals(binding.inputNewPasswordConfirm.getText())) {
-            binding.inputNewPasswordConfirm.showError(
-                    getString(R.string.error_password_mismatch));
+            binding.inputNewPasswordConfirm.showError(getString(R.string.error_password_mismatch));
             return;
         }
 

@@ -34,7 +34,7 @@ public class SosActivity extends AppCompatActivity {
         InsetsUtil.applyTopInset(binding.sosRoot);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
-        String relation = repository.getUserProfile().getGuardianRelation();
+        String relation = repository.getGuardianRelation();
         binding.sosStep1.setText(getString(R.string.sos_step_1, relation));
 
         binding.btnClose.setOnClickListener(v -> finish());

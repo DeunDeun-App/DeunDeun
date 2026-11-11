@@ -1,9 +1,7 @@
 package com.example.deundeun.data.repository;
 
 import com.example.deundeun.data.model.AchievementRate;
-import com.example.deundeun.data.model.GuardianNotice;
 import com.example.deundeun.data.model.TrainingRecord;
-import com.example.deundeun.data.model.UserProfile;
 import com.example.deundeun.data.model.WeeklySummary;
 
 import java.util.ArrayList;
@@ -100,28 +98,7 @@ public class FakeTrainingRepository {
 
     // ----- 내정보 -----
 
-    public UserProfile getUserProfile() {
-        return new UserProfile(
-                "김든든", "010-1234-5678", "2000년 1월 1일",
-                "지적장애", "",
-                "엄마", "김든둔", "010-9876-5432");
-    }
-
-    /** 내정보의 보호자 알림. 최대 {@link #PREVIEW_LIMIT}개만 보여준다. */
-    public List<GuardianNotice> getGuardianNotices() {
-        List<GuardianNotice> notices = new ArrayList<>();
-        notices.add(new GuardianNotice(
-                "위치 공유", "SOS 요청 시 GPS 위치 전송", "7월 17일", "오전 10:12"));
-        notices.add(new GuardianNotice(
-                "훈련 완료", "재난 시뮬레이션 92점 달성", "7월 17일", "오전 10:07"));
-        notices.add(new GuardianNotice(
-                "훈련 완료", "119 신고 연습 88점 달성", "7월 15일", "오후 4:26"));
-        notices.add(new GuardianNotice(
-                "위치 공유", "SOS 요청 시 GPS 위치 전송", "7월 14일", "오전 9:41"));
-        notices.add(new GuardianNotice(
-                "훈련 완료", "재난 시뮬레이션 95점 달성", "7월 14일", "오전 9:38"));
-        notices.add(new GuardianNotice(
-                "훈련 완료", "119 신고 연습 76점 달성", "7월 12일", "오후 2:12"));
-        return limit(notices, PREVIEW_LIMIT);
+    public String getGuardianRelation() {
+        return "엄마";
     }
 }
