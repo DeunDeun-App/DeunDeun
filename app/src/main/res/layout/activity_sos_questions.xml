@@ -100,37 +100,37 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <!-- 지금 어디 있어요? -->
+            <!-- 무슨 일이 생겼어요? -->
             <TextView
                 style="@style/Text.ItemTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/space_m"
                 android:fontFamily="@font/pretendard_extrabold"
-                android:text="@string/sos_q_where"
+                android:text="@string/sos_q_situation"
                 android:textSize="16sp" />
 
             <TextView
-                android:id="@+id/where_subway"
+                android:id="@+id/situation_fire"
                 style="@style/Option.Sos"
-                android:text="@string/sos_where_subway" />
+                android:text="@string/sos_situation_fire" />
 
             <TextView
-                android:id="@+id/where_home"
+                android:id="@+id/situation_earthquake"
                 style="@style/Option.Sos"
-                android:text="@string/sos_where_home" />
+                android:text="@string/sos_situation_earthquake" />
 
             <TextView
-                android:id="@+id/where_school"
+                android:id="@+id/situation_flood"
                 style="@style/Option.Sos"
-                android:text="@string/sos_where_school" />
+                android:text="@string/sos_situation_flood" />
 
             <TextView
-                android:id="@+id/where_unknown"
+                android:id="@+id/situation_unknown"
                 style="@style/Option.Sos"
-                android:text="@string/sos_where_unknown" />
+                android:text="@string/sos_situation_unknown" />
 
-            <!-- 무서워요? -->
+            <!-- 갇혀 있어요? -->
             <TextView
                 style="@style/Text.ItemTitle"
                 android:layout_width="wrap_content"
@@ -138,7 +138,7 @@
                 android:layout_marginTop="@dimen/space_l"
                 android:layout_marginBottom="@dimen/space_m"
                 android:fontFamily="@font/pretendard_extrabold"
-                android:text="@string/sos_q_scared"
+                android:text="@string/sos_q_trapped"
                 android:textSize="16sp" />
 
             <LinearLayout
@@ -147,20 +147,20 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/scared_yes"
+                    android:id="@+id/trapped_yes"
                     style="@style/Option.Sos"
                     android:layout_width="0dp"
                     android:layout_marginEnd="7dp"
                     android:layout_weight="1"
-                    android:text="@string/sos_scared_yes" />
+                    android:text="@string/sos_trapped_yes" />
 
                 <TextView
-                    android:id="@+id/scared_no"
+                    android:id="@+id/trapped_no"
                     style="@style/Option.Sos"
                     android:layout_width="0dp"
                     android:layout_marginStart="7dp"
                     android:layout_weight="1"
-                    android:text="@string/sos_scared_no" />
+                    android:text="@string/sos_trapped_no" />
 
             </LinearLayout>
 

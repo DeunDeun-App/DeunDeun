@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.MainActivity;
 import com.example.deundeun.R;
-import com.example.deundeun.data.repository.FakeTrainingRepository;
 import com.example.deundeun.databinding.ActivitySosSentBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.home.HomeFragment;
@@ -18,8 +17,10 @@ import com.example.deundeun.ui.home.HomeFragment;
 /** 메시지 전송 완료 */
 public class SosSentActivity extends AppCompatActivity {
 
+    /** 문자에 위치를 붙였는지. 없으면 true 로 본다 */
+    public static final String EXTRA_HAS_LOCATION = "has_location";
+
     private ActivitySosSentBinding binding;
-    private final FakeTrainingRepository repository = new FakeTrainingRepository();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -32,8 +33,13 @@ public class SosSentActivity extends AppCompatActivity {
         InsetsUtil.applyTopInset(binding.sosSentRoot);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
-        String guardian = repository.getGuardianRelation();
-        binding.sentDesc.setText(getString(R.string.sos_sent_desc, guardian));
+        String guardian = getIntent().getStringExtra(SosActivity.EXTRA_GUARDIAN_NAME);
+        if (guardian == null) {
+            guardian = getString(R.string.sos_guardian_fallback);
+        }
+        boolean hasLocation = getIntent().getBooleanExtra(EXTRA_HAS_LOCATION, true);
+        binding.sentDesc.setText(getString(hasLocation
+                ? R.string.sos_sent_desc : R.string.sos_sent_desc_no_location, guardian));
 
         binding.btnOk.setOnClickListener(v -> goHome());
         binding.btnCall119.setOnClickListener(v -> dial119());

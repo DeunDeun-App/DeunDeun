@@ -236,19 +236,24 @@
     <string name="sos_action">도움 요청하기</string>
     <string name="sos_footnote">위치 공유가 즉시 시작됩니다</string>
     <string name="sos_requested">보호자에게 도움을 요청했어요.</string>
+    <string name="sos_guardian_fallback">보호자</string>
+    <string name="sos_login_required">로그인 후 도움을 요청할 수 있어요.</string>
+    <string name="sos_network_error">지금은 요청을 보낼 수 없어요. 잠시 후 다시 해 주세요.</string>
+    <string name="sos_unavailable_title">보호자에게 보낼 수 없어요</string>
+    <string name="sos_unavailable_close">닫기</string>
     <string name="cd_close">닫기</string>
 
     <!-- SOS 질문 -->
     <string name="sos_flow_title">도움 요청하기</string>
-    <string name="sos_q_where">지금 어디 있어요?</string>
-    <string name="sos_q_scared">무서워요?</string>
+    <string name="sos_q_situation">무슨 일이 생겼어요?</string>
+    <string name="sos_q_trapped">갇혀서 못 나가요?</string>
     <string name="sos_q_hurt">다쳤어요?</string>
-    <string name="sos_where_subway">지하철역 근처예요</string>
-    <string name="sos_where_home">집 근처예요</string>
-    <string name="sos_where_school">학교 근처예요</string>
-    <string name="sos_where_unknown">모르겠어요</string>
-    <string name="sos_scared_yes">네, 무서워요</string>
-    <string name="sos_scared_no">괜찮아요</string>
+    <string name="sos_situation_fire">불이 났어요</string>
+    <string name="sos_situation_earthquake">땅이 흔들려요</string>
+    <string name="sos_situation_flood">물이 차올라요</string>
+    <string name="sos_situation_unknown">잘 모르겠어요</string>
+    <string name="sos_trapped_yes">네, 못 나가요</string>
+    <string name="sos_trapped_no">아니요, 나왔어요</string>
     <string name="sos_hurt_no">아니요, 안 다쳤어요</string>
     <string name="sos_hurt_yes">네, 다쳤어요</string>
     <string name="sos_next">다음</string>
@@ -257,26 +262,40 @@
     <!-- SOS 메시지 미리보기 -->
     <string name="sos_preview_eyebrow">보낼 메시지</string>
     <string name="sos_preview_title">이렇게 보낼게요</string>
-    <string-array name="sos_where_sentences">
-        <item>지하철역 근처에 있어요.</item>
-        <item>집 근처에 있어요.</item>
-        <item>학교 근처에 있어요.</item>
-        <item>지금 어디인지 잘 모르겠어요.</item>
+    <string-array name="sos_situation_sentences">
+        <item>불이 났어요.</item>
+        <item>지진이 났어요.</item>
+        <item>물이 차올라요.</item>
+        <item>위험한 일이 생겼어요.</item>
     </string-array>
-    <string name="sos_preview_message">[%1$s에게] 저는 %2$s\n%3$s %4$s 도와주세요.</string>
+    <string name="sos_preview_message">[%1$s에게] %2$s\n%3$s %4$s 도와주세요.</string>
     <string name="sos_gps_title">GPS 위치 첨부됨</string>
     <string name="sos_gps_value">서울 지하철 2호선 역삼역 근처</string>
+    <string name="sos_gps_loading_title">위치를 확인하고 있어요</string>
+    <string name="sos_gps_loading_value">잠시만 기다려 주세요</string>
+    <string name="sos_gps_near">%1$s 근처</string>
+    <string name="sos_gps_no_address">주소는 찾지 못했어요</string>
+    <string name="sos_gps_missing_title">위치를 확인하지 못했어요</string>
+    <string name="sos_gps_missing_value">위치 없이 메시지만 보낼게요</string>
+    <string name="sos_location_line">내 위치: %1$s\n%2$s</string>
+    <string name="sos_location_missing_line">위치를 확인하지 못했어요. 전화해 주세요.</string>
+    <string name="sos_no_sms_app">문자를 보낼 수 있는 앱이 없어요.</string>
+    <string name="sos_confirm_title">문자를 보냈나요?</string>
+    <string name="sos_confirm_message">문자앱에서 전송 버튼을 눌러야 %1$s에게 전달돼요.</string>
+    <string name="sos_confirm_sent">보냈어요</string>
+    <string name="sos_confirm_retry">다시 보내기</string>
     <string name="sos_gps_badge">확인</string>
     <string name="sos_edit">수정</string>
     <string name="sos_send">전송하기</string>
-    <string name="sos_scared_line">무서워요.</string>
-    <string name="sos_not_scared_line">괜찮아요.</string>
+    <string name="sos_trapped_line">갇혀서 못 나가고 있어요.</string>
+    <string name="sos_not_trapped_line">밖으로 나왔어요.</string>
     <string name="sos_hurt_line">다쳤어요.</string>
     <string name="sos_not_hurt_line">다치지는 않았어요.</string>
 
     <!-- SOS 전송 완료 -->
     <string name="sos_sent_title">메시지를 보냈어요!</string>
     <string name="sos_sent_desc">%1$s에게 위치와 상태가 전달됐어요.\n도움이 올 때까지 안전한 곳에 있어요.</string>
+    <string name="sos_sent_desc_no_location">%1$s에게 상태가 전달됐어요.\n도움이 올 때까지 안전한 곳에 있어요.</string>
     <string name="sos_call119_title">119도 연결할까요?</string>
     <string name="sos_call119_desc">다쳤거나 더 위험하면 눌러요</string>
     <string name="sos_ok">괜찮아요</string>

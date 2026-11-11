@@ -1,27 +1,46 @@
 package com.example.deundeun.ui.sos;
 
+import android.Manifest;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
-import com.example.deundeun.data.repository.FakeTrainingRepository;
+import com.example.deundeun.data.network.dto.sos.GuardianResponse;
+import com.example.deundeun.data.repository.SosRepository;
 import com.example.deundeun.databinding.ActivitySosBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+
+import java.util.List;
 
 /**
  * SOS 도움요청 진입.
  *
- * 실제 요청(위치 권한, GPS 수집, 보호자 전송)은 아직 붙지 않았다.
- * 위치 권한은 사용자가 이 화면에서 "도움 요청하기"를 누른 뒤에 요청해야 한다.
+ * 서버에서 보호자를 불러와 보여주고, "도움 요청하기"를 누르면 그때 위치 권한을 묻는다.
+ * 권한을 거절해도 위치 없이 요청은 이어간다.
  */
 public class SosActivity extends AppCompatActivity {
 
+    /** 다음 화면들에 넘기는 보호자 이름. */
+    public static final String EXTRA_GUARDIAN_NAME = "guardian_name";
+
     private ActivitySosBinding binding;
-    private final FakeTrainingRepository repository = new FakeTrainingRepository();
+    private SosRepository repository;
+
+    @Nullable
+    private String guardianName;
+    private boolean loading;
+
+    private final ActivityResultLauncher<String[]> locationPermission = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(), granted -> goToQuestions());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,15 +53,90 @@ public class SosActivity extends AppCompatActivity {
         InsetsUtil.applyTopInset(binding.sosRoot);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
 
-        String relation = repository.getGuardianRelation();
-        binding.sosStep1.setText(getString(R.string.sos_step_1, relation));
+        repository = new SosRepository(this);
+        if (!repository.isLoggedIn()) {
+            Toast.makeText(this, R.string.sos_login_required, Toast.LENGTH_SHORT).show();
+            finish();
+            return;
+        }
+
+        bindGuardian();
 
         binding.btnClose.setOnClickListener(v -> finish());
         binding.btnRequest.setOnClickListener(v -> requestHelp());
+
+        loadGuardians(false);
+    }
+
+    private void bindGuardian() {
+        String name = guardianName != null ? guardianName : getString(R.string.sos_guardian_fallback);
+        binding.sosStep1.setText(getString(R.string.sos_step_1, name));
     }
 
     private void requestHelp() {
-        // TODO: 여기서 위치 권한을 요청한다. 사용자가 요청 의사를 밝힌 뒤가 맞는 시점이다.
-        startActivity(new Intent(this, SosQuestionsActivity.class));
+        if (guardianName != null) {
+            askLocation();
+        } else {
+            // 처음 불러오기가 실패했으면 한 번 더 시도하고, 그래도 안 되면 이유를 알려준다
+            loadGuardians(true);
+        }
+    }
+
+    /** @param proceed 불러온 뒤 바로 다음 단계로 넘어갈지 */
+    private void loadGuardians(boolean proceed) {
+        if (loading) {
+            return;
+        }
+        loading = true;
+        binding.btnRequest.setEnabled(false);
+
+        repository.getGuardians(result -> {
+            loading = false;
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            binding.btnRequest.setEnabled(true);
+
+            List<GuardianResponse> guardians = result.getData();
+            if (result.isSuccess() && guardians != null && !guardians.isEmpty()) {
+                guardianName = guardians.get(0).getGuardianName();
+                bindGuardian();
+                if (proceed) {
+                    askLocation();
+                }
+                return;
+            }
+
+            if (proceed) {
+                showUnavailable(result.getMessageOr(getString(R.string.sos_network_error)));
+            }
+        });
+    }
+
+    private void askLocation() {
+        if (LocationReader.hasPermission(this)) {
+            goToQuestions();
+            return;
+        }
+        locationPermission.launch(new String[]{
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION});
+    }
+
+    private void goToQuestions() {
+        Intent intent = new Intent(this, SosQuestionsActivity.class);
+        intent.putExtra(EXTRA_GUARDIAN_NAME, guardianName);
+        startActivity(intent);
+    }
+
+    /** 보호자에게 보낼 수 없을 때. 119 는 언제든 걸 수 있게 둔다. */
+    private void showUnavailable(String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.sos_unavailable_title)
+                .setMessage(message)
+                .setPositiveButton(R.string.sos_call119,
+                        (dialog, which) -> startActivity(new Intent(Intent.ACTION_DIAL, Uri.parse("tel:119"))))
+                .setNegativeButton(R.string.sos_unavailable_close, null)
+                .show();
     }
 }
