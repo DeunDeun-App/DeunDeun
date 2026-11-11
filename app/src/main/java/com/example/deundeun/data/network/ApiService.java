@@ -3,12 +3,17 @@ package com.example.deundeun.data.network;
 import com.example.deundeun.data.network.dto.auth.AuthRequest;
 import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
+import com.example.deundeun.data.network.dto.call.CallAnswerResponse;
+import com.example.deundeun.data.network.dto.call.CallRequest;
+import com.example.deundeun.data.network.dto.call.CallResultResponse;
+import com.example.deundeun.data.network.dto.call.CallSessionResponse;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -44,4 +49,16 @@ public interface ApiService {
 
     @POST("auth/password/reset")
     Call<ApiResponse<Void>> resetPassword(@Body AuthRequest request);
+
+    @POST("call/sessions")
+    Call<ApiResponse<CallSessionResponse>> startCallSession(@Header("Authorization") String authorization);
+
+    @POST("call/sessions/{sessionId}/answers")
+    Call<ApiResponse<CallAnswerResponse>> answerCall(@Header("Authorization") String authorization,
+                                                     @Path("sessionId") long sessionId,
+                                                     @Body CallRequest request);
+
+    @POST("call/sessions/{sessionId}/complete")
+    Call<ApiResponse<CallResultResponse>> completeCall(@Header("Authorization") String authorization,
+                                                       @Path("sessionId") long sessionId);
 }

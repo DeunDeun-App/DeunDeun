@@ -154,17 +154,67 @@
     <string name="call_start">신고 연습 시작하기</string>
     <string name="call_ongoing">가상 통화 중 · %1$s</string>
     <string name="call_hint_title">도움말</string>
-    <string name="call_listening">음성 인식 중 …</string>
+    <string name="call_listening">다 말했으면 마이크를 한 번 더 눌러주세요</string>
+    <string name="call_live_placeholder">듣고 있어요. 말씀해 주세요</string>
+    <string name="call_listen_again">잘 못 알아들었어요. 다시 한 번 말씀해 주세요</string>
+    <string name="call_situation_label">연습 상황</string>
+    <string name="call_situation_guide">이 상황을 내 말로 119에 알려 주세요</string>
+    <string name="cd_call_situation">연습 상황: %1$s</string>
+
+    <!-- 119 신고 연습에서 나올 만한 말. 음성 인식기가 이쪽으로 알아듣게 한다 -->
+    <string-array name="call_speech_hints">
+        <item>불이 났어요</item>
+        <item>불</item>
+        <item>화재</item>
+        <item>연기</item>
+        <item>타고 있어요</item>
+        <item>지진</item>
+        <item>흔들려요</item>
+        <item>무너졌어요</item>
+        <item>홍수</item>
+        <item>물이 차고 있어요</item>
+        <item>잠겼어요</item>
+        <item>갇혀 있어요</item>
+        <item>아파트</item>
+        <item>번지</item>
+        <item>동</item>
+        <item>빌라</item>
+        <item>학교</item>
+        <item>초등학교</item>
+        <item>병원</item>
+        <item>역</item>
+        <item>마트</item>
+        <item>편의점</item>
+        <item>공원</item>
+        <item>앞이에요</item>
+        <item>근처예요</item>
+        <item>다친 사람</item>
+        <item>다쳤어요</item>
+        <item>없어요</item>
+        <item>있어요</item>
+    </string-array>
+    <string name="call_speech_preparing">한국어 음성 인식을 준비하고 있어요. 잠시만 기다려 주세요</string>
     <string name="call_end">통화 종료하기</string>
     <string name="cd_mic">말하기</string>
+    <string name="cd_mic_done">다 말했어요</string>
     <string name="cd_operator">119 상담원</string>
     <string name="cd_me">나</string>
 
-    <!-- 통화 대본 (연습용 고정 시나리오) -->
-    <string name="call_line_1">네, 119입니다. 무엇을 도와드릴까요?</string>
-    <string name="call_line_2">"집에 불이 났어요. 강남구예요."</string>
-    <string name="call_line_3">정확한 주소를 말씀해주시겠어요?</string>
-    <string name="call_hint_1">동, 번지나 건물 이름을 말해주세요.\n예) "역삼동 123번지", "OO 아파트"</string>
+    <!-- 통화 진행 상태 -->
+    <string name="call_tap_mic">마이크를 눌러 말해주세요</string>
+    <string name="call_connecting">전화를 연결하고 있어요 …</string>
+    <string name="call_operator_speaking">상담원이 말하고 있어요</string>
+    <string name="call_judging">확인하고 있어요 …</string>
+    <string name="call_moving_on">괜찮아요. 도움말을 보고 다음에 다시 연습해 봐요. 다음 질문으로 넘어갈게요.</string>
+    <string name="call_closing">알려주셔서 고마워요. 바로 출동할게요.</string>
+    <string name="call_no_speech">잘 안 들렸어요. 마이크를 누르고 다시 말해주세요.</string>
+    <string name="call_speech_error">음성 인식이 잘 되지 않았어요. 다시 눌러주세요.</string>
+    <string name="call_speech_unavailable">이 기기에서는 음성 인식을 쓸 수 없어요.</string>
+    <string name="call_mic_denied">마이크를 허용해야 연습할 수 있어요.</string>
+    <string name="call_login_required">로그인 정보가 없습니다. 다시 로그인해 주세요.</string>
+    <string name="call_type_answer_title">대답 입력 (개발용)</string>
+    <string name="call_type_answer_ok">보내기</string>
+    <string name="call_type_answer_cancel">취소</string>
 
     <!-- ===== 훈련 완료 ===== -->
     <string name="complete_training">훈련을 마쳤어요!</string>
