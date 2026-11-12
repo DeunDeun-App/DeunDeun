@@ -5,6 +5,9 @@ import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
 import com.example.deundeun.data.network.dto.disaster.DisasterMessageResponse;
 import com.example.deundeun.data.network.dto.disaster.EasyMessageResponse;
+import com.example.deundeun.data.network.dto.sos.GuardianResponse;
+import com.example.deundeun.data.network.dto.sos.SosRequest;
+import com.example.deundeun.data.network.dto.sos.SosResponse;
 import com.example.deundeun.data.network.dto.user.NotificationResponse;
 import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.network.dto.user.ProfileUpdateRequest;
@@ -85,4 +88,15 @@ public interface ApiService {
 
     @POST("disaster-messages/{id}/easy")
     Call<ApiResponse<EasyMessageResponse>> toEasyMessage(@Path("id") String id);
+
+    @GET("sos/guardians")
+    Call<ApiResponse<List<GuardianResponse>>> getSosGuardians(@Header("Authorization") String authorization);
+
+    @POST("sos")
+    Call<ApiResponse<SosResponse>> requestSos(@Header("Authorization") String authorization,
+                                              @Body SosRequest request);
+
+    @POST("sos/{sosId}/sent")
+    Call<ApiResponse<Void>> markSosSent(@Header("Authorization") String authorization,
+                                        @Path("sosId") long sosId);
 }
