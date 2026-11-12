@@ -17,6 +17,7 @@ import com.example.deundeun.databinding.DialogCompleteBinding;
 import com.example.deundeun.ui.common.AgreementRowView;
 import com.example.deundeun.ui.common.DialogHelper;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 import com.example.deundeun.ui.common.LabeledInputView;
 
 import java.util.Arrays;
@@ -43,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.signupScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         binding.header.setOnBackClickListener(v -> finish());
 
@@ -110,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity {
     // ----- 가입 -----
 
     private void attemptSignUp() {
+        KeyboardUtil.hide(this);
         clearAllStates();
 
         String name = binding.inputName.getText();

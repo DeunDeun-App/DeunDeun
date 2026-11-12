@@ -21,6 +21,7 @@ import com.example.deundeun.data.network.dto.sos.SosResponse;
 import com.example.deundeun.data.repository.SosRepository;
 import com.example.deundeun.databinding.ActivitySosMessageBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.SessionNavigator;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -56,6 +57,7 @@ public class SosMessageActivity extends AppCompatActivity {
     private String address;
     /** 위치 읽기가 끝났는지. 못 읽은 경우도 포함 */
     private boolean locationChecked;
+    private boolean shareLocation;
     private boolean sending;
 
     // 서버에 남긴 요청. 문자앱을 다시 열 때 그대로 쓴다
@@ -84,6 +86,7 @@ public class SosMessageActivity extends AppCompatActivity {
 
         answers = (SosAnswers) getIntent().getSerializableExtra(SosAnswers.EXTRA);
         guardianName = getIntent().getStringExtra(SosActivity.EXTRA_GUARDIAN_NAME);
+        shareLocation = getIntent().getBooleanExtra(SosActivity.EXTRA_SHARE_LOCATION, true);
         if (guardianName == null) {
             guardianName = getString(R.string.sos_guardian_fallback);
         }
@@ -135,7 +138,7 @@ public class SosMessageActivity extends AppCompatActivity {
     }
 
     private void readLocation() {
-        if (!LocationReader.hasPermission(this)) {
+        if (!shareLocation || !LocationReader.hasPermission(this)) {
             locationChecked = true;
             bindLocation(false);
             bindMessage();
@@ -161,6 +164,10 @@ public class SosMessageActivity extends AppCompatActivity {
                     ? getString(R.string.sos_gps_near, address)
                     : getString(R.string.sos_gps_no_address));
             binding.gpsBadge.setVisibility(View.VISIBLE);
+        } else if (!shareLocation) {
+            binding.gpsTitle.setText(R.string.sos_gps_off_title);
+            binding.gpsValue.setText(R.string.sos_gps_missing_value);
+            binding.gpsBadge.setVisibility(View.GONE);
         } else {
             binding.gpsTitle.setText(R.string.sos_gps_missing_title);
             binding.gpsValue.setText(R.string.sos_gps_missing_value);
@@ -188,9 +195,11 @@ public class SosMessageActivity extends AppCompatActivity {
 
         if (location == null) {
             // 아직 읽는 중이면 붙이지 않는다. 못 읽었으면 보호자가 전화하도록 알린다
-            return locationChecked
-                    ? message + "\n" + getString(R.string.sos_location_missing_line)
-                    : message;
+            if (!locationChecked) {
+                return message;
+            }
+            return message + "\n" + getString(shareLocation
+                    ? R.string.sos_location_missing_line : R.string.sos_location_off_line);
         }
         String mapUrl = String.format(Locale.US, MAP_URL, location.getLatitude(), location.getLongitude());
         String place = address != null ? address : getString(R.string.sos_gps_no_address);
@@ -221,6 +230,10 @@ public class SosMessageActivity extends AppCompatActivity {
                 return;
             }
             SosResponse response = result.getData();
+            if ("SESSION_EXPIRED".equals(result.getCode())) {
+                SessionNavigator.toLogin(this, R.string.error_session_expired);
+                return;
+            }
             if (!result.isSuccess() || response == null) {
                 setSending(false);
                 Toast.makeText(this, result.getMessageOr(getString(R.string.sos_network_error)),

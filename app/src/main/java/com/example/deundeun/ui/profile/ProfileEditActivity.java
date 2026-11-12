@@ -28,6 +28,7 @@ import com.example.deundeun.data.repository.UserRepository;
 import com.example.deundeun.databinding.ActivityProfileEditBinding;
 import com.example.deundeun.databinding.ViewEditFieldBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 import com.example.deundeun.ui.common.SessionNavigator;
 
 import java.util.Arrays;
@@ -62,6 +63,7 @@ public class ProfileEditActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.topBar);
         InsetsUtil.applyBottomInset(binding.profileEditScroll);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         repository = new UserRepository(this);
 
@@ -270,6 +272,8 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     private void save() {
+        KeyboardUtil.hide(this);
+
         String name = text(binding.fieldName);
         String phone = text(binding.fieldPhone);
         String guardianName = text(binding.fieldGuardianName);
@@ -310,7 +314,7 @@ public class ProfileEditActivity extends AppCompatActivity {
         repository.updateProfile(request, result -> {
             binding.btnSave.setEnabled(true);
             if (result.isSuccess()) {
-                Toast.makeText(this, R.string.profile_saved, Toast.LENGTH_SHORT).show();
+                setResult(RESULT_OK);
                 finish();
             } else {
                 handleFailure(result);

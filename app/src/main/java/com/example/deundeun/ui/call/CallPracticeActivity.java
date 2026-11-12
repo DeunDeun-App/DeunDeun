@@ -35,6 +35,7 @@ import com.example.deundeun.data.network.dto.call.CallSessionResponse;
 import com.example.deundeun.data.repository.CallRepository;
 import com.example.deundeun.databinding.ActivityCallPracticeBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.SessionNavigator;
 import com.example.deundeun.ui.common.TrainingCompleteActivity;
 import com.google.android.material.chip.Chip;
 
@@ -176,6 +177,10 @@ public class CallPracticeActivity extends AppCompatActivity {
         repository.startSession(result -> {
             CallSessionResponse session = result.getData();
 
+            if ("SESSION_EXPIRED".equals(result.getCode())) {
+                SessionNavigator.toLogin(this, R.string.error_session_expired);
+                return;
+            }
             if (!result.isSuccess() || session == null || session.getItems().isEmpty()) {
                 Toast.makeText(this, result.getMessageOr(getString(R.string.error_network)),
                         Toast.LENGTH_SHORT).show();

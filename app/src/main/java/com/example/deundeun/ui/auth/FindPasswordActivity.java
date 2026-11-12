@@ -14,6 +14,7 @@ import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.data.repository.BaseRepository.Result;
 import com.example.deundeun.databinding.ActivityFindPasswordBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 
 /**
  * 비밀번호 찾기.
@@ -47,6 +48,7 @@ public class FindPasswordActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.findPasswordScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         emailForm = new EmailCodeForm(this, binding.inputEmail, binding.btnSendEmail,
                 binding.authCodeRow, binding.inputAuthCode, binding.btnVerifyCode);
@@ -61,6 +63,7 @@ public class FindPasswordActivity extends AppCompatActivity {
         binding.btnVerifyCode.setOnClickListener(v ->
                 emailForm.verify(repository::verifyPasswordResetCode, data -> { }, result -> false));
         binding.btnSubmit.setOnClickListener(v -> {
+            KeyboardUtil.hide(this);
             if (isResetStep()) {
                 submitNewPassword();
             } else {

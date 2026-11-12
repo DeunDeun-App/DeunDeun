@@ -16,6 +16,7 @@ import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.databinding.ActivityLoginBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 
 /** 로그인. 앱의 진입 화면. */
 public class LoginActivity extends AppCompatActivity {
@@ -53,6 +54,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         InsetsUtil.applyVerticalInsets(binding.loginRoot);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.btnSignup.setOnClickListener(v ->
@@ -64,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void attemptLogin() {
+        KeyboardUtil.hide(this);
         binding.inputLoginId.clearState();
         binding.inputPassword.clearState();
 

@@ -102,6 +102,8 @@ public class SosQuestionsActivity extends AppCompatActivity {
         intent.putExtra(SosAnswers.EXTRA, answers);
         intent.putExtra(SosActivity.EXTRA_GUARDIAN_NAME,
                 getIntent().getStringExtra(SosActivity.EXTRA_GUARDIAN_NAME));
+        intent.putExtra(SosActivity.EXTRA_SHARE_LOCATION,
+                getIntent().getBooleanExtra(SosActivity.EXTRA_SHARE_LOCATION, true));
         startActivity(intent);
     }
 }

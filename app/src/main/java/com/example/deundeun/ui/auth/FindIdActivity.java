@@ -19,6 +19,7 @@ import com.example.deundeun.databinding.ActivityFindIdBinding;
 import com.example.deundeun.databinding.DialogCompleteBinding;
 import com.example.deundeun.ui.common.DialogHelper;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 
 public class FindIdActivity extends AppCompatActivity {
 
@@ -41,6 +42,7 @@ public class FindIdActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.findIdScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         emailForm = new EmailCodeForm(this, binding.inputEmail, binding.btnSendEmail,
                 binding.authCodeRow, binding.inputAuthCode, binding.btnVerifyCode);
@@ -49,6 +51,7 @@ public class FindIdActivity extends AppCompatActivity {
         binding.btnSendEmail.setOnClickListener(v -> sendAuthCode());
         binding.btnVerifyCode.setOnClickListener(v -> verifyAuthCode());
         binding.btnSubmit.setOnClickListener(v -> {
+            KeyboardUtil.hide(this);
             if (foundLoginId != null) {
                 showResultDialog();
             } else {

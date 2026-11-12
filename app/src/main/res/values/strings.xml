@@ -299,6 +299,8 @@
     <string name="sos_step_4">119 연결 선택 가능</string>
     <string name="sos_action">도움 요청하기</string>
     <string name="sos_footnote">위치 공유가 즉시 시작됩니다</string>
+    <string name="sos_step_1_no_location">%1$s에게 도움 요청 전송</string>
+    <string name="sos_footnote_no_location">위치 공유가 꺼져 있어 위치는 보내지 않습니다</string>
     <string name="sos_requested">보호자에게 도움을 요청했어요.</string>
     <string name="sos_guardian_fallback">보호자</string>
     <string name="sos_login_required">로그인 후 도움을 요청할 수 있어요.</string>
@@ -343,6 +345,8 @@
     <string name="sos_gps_missing_value">위치 없이 메시지만 보낼게요</string>
     <string name="sos_location_line">내 위치: %1$s\n%2$s</string>
     <string name="sos_location_missing_line">위치를 확인하지 못했어요. 전화해 주세요.</string>
+    <string name="sos_gps_off_title">위치 공유가 꺼져 있어요</string>
+    <string name="sos_location_off_line">어디에 있는지 전화해 주세요.</string>
     <string name="sos_no_sms_app">문자를 보낼 수 있는 앱이 없어요.</string>
     <string name="sos_confirm_title">문자를 보냈나요?</string>
     <string name="sos_confirm_message">문자앱에서 전송 버튼을 눌러야 %1$s에게 전달돼요.</string>

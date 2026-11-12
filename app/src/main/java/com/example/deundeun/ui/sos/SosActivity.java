@@ -15,9 +15,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
 import com.example.deundeun.data.network.dto.sos.GuardianResponse;
+import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.repository.SosRepository;
+import com.example.deundeun.data.repository.UserRepository;
 import com.example.deundeun.databinding.ActivitySosBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.SessionNavigator;
 
 import java.util.List;
 
@@ -31,9 +34,13 @@ public class SosActivity extends AppCompatActivity {
 
     /** 다음 화면들에 넘기는 보호자 이름. */
     public static final String EXTRA_GUARDIAN_NAME = "guardian_name";
+    public static final String EXTRA_SHARE_LOCATION = "share_location";
 
     private ActivitySosBinding binding;
     private SosRepository repository;
+    private UserRepository userRepository;
+
+    private boolean shareLocation = true;
 
     @Nullable
     private String guardianName;
@@ -60,7 +67,9 @@ public class SosActivity extends AppCompatActivity {
             return;
         }
 
+        userRepository = new UserRepository(this);
         bindGuardian();
+        loadShareLocation();
 
         binding.btnClose.setOnClickListener(v -> finish());
         binding.btnRequest.setOnClickListener(v -> requestHelp());
@@ -70,7 +79,23 @@ public class SosActivity extends AppCompatActivity {
 
     private void bindGuardian() {
         String name = guardianName != null ? guardianName : getString(R.string.sos_guardian_fallback);
-        binding.sosStep1.setText(getString(R.string.sos_step_1, name));
+        binding.sosStep1.setText(getString(shareLocation
+                ? R.string.sos_step_1 : R.string.sos_step_1_no_location, name));
+        binding.sosFootnote.setText(shareLocation
+                ? R.string.sos_footnote : R.string.sos_footnote_no_location);
+    }
+
+    private void loadShareLocation() {
+        userRepository.getProfile(result -> {
+            if (isFinishing() || isDestroyed()) {
+                return;
+            }
+            ProfileResponse profile = result.getData();
+            if (result.isSuccess() && profile != null) {
+                shareLocation = profile.isShareLocation();
+                bindGuardian();
+            }
+        });
     }
 
     private void requestHelp() {
@@ -107,6 +132,10 @@ public class SosActivity extends AppCompatActivity {
                 return;
             }
 
+            if ("SESSION_EXPIRED".equals(result.getCode())) {
+                SessionNavigator.toLogin(this, R.string.error_session_expired);
+                return;
+            }
             if (proceed) {
                 showUnavailable(result.getMessageOr(getString(R.string.sos_network_error)));
             }
@@ -114,7 +143,7 @@ public class SosActivity extends AppCompatActivity {
     }
 
     private void askLocation() {
-        if (LocationReader.hasPermission(this)) {
+        if (!shareLocation || LocationReader.hasPermission(this)) {
             goToQuestions();
             return;
         }
@@ -126,6 +155,7 @@ public class SosActivity extends AppCompatActivity {
     private void goToQuestions() {
         Intent intent = new Intent(this, SosQuestionsActivity.class);
         intent.putExtra(EXTRA_GUARDIAN_NAME, guardianName);
+        intent.putExtra(EXTRA_SHARE_LOCATION, shareLocation);
         startActivity(intent);
     }
 

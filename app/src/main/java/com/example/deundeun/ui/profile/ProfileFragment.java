@@ -1,5 +1,6 @@
 package com.example.deundeun.ui.profile;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
@@ -46,6 +49,14 @@ public class ProfileFragment extends Fragment {
 
     private boolean bindingSwitches;
 
+    private final ActivityResultLauncher<Intent> editLauncher = registerForActivityResult(
+            new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == Activity.RESULT_OK) {
+                    Toast.makeText(requireContext(), R.string.profile_saved,
+                            Toast.LENGTH_SHORT).show();
+                }
+            });
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -72,7 +83,7 @@ public class ProfileFragment extends Fragment {
         binding.noticeList.setAdapter(noticeAdapter);
 
         binding.btnEditProfile.setOnClickListener(v ->
-                startActivity(new Intent(requireContext(), ProfileEditActivity.class)));
+                editLauncher.launch(new Intent(requireContext(), ProfileEditActivity.class)));
         binding.btnLogout.setOnClickListener(v -> logout());
         binding.btnWithdraw.setOnClickListener(v -> confirmWithdraw());
     }

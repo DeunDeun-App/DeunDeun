@@ -27,7 +27,7 @@ public final class InsetsUtil {
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
             Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(v.getPaddingLeft(), baseTop + bars.top,
-                    v.getPaddingRight(), baseBottom + bars.bottom);
+                    v.getPaddingRight(), baseBottom + bottomInset(windowInsets));
             return windowInsets;
         });
     }
@@ -35,11 +35,17 @@ public final class InsetsUtil {
     public static void applyBottomInset(View view) {
         final int basePadding = view.getPaddingBottom();
         ViewCompat.setOnApplyWindowInsetsListener(view, (v, windowInsets) -> {
-            Insets bars = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(v.getPaddingLeft(), v.getPaddingTop(),
-                    v.getPaddingRight(), basePadding + bars.bottom);
+                    v.getPaddingRight(), basePadding + bottomInset(windowInsets));
             return windowInsets;
         });
+    }
+
+    private static int bottomInset(WindowInsetsCompat windowInsets) {
+        if (windowInsets.isVisible(WindowInsetsCompat.Type.ime())) {
+            return 0;
+        }
+        return windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom;
     }
 
     public static void applyBottomBarInset(View bar) {
