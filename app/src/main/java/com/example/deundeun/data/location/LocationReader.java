@@ -1,4 +1,4 @@
-package com.example.deundeun.ui.sos;
+package com.example.deundeun.data.location;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.regex.Pattern;
 
 /**
  * 지금 위치를 한 번 읽고, 가능하면 주소로 바꿔준다. 안드로이드 기본 {@link LocationManager} 만 쓴다.
@@ -34,15 +35,22 @@ public class LocationReader {
     public interface Listener {
         /**
          * @param location 읽은 위치. 못 읽으면 null
-         * @param address  주소 (예: 서울특별시 강남구 역삼동). 못 바꾸면 null
+         * @param address  주소. 못 바꾸면 null
          */
-        void onLocation(@Nullable Location location, @Nullable String address);
+        void onLocation(@Nullable Location location, @Nullable Address address);
     }
+
+    public static final String[] PERMISSIONS = {
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.ACCESS_COARSE_LOCATION};
 
     private static final long TIMEOUT_MS = 10_000;
     // 이보다 오래된 마지막 위치는 쓰지 않는다
     private static final long LAST_KNOWN_MAX_AGE_MS = 2 * 60_000;
     private static final String COUNTRY_PREFIX = "대한민국 ";
+    private static final int MAX_RESULTS = 5;
+    private static final Pattern PROVINCE = Pattern.compile("[가-힣]+[시도]$");
+    private static final Pattern DISTRICT = Pattern.compile(".+[시군구]$");
 
     private final Context context;
     private final LocationManager locationManager;
@@ -159,28 +167,55 @@ public class LocationReader {
             return;
         }
         geocodeExecutor.execute(() -> {
-            String address = toAddress(location);
+            Address address = toAddress(location);
             handler.post(() -> target.onLocation(location, address));
         });
     }
 
     @Nullable
     @SuppressWarnings("deprecation") // 새 콜백 방식은 API 33 부터라 백그라운드 스레드에서 옛 방식을 쓴다
-    private String toAddress(@NonNull Location location) {
+    private Address toAddress(@NonNull Location location) {
         try {
             List<Address> results = new Geocoder(context, Locale.KOREAN)
-                    .getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+                    .getFromLocation(location.getLatitude(), location.getLongitude(), MAX_RESULTS);
             if (results == null || results.isEmpty()) {
                 return null;
             }
-            String line = results.get(0).getAddressLine(0);
-            if (line == null) {
-                return null;
+            for (Address result : results) {
+                if (result.getAdminArea() != null) {
+                    return result;
+                }
             }
-            return line.startsWith(COUNTRY_PREFIX) ? line.substring(COUNTRY_PREFIX.length()) : line;
+            return results.get(0);
         } catch (Exception e) {
             return null;
         }
+    }
+
+    @Nullable
+    public static String addressLine(@Nullable Address address) {
+        String line = address == null ? null : address.getAddressLine(0);
+        if (line == null) {
+            return null;
+        }
+        return line.startsWith(COUNTRY_PREFIX) ? line.substring(COUNTRY_PREFIX.length()) : line;
+    }
+
+    @Nullable
+    public static String region(@Nullable Address address) {
+        String line = addressLine(address);
+        if (line == null || line.trim().isEmpty()) {
+            return null;
+        }
+        String[] tokens = line.trim().split("\\s+");
+        if (!PROVINCE.matcher(tokens[0]).matches()) {
+            return null;
+        }
+        StringBuilder region = new StringBuilder(tokens[0]);
+        for (int i = 1; i < tokens.length && DISTRICT.matcher(tokens[i]).matches(); i++) {
+            region.append(' ').append(tokens[i]);
+        }
+        return region.toString();
     }
 
     private static long ageMs(Location location) {

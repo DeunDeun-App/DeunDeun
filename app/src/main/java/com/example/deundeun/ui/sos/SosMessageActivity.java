@@ -16,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.location.LocationReader;
 import com.example.deundeun.data.network.dto.sos.SosRequest;
 import com.example.deundeun.data.network.dto.sos.SosResponse;
 import com.example.deundeun.data.repository.SosRepository;
@@ -150,7 +151,7 @@ public class SosMessageActivity extends AppCompatActivity {
 
         locationReader.read((found, foundAddress) -> {
             location = found;
-            address = foundAddress;
+            address = LocationReader.addressLine(foundAddress);
             locationChecked = true;
             bindLocation(found != null);
             bindMessage();

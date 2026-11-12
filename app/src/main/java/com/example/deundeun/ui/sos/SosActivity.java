@@ -1,6 +1,5 @@
 package com.example.deundeun.ui.sos;
 
-import android.Manifest;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,6 +13,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.location.LocationReader;
 import com.example.deundeun.data.network.dto.sos.GuardianResponse;
 import com.example.deundeun.data.network.dto.user.ProfileResponse;
 import com.example.deundeun.data.repository.SosRepository;
@@ -147,9 +147,7 @@ public class SosActivity extends AppCompatActivity {
             goToQuestions();
             return;
         }
-        locationPermission.launch(new String[]{
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION});
+        locationPermission.launch(LocationReader.PERMISSIONS);
     }
 
     private void goToQuestions() {
