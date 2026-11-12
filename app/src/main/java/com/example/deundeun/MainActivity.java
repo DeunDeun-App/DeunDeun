@@ -11,10 +11,13 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.deundeun.data.repository.AuthRepository;
+import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.databinding.ActivityMainBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.NavItemView;
 import com.example.deundeun.ui.common.NotchedBarDrawable;
+import com.example.deundeun.ui.common.SessionNavigator;
 import com.example.deundeun.ui.home.HomeFragment;
 import com.example.deundeun.ui.profile.ProfileFragment;
 import com.example.deundeun.ui.record.RecordFragment;
@@ -36,9 +39,18 @@ public class MainActivity extends AppCompatActivity {
 
     private String selectedTag;
 
+    private SessionManager sessionManager;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        sessionManager = new SessionManager(this);
+        if (!sessionManager.isLoggedIn()) {
+            SessionNavigator.toLogin(this, null);
+            return;
+        }
+
         EdgeToEdge.enable(this);
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
@@ -64,7 +76,21 @@ public class MainActivity extends AppCompatActivity {
                 ? savedInstanceState.getString(STATE_SELECTED_TAB, HomeFragment.TAG)
                 : HomeFragment.TAG;
         showTab(requestedTab(getIntent(), initialTag));
+
+        checkSession();
     }
+
+    private void checkSession() {
+        new AuthRepository().me(sessionManager.getAuthorization(), result -> {
+            if (result.isSuccess() && result.getData() != null) {
+                sessionManager.updateUser(result.getData().getLoginId(),
+                        result.getData().getUserName());
+            } else if (result.hasCode("SESSION_EXPIRED")) {
+                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            }
+        });
+    }
+
 
     @Override
     protected void onNewIntent(Intent intent) {

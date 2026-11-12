@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_dialog"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    android:paddingStart="24dp"
+    android:paddingTop="30dp"
+    android:paddingEnd="24dp"
+    android:paddingBottom="24dp">
+
+    <TextView
+        android:id="@+id/dialog_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/pretendard_extrabold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        tools:text="정말 탈퇴하시겠습니까?" />
+
+    <TextView
+        android:id="@+id/dialog_message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_m"
+        android:fontFamily="@font/pretendard_medium"
+        android:gravity="center"
+        android:lineSpacingExtra="4sp"
+        android:textColor="@color/text_pill"
+        android:textSize="14sp"
+        tools:text="탈퇴하면 내 정보와 훈련 기록이 모두 삭제되며 되돌릴 수 없습니다." />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/space_l"
+        android:orientation="horizontal">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_cancel"
+            style="@style/Button.Secondary"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:text="@string/action_cancel"
+            android:textSize="16sp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/dialog_confirm"
+            style="@style/Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="@dimen/space_s"
+            android:layout_weight="1"
+            android:textSize="16sp"
+            tools:text="탈퇴하기" />
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -25,7 +25,7 @@ public class SosQuestionsActivity extends AppCompatActivity {
     private ActivitySosQuestionsBinding binding;
     private final SosAnswers answers = new SosAnswers();
 
-    private List<TextView> whereOptions;
+    private List<TextView> situationOptions;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -40,18 +40,18 @@ public class SosQuestionsActivity extends AppCompatActivity {
 
         binding.btnBack.setOnClickListener(v -> finish());
 
-        whereOptions = Arrays.asList(binding.whereSubway, binding.whereHome,
-                binding.whereSchool, binding.whereUnknown);
-        for (int i = 0; i < whereOptions.size(); i++) {
+        situationOptions = Arrays.asList(binding.situationFire, binding.situationEarthquake,
+                binding.situationFlood, binding.situationUnknown);
+        for (int i = 0; i < situationOptions.size(); i++) {
             final int index = i;
-            whereOptions.get(i).setOnClickListener(v -> {
-                selectOne(whereOptions, (TextView) v);
-                answers.setWhereIndex(index);
+            situationOptions.get(i).setOnClickListener(v -> {
+                selectOne(situationOptions, (TextView) v);
+                answers.setSituationIndex(index);
                 syncProgress();
             });
         }
 
-        bindPair(binding.scaredYes, binding.scaredNo, true);
+        bindPair(binding.trappedYes, binding.trappedNo, true);
         bindPair(binding.hurtNo, binding.hurtYes, false);
 
         binding.btnNext.setOnClickListener(v -> goNext());
@@ -59,16 +59,16 @@ public class SosQuestionsActivity extends AppCompatActivity {
         syncProgress();
     }
 
-    /** 두 개짜리 질문. {@code scaredQuestion} 이면 무서움, 아니면 다침 답을 채운다. */
-    private void bindPair(TextView first, TextView second, boolean scaredQuestion) {
+    /** 두 개짜리 질문. {@code trappedQuestion} 이면 갇힘, 아니면 다침 답을 채운다. */
+    private void bindPair(TextView first, TextView second, boolean trappedQuestion) {
         List<TextView> pair = Arrays.asList(first, second);
         for (TextView option : pair) {
             option.setOnClickListener(v -> {
                 selectOne(pair, (TextView) v);
-                // 무서움은 첫 번째가 "네", 다침은 첫 번째가 "아니요" 라 뒤집어 담는다.
+                // 갇힘은 첫 번째가 "네", 다침은 첫 번째가 "아니요" 라 뒤집어 담는다.
                 boolean isFirst = v == first;
-                if (scaredQuestion) {
-                    answers.setScared(isFirst);
+                if (trappedQuestion) {
+                    answers.setTrapped(isFirst);
                 } else {
                     answers.setHurt(!isFirst);
                 }
@@ -95,11 +95,15 @@ public class SosQuestionsActivity extends AppCompatActivity {
 
     private void goNext() {
         if (!answers.isComplete()) {
-            Toast.makeText(this, R.string.sos_q_where, Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.sos_q_situation, Toast.LENGTH_SHORT).show();
             return;
         }
         Intent intent = new Intent(this, SosMessageActivity.class);
         intent.putExtra(SosAnswers.EXTRA, answers);
+        intent.putExtra(SosActivity.EXTRA_GUARDIAN_NAME,
+                getIntent().getStringExtra(SosActivity.EXTRA_GUARDIAN_NAME));
+        intent.putExtra(SosActivity.EXTRA_SHARE_LOCATION,
+                getIntent().getBooleanExtra(SosActivity.EXTRA_SHARE_LOCATION, true));
         startActivity(intent);
     }
 }

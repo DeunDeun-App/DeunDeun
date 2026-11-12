@@ -131,6 +131,7 @@
             app:backgroundTint="@color/red_sos" />
 
         <TextView
+            android:id="@+id/sos_footnote"
             style="@style/Text.ItemMeta"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

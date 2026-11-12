@@ -10,24 +10,28 @@ import java.io.Serializable;
 public class SosAnswers implements Serializable {
 
     public static final String EXTRA = "sos_answers";
-    private Integer whereIndex;
-    private Boolean scared;
+
+    /** 서버로 보내는 재난 코드. 질문 화면의 보기 순서와 같다. */
+    private static final String[] SITUATION_CODES = {"FIRE", "EARTHQUAKE", "FLOOD", "UNKNOWN"};
+
+    private Integer situationIndex;
+    private Boolean trapped;
     private Boolean hurt;
 
-    public Integer getWhereIndex() {
-        return whereIndex;
+    public Integer getSituationIndex() {
+        return situationIndex;
     }
 
-    public void setWhereIndex(Integer whereIndex) {
-        this.whereIndex = whereIndex;
+    public void setSituationIndex(Integer situationIndex) {
+        this.situationIndex = situationIndex;
     }
 
-    public Boolean getScared() {
-        return scared;
+    public Boolean getTrapped() {
+        return trapped;
     }
 
-    public void setScared(Boolean scared) {
-        this.scared = scared;
+    public void setTrapped(Boolean trapped) {
+        this.trapped = trapped;
     }
 
     public Boolean getHurt() {
@@ -41,16 +45,24 @@ public class SosAnswers implements Serializable {
     /** 답한 질문 수. 상단 진행 표시에 쓴다. */
     public int answeredCount() {
         int count = 0;
-        if (whereIndex != null) {
+        if (situationIndex != null) {
             count++;
         }
-        if (scared != null) {
+        if (trapped != null) {
             count++;
         }
         if (hurt != null) {
             count++;
         }
         return count;
+    }
+
+    /** 고른 재난의 서버 코드. 아직 안 골랐으면 null */
+    public String getSituationCode() {
+        if (situationIndex == null || situationIndex < 0 || situationIndex >= SITUATION_CODES.length) {
+            return null;
+        }
+        return SITUATION_CODES[situationIndex];
     }
 
     public boolean isComplete() {

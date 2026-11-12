@@ -36,12 +36,12 @@
             android:minHeight="120dp" />
 
         <com.example.deundeun.ui.common.LabeledInputView
-            android:id="@+id/input_email"
+            android:id="@+id/input_login_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
-            app:labelText="@string/label_email" />
+            android:hint="@string/hint_login_id_login"
+            android:inputType="text"
+            app:labelText="@string/label_login_id" />
 
         <com.example.deundeun.ui.common.LabeledInputView
             android:id="@+id/input_password"
@@ -76,14 +76,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/btn_find_email"
+                android:id="@+id/btn_find_id"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/min_touch_target"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:gravity="center"
                 android:paddingStart="@dimen/space_s"
                 android:paddingEnd="@dimen/space_s"
-                android:text="@string/action_find_email"
+                android:text="@string/action_find_id"
                 android:textColor="@color/text_secondary"
                 android:textSize="13sp" />
 

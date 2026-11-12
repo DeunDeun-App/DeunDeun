@@ -25,12 +25,61 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="가상 통화 중 · 00:32" />
 
+    <!-- 이번 연습 상황. 이 상황을 신고한다고 생각하고 대답한다 -->
+    <LinearLayout
+        android:id="@+id/situation_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_h_margin"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="@dimen/screen_h_margin"
+        android:background="@drawable/bg_call_situation"
+        android:orientation="vertical"
+        android:padding="16dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/call_timer"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/situation_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/pretendard_extrabold"
+            android:includeFontPadding="false"
+            android:textColor="@color/orange_primary"
+            android:textSize="13sp"
+            android:text="@string/call_situation_label" />
+
+        <!-- 상황 단서. 문장이 아닌 낱말이라 자기 말로 설명해야 한다 -->
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/situation_cues"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:chipSpacingHorizontal="8dp"
+            app:chipSpacingVertical="8dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/pretendard_semibold"
+            android:includeFontPadding="false"
+            android:text="@string/call_situation_guide"
+            android:textColor="@color/text_pill"
+            android:textSize="13sp" />
+
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/message_list"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="@dimen/space_l"
         android:clipToPadding="false"
+        android:defaultFocusHighlightEnabled="false"
         android:paddingStart="@dimen/screen_h_margin"
         android:paddingEnd="@dimen/screen_h_margin"
         android:scrollbars="none"
@@ -38,7 +87,7 @@
         app:layout_constraintBottom_toTopOf="@id/hint_card"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/call_timer"
+        app:layout_constraintTop_toBottomOf="@id/situation_card"
         tools:itemCount="3"
         tools:listitem="@layout/item_call_message" />
 
@@ -53,7 +102,7 @@
         android:background="@drawable/bg_hint_green"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@id/call_status"
+        app:layout_constraintBottom_toTopOf="@id/live_panel"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -78,12 +127,51 @@
 
     </LinearLayout>
 
+    <!-- 말하는 동안 보이는 실시간 자막과 파동. 다 말하면 말풍선으로 올라간다 -->
+    <LinearLayout
+        android:id="@+id/live_panel"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/screen_h_margin"
+        android:layout_marginEnd="@dimen/screen_h_margin"
+        android:layout_marginBottom="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/call_status"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:visibility="visible">
+
+        <TextView
+            android:id="@+id/live_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="start"
+            android:fontFamily="@font/pretendard_semibold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="4dp"
+            android:maxLines="3"
+            android:textColor="@color/text_primary"
+            android:textSize="18sp"
+            tools:text="서울시 강남구 역삼동이에요" />
+
+        <com.example.deundeun.ui.call.WaveformView
+            android:id="@+id/waveform"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:layout_marginTop="14dp"
+            android:importantForAccessibility="no" />
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/call_status"
         style="@style/Text.ItemMeta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="51dp"
+        android:layout_marginBottom="28dp"
         android:text="@string/call_listening"
         app:layout_constraintBottom_toTopOf="@id/btn_mic"
         app:layout_constraintEnd_toEndOf="parent"

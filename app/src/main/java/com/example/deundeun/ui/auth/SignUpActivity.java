@@ -1,25 +1,23 @@
 package com.example.deundeun.ui.auth;
 
 import android.app.Dialog;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
 import com.example.deundeun.data.repository.AuthRepository;
 import com.example.deundeun.databinding.ActivitySignUpBinding;
-import com.example.deundeun.databinding.DialogSignupCompleteBinding;
+import com.example.deundeun.databinding.DialogCompleteBinding;
 import com.example.deundeun.ui.common.AgreementRowView;
+import com.example.deundeun.ui.common.DialogHelper;
 import com.example.deundeun.ui.common.InsetsUtil;
+import com.example.deundeun.ui.common.KeyboardUtil;
 import com.example.deundeun.ui.common.LabeledInputView;
 
 import java.util.Arrays;
@@ -34,9 +32,7 @@ public class SignUpActivity extends AppCompatActivity {
     private final AuthRepository repository = new AuthRepository();
 
     private List<AgreementRowView> agreements;
-    private boolean emailVerified;
-    private String verifiedEmail;
-    private AuthCodeTimer codeTimer;
+    private EmailCodeForm emailForm;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,6 +44,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         InsetsUtil.applyTopInset(binding.signupScroll);
         InsetsUtil.applyBottomInset(binding.ctaContainer);
+        KeyboardUtil.fitContentAboveKeyboard(this);
 
         binding.header.setOnBackClickListener(v -> finish());
 
@@ -56,18 +53,19 @@ public class SignUpActivity extends AppCompatActivity {
                 binding.agreePrivacy, binding.agreeMarketing);
         setUpAgreements();
 
-        codeTimer = new AuthCodeTimer(this, binding.inputAuthCode);
-        binding.inputEmail.alignWithField(binding.btnSendEmail);
-        binding.inputAuthCode.alignWithField(binding.btnVerifyCode);
+        emailForm = new EmailCodeForm(this, binding.inputEmail, binding.btnSendEmail,
+                binding.authCodeRow, binding.inputAuthCode, binding.btnVerifyCode);
 
-        binding.btnSendEmail.setOnClickListener(v -> sendAuthCode());
-        binding.btnVerifyCode.setOnClickListener(v -> verifyAuthCode());
+        binding.btnSendEmail.setOnClickListener(v ->
+                emailForm.send(repository::sendSignUpCode, result -> false));
+        binding.btnVerifyCode.setOnClickListener(v ->
+                emailForm.verify(repository::verifySignUpCode, data -> { }, result -> false));
         binding.btnSubmit.setOnClickListener(v -> attemptSignUp());
     }
 
     @Override
     protected void onDestroy() {
-        codeTimer.cancel();
+        emailForm.release();
         super.onDestroy();
     }
 
@@ -111,105 +109,33 @@ public class SignUpActivity extends AppCompatActivity {
                 allAgreed() ? R.drawable.bg_checkbox_checked : R.drawable.bg_checkbox);
     }
 
-    // ----- 이메일 인증 -----
-
-    private void sendAuthCode() {
-        binding.inputEmail.clearState();
-        String email = binding.inputEmail.getText();
-
-        if (email.isEmpty()) {
-            binding.inputEmail.showError(getString(R.string.error_email_required));
-            return;
-        }
-        if (!repository.isEmailFormatValid(email)) {
-            binding.inputEmail.showError(getString(R.string.error_email_format));
-            return;
-        }
-
-        boolean codeRowShown = binding.authCodeRow.getVisibility() == View.VISIBLE;
-        binding.inputAuthCode.setText("");
-        binding.authCodeRow.setVisibility(View.VISIBLE);
-        codeTimer.showSending();
-
-        binding.btnSendEmail.setEnabled(false);
-        repository.sendSignUpCode(email, result -> {
-            binding.btnSendEmail.setEnabled(true);
-
-            if (result.isSuccess()) {
-                emailVerified = false;
-                verifiedEmail = null;
-                binding.btnSendEmail.setText(R.string.action_resend_email);
-                codeTimer.start(result.getData());
-                binding.inputAuthCode.getEditView().requestFocus();
-                return;
-            }
-
-            restoreCodeRow(codeRowShown);
-            binding.inputEmail.showError(result.getMessageOr(getString(R.string.error_network)));
-        });
-    }
-
-    private void restoreCodeRow(boolean shown) {
-        codeTimer.stop();
-        binding.inputAuthCode.clearState();
-        if (!shown) {
-            binding.authCodeRow.setVisibility(View.GONE);
-        }
-    }
-
-    private void verifyAuthCode() {
-        String code = binding.inputAuthCode.getText();
-
-        if (codeTimer.isExpired()) {
-            binding.inputAuthCode.showError(getString(R.string.error_code_expired));
-            return;
-        }
-        if (code.isEmpty()) {
-            codeTimer.showError(getString(R.string.error_code_required));
-            return;
-        }
-
-        String email = binding.inputEmail.getText();
-
-        binding.btnVerifyCode.setEnabled(false);
-        repository.verifySignUpCode(email, code, result -> {
-            binding.btnVerifyCode.setEnabled(true);
-            emailVerified = result.isSuccess();
-            verifiedEmail = emailVerified ? email : null;
-
-            if (emailVerified) {
-                codeTimer.stop();
-                binding.inputAuthCode.showSuccess(getString(R.string.success_code_verified));
-                return;
-            }
-
-            String message = result.getMessageOr(getString(R.string.error_network));
-            if (result.hasCode("CODE_EXPIRED") || result.hasCode("CODE_ATTEMPTS")) {
-                codeTimer.stop();
-                binding.inputAuthCode.showError(message);
-            } else {
-                codeTimer.showError(message);
-            }
-        });
-    }
-
     // ----- 가입 -----
 
     private void attemptSignUp() {
+        KeyboardUtil.hide(this);
         clearAllStates();
 
-        if (binding.inputName.isEmpty()) {
+        String name = binding.inputName.getText();
+        String loginId = binding.inputLoginId.getText();
+        String password = binding.inputPassword.getText();
+
+        if (name.isEmpty()) {
             focusWithError(binding.inputName, R.string.error_name_required);
             return;
         }
-        if (!emailVerified || !binding.inputEmail.getText().equals(verifiedEmail)) {
-            binding.authCodeRow.setVisibility(View.VISIBLE);
-            codeTimer.showError(getString(R.string.error_email_not_verified));
-            binding.inputAuthCode.getEditView().requestFocus();
+        if (loginId.isEmpty()) {
+            focusWithError(binding.inputLoginId, R.string.error_login_id_required);
+            return;
+        }
+        if (!repository.isLoginIdFormatValid(loginId)) {
+            focusWithError(binding.inputLoginId, R.string.error_login_id_format);
+            return;
+        }
+        if (!emailForm.isVerified()) {
+            emailForm.showNotVerified(getString(R.string.error_email_not_verified));
             return;
         }
 
-        String password = binding.inputPassword.getText();
         Integer passwordError = PasswordRule.validate(password);
         if (passwordError != null) {
             focusWithError(binding.inputPassword, passwordError);
@@ -225,10 +151,8 @@ public class SignUpActivity extends AppCompatActivity {
             return;
         }
 
-        String name = binding.inputName.getText();
-
         binding.btnSubmit.setEnabled(false);
-        repository.signUp(name, binding.inputEmail.getText(), password, result -> {
+        repository.signUp(loginId, name, emailForm.getVerifiedEmail(), password, result -> {
             binding.btnSubmit.setEnabled(true);
 
             if (result.isSuccess()) {
@@ -244,12 +168,13 @@ public class SignUpActivity extends AppCompatActivity {
 
         if (result.hasCode("NAME")) {
             binding.inputName.showError(message);
+        } else if (result.hasCode("LOGIN_ID")) {
+            binding.inputLoginId.showError(message);
+            binding.inputLoginId.getEditView().requestFocus();
         } else if (result.hasCode("PASSWORD")) {
             binding.inputPassword.showError(message);
         } else if (result.hasCode("EMAIL_NOT_VERIFIED")) {
-            emailVerified = false;
-            binding.authCodeRow.setVisibility(View.VISIBLE);
-            codeTimer.showError(message);
+            emailForm.showNotVerified(message);
         } else if (result.hasCode("EMAIL")) {
             binding.inputEmail.showError(message);
         } else {
@@ -259,38 +184,24 @@ public class SignUpActivity extends AppCompatActivity {
 
     private void clearAllStates() {
         binding.inputName.clearState();
+        binding.inputLoginId.clearState();
         binding.inputPassword.clearState();
         binding.inputPasswordConfirm.clearState();
     }
 
-    private void focusWithError(LabeledInputView input, int messageRes) {
+    private void focusWithError(LabeledInputView input, @StringRes int messageRes) {
         input.showError(getString(messageRes));
         input.getEditView().requestFocus();
     }
 
     private void showCompleteDialog(String name) {
-        DialogSignupCompleteBinding dialogBinding =
-                DialogSignupCompleteBinding.inflate(getLayoutInflater());
+        DialogCompleteBinding dialogBinding = DialogCompleteBinding.inflate(getLayoutInflater());
         dialogBinding.dialogMessage.setText(getString(R.string.signup_complete_message, name));
 
-        Dialog dialog = new Dialog(this);
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(dialogBinding.getRoot());
-        dialog.setCancelable(false);
-
-        Window window = dialog.getWindow();
-        if (window != null) {
-            window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-            window.setLayout(
-                    (int) (getResources().getDisplayMetrics().widthPixels * 0.78f),
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-        }
-
+        Dialog dialog = DialogHelper.show(this, dialogBinding.getRoot(), 0.78f, false);
         dialogBinding.dialogConfirm.setOnClickListener(v -> {
             dialog.dismiss();
-            // 가입 후에는 로그인 화면으로 되돌린다.
             finish();
         });
-        dialog.show();
     }
 }
