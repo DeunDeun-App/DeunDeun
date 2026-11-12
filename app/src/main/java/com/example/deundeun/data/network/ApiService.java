@@ -3,6 +3,10 @@ package com.example.deundeun.data.network;
 import com.example.deundeun.data.network.dto.auth.AuthRequest;
 import com.example.deundeun.data.network.dto.auth.LoginResponse;
 import com.example.deundeun.data.network.dto.auth.UserResponse;
+import com.example.deundeun.data.network.dto.call.CallAnswerResponse;
+import com.example.deundeun.data.network.dto.call.CallRequest;
+import com.example.deundeun.data.network.dto.call.CallResultResponse;
+import com.example.deundeun.data.network.dto.call.CallSessionResponse;
 import com.example.deundeun.data.network.dto.disaster.DisasterMessageResponse;
 import com.example.deundeun.data.network.dto.disaster.EasyMessageResponse;
 import com.example.deundeun.data.network.dto.sos.GuardianResponse;
@@ -99,4 +103,15 @@ public interface ApiService {
     @POST("sos/{sosId}/sent")
     Call<ApiResponse<Void>> markSosSent(@Header("Authorization") String authorization,
                                         @Path("sosId") long sosId);
+    @POST("call/sessions")
+    Call<ApiResponse<CallSessionResponse>> startCallSession(@Header("Authorization") String authorization);
+
+    @POST("call/sessions/{sessionId}/answers")
+    Call<ApiResponse<CallAnswerResponse>> answerCall(@Header("Authorization") String authorization,
+                                                     @Path("sessionId") long sessionId,
+                                                     @Body CallRequest request);
+
+    @POST("call/sessions/{sessionId}/complete")
+    Call<ApiResponse<CallResultResponse>> completeCall(@Header("Authorization") String authorization,
+                                                       @Path("sessionId") long sessionId);
 }
