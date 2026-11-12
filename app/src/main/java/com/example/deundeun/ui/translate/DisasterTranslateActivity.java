@@ -5,10 +5,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.location.LocationReader;
 import com.example.deundeun.data.network.dto.disaster.DisasterMessageResponse;
 import com.example.deundeun.data.network.dto.disaster.EasyMessageResponse;
 import com.example.deundeun.data.repository.DisasterRepository;
@@ -33,6 +36,19 @@ public class DisasterTranslateActivity extends AppCompatActivity {
     private final Map<String, EasyMessageResponse> easyMessages = new HashMap<>();
     private int position;
 
+    private LocationReader locationReader;
+    @Nullable
+    private String region;
+
+    private final ActivityResultLauncher<String[]> locationPermission = registerForActivityResult(
+            new ActivityResultContracts.RequestMultiplePermissions(), granted -> {
+                if (LocationReader.hasPermission(this)) {
+                    locate();
+                } else {
+                    applyRegion(null);
+                }
+            });
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +63,31 @@ public class DisasterTranslateActivity extends AppCompatActivity {
         binding.btnPrevMessage.setOnClickListener(v -> showMessage(position - 1));
         binding.btnNextMessage.setOnClickListener(v -> showMessage(position + 1));
 
+        locationReader = new LocationReader(this);
+        if (LocationReader.hasPermission(this)) {
+            locate();
+        } else {
+            locationPermission.launch(LocationReader.PERMISSIONS);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        locationReader.shutdown();
+    }
+
+    private void locate() {
+        binding.originalMessage.setText(R.string.translate_locating);
+        showStatus(getString(R.string.translate_locating), true, null);
+        locationReader.read((location, address) -> applyRegion(LocationReader.region(address)));
+    }
+
+    private void applyRegion(@Nullable String region) {
+        this.region = region;
+        binding.originalLabel.setText(region == null
+                ? getString(R.string.translate_recent_all)
+                : getString(R.string.translate_recent_region, region));
         loadMessages(false);
     }
 
@@ -54,7 +95,7 @@ public class DisasterTranslateActivity extends AppCompatActivity {
         binding.originalMessage.setText(R.string.translate_list_loading);
         showStatus(getString(R.string.translate_list_loading), true, null);
 
-        repository.getRecentMessages(refresh, result -> {
+        repository.getRecentMessages(refresh, region, result -> {
             if (isFinishing()) {
                 return;
             }
@@ -69,7 +110,10 @@ public class DisasterTranslateActivity extends AppCompatActivity {
             messages.clear();
             messages.addAll(data);
             if (messages.isEmpty()) {
-                binding.originalMessage.setText(R.string.translate_empty);
+                binding.originalMessage.setText(region == null
+                        ? R.string.translate_empty : R.string.translate_empty_region);
+                binding.originalMeta.setVisibility(View.GONE);
+                binding.messagePager.setVisibility(View.GONE);
                 binding.resultCard.setVisibility(View.GONE);
                 return;
             }

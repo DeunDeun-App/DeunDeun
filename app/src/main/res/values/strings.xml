@@ -283,6 +283,10 @@
     <string name="translate_list_loading">최근 재난문자를 불러오는 중입니다.</string>
     <string name="translate_loading">쉬운 말로 바꾸는 중입니다.</string>
     <string name="translate_empty">최근 재난문자가 없습니다.</string>
+    <string name="translate_empty_region">우리 지역에 최근 재난문자가 없습니다.</string>
+    <string name="translate_locating">현재 위치를 확인하는 중입니다.</string>
+    <string name="translate_recent_region">%1$s 재난문자</string>
+    <string name="translate_recent_all">전국 재난문자 (위치 확인 불가)</string>
     <string name="translate_retry">%1$s\n다시 시도하려면 여기를 눌러 주세요.</string>
     <string name="translate_meta">%1$s · %2$s</string>
     <string name="translate_position">%1$d / %2$d</string>
