@@ -88,7 +88,7 @@ public interface ApiService {
 
     @GET("disaster-messages")
     Call<ApiResponse<List<DisasterMessageResponse>>> getRecentDisasterMessages(
-            @Query("refresh") boolean refresh);
+            @Query("refresh") boolean refresh, @Query("region") String region);
 
     @POST("disaster-messages/{id}/easy")
     Call<ApiResponse<EasyMessageResponse>> toEasyMessage(@Path("id") String id);
