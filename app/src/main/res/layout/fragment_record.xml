@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- 기록탭 -->
+<!-- 기록탭. 훈련 종류별 통계(이번 주 횟수, 점수, 항목별 달성률). 하나하나의 기록은 홈에서 본다 -->
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -27,7 +27,7 @@
             android:layout_marginBottom="@dimen/space_l"
             android:text="@string/record_title" />
 
-        <!-- 세그먼트 탭 -->
+        <!-- 세그먼트 탭: 훈련 종류. 아래 내용은 고른 종류의 기록만 보여준다 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="52dp"
@@ -36,202 +36,30 @@
             android:padding="4dp">
 
             <TextView
-                android:id="@+id/tab_history"
+                android:id="@+id/tab_simulation"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/bg_segmented_thumb"
                 android:gravity="center"
-                android:text="@string/record_tab_history"
+                android:text="@string/record_report_simulation"
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/tab_score"
+                android:id="@+id/tab_call"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="@string/record_tab_score"
+                android:text="@string/record_report_call"
                 android:textSize="15sp" />
 
         </LinearLayout>
 
-        <!-- ===== 훈련 이력 ===== -->
-        <LinearLayout
-            android:id="@+id/mode_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Card.Deundeun"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/history_title"
-                        style="@style/Text.ItemTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="재난 시뮬레이션" />
-
-                    <TextView
-                        android:id="@+id/history_meta"
-                        style="@style/Text.ItemMeta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        tools:text="지진 대피 · 7월 17일 10:05" />
-
-                    <!-- 범례 -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/space_l"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:background="@drawable/bg_progress_fill" />
-
-                        <TextView
-                            style="@style/Text.ItemMeta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="@string/record_legend_simulation" />
-
-                        <View
-                            android:layout_width="12dp"
-                            android:layout_height="12dp"
-                            android:layout_marginStart="@dimen/space_m"
-                            android:background="@drawable/bg_progress_fill"
-                            android:backgroundTint="@color/orange_pale" />
-
-                        <TextView
-                            style="@style/Text.ItemMeta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="6dp"
-                            android:text="@string/record_legend_call" />
-
-                    </LinearLayout>
-
-                    <com.example.deundeun.ui.record.GroupedBarChartView
-                        android:id="@+id/bar_chart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="@dimen/space_m" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <TextView
-                style="@style/Text.SectionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_xl"
-                android:layout_marginBottom="@dimen/space_m"
-                android:text="@string/record_recent" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recent_records"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:nestedScrollingEnabled="false"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                tools:itemCount="2"
-                tools:listitem="@layout/item_training_record" />
-
-        </LinearLayout>
-
-        <!-- ===== 119 점수 변화 ===== -->
-        <LinearLayout
-            android:id="@+id/mode_score"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:visibility="gone"
-            tools:visibility="gone">
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Card.Deundeun"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        android:id="@+id/score_title"
-                        style="@style/Text.ItemTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        tools:text="재난 시뮬레이션" />
-
-                    <TextView
-                        android:id="@+id/score_meta"
-                        style="@style/Text.ItemMeta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        tools:text="지진 대피 · 7월 17일 10:05" />
-
-                    <com.example.deundeun.ui.record.ScoreLineChartView
-                        android:id="@+id/line_chart"
-                        android:layout_width="match_parent"
-                        android:layout_height="200dp"
-                        android:layout_marginTop="@dimen/space_xl" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                style="@style/Card.Deundeun"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/space_l">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="20dp">
-
-                    <TextView
-                        style="@style/Text.SectionTitle"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/space_l"
-                        android:text="@string/record_achievement_title" />
-
-                    <!-- 달성률 항목은 개수가 가변이라 코드에서 채우도록 함 -->
-                    <LinearLayout
-                        android:id="@+id/achievement_list"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical" />
-
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-        </LinearLayout>
+        <!-- ===== 요약·점수 변화·항목별 달성률 ===== -->
+        <include
+            android:id="@+id/report"
+            layout="@layout/view_score_report" />
 
     </LinearLayout>
 

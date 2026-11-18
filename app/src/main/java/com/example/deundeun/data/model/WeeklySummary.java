@@ -1,5 +1,11 @@
 package com.example.deundeun.data.model;
 
+import androidx.annotation.Nullable;
+
+import com.example.deundeun.data.network.dto.record.RecordResponse;
+
+import java.util.List;
+
 /** 홈 상단 "이번 주 훈련 기록" 카드에 쓰이는 주간 집계. */
 public class WeeklySummary {
 
@@ -15,6 +21,30 @@ public class WeeklySummary {
         this.minutesByDay = minutesByDay.clone();
         this.simulationCount = simulationCount;
         this.emergencyCallCount = emergencyCallCount;
+    }
+
+    /** 서버 기록으로 만든다. null 이면 모두 0 */
+    public static WeeklySummary from(@Nullable RecordResponse data) {
+        int[] minutes = new int[7];
+        if (data == null) {
+            return new WeeklySummary(minutes, 0, 0);
+        }
+        List<Integer> dayMinutes = data.getDayMinutes();
+        for (int day = 0; day < 7 && day < dayMinutes.size(); day++) {
+            Integer value = dayMinutes.get(day);
+            minutes[day] = value == null ? 0 : value;
+        }
+        return new WeeklySummary(minutes, thisWeek(data.getSimulationCounts()),
+                thisWeek(data.getCallCounts()));
+    }
+
+    /** 주별 횟수의 마지막 칸이 이번 주 */
+    private static int thisWeek(List<Integer> counts) {
+        if (counts.isEmpty()) {
+            return 0;
+        }
+        Integer value = counts.get(counts.size() - 1);
+        return value == null ? 0 : value;
     }
 
     public int[] getMinutesByDay() {

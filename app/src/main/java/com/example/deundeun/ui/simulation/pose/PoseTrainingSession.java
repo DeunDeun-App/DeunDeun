@@ -66,6 +66,11 @@ public class PoseTrainingSession {
         return lastCheck;
     }
 
+    /** 첫 프레임부터 지금까지 걸린 시간. 아직 시작 전이면 0 */
+    public long elapsedMs(long nowMs) {
+        return startedAt < 0 ? 0 : Math.max(0, nowMs - startedAt);
+    }
+
     /** 유지 단계에서 남은 초 (올림) */
     public int remainingHoldSeconds(long nowMs) {
         if (holdStartedAt < 0) return (int) (HOLD_MS / 1000);
