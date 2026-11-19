@@ -26,6 +26,10 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.network.dto.record.KeywordResponse;
+import com.example.deundeun.data.network.dto.simulation.SimulationRequest;
+import com.example.deundeun.data.network.dto.simulation.SimulationResultResponse;
+import com.example.deundeun.data.repository.RecordRepository;
 import com.example.deundeun.databinding.ActivitySimulationRunBinding;
 import com.example.deundeun.ui.call.OperatorVoice;
 import com.example.deundeun.ui.common.InsetsUtil;
@@ -43,6 +47,7 @@ import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult;
 
 import com.google.android.material.button.MaterialButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -56,7 +61,7 @@ import java.util.concurrent.Executors;
  * - 따라 하기 장면: CameraX 로 카메라를 띄우고, 프레임마다 MediaPipe 로 자세를 인식해
  *   {@link DisasterPoseEvaluator} 가 판정한 결과에 맞춰 짧은 안내 문장을 보여준다.
  *   올바른 자세를 몇 초 유지하면 다음 장면, 제한 시간 안에 못 하면 재훈련을 권한다.
- * 카메라는 처음부터 켜 두어 이야기 내내 내 모습이 화면에 보인다.
+ * 카메라는 따라 하기 장면에서만 켠다. 자세 시도가 끝나면 결과를 서버에 기록한다.
  */
 public class SimulationRunActivity extends AppCompatActivity {
 
@@ -92,6 +97,14 @@ public class SimulationRunActivity extends AppCompatActivity {
     /** 같은 문장을 화면 낭독기로 반복해서 읽지 않으려고 기억해 둔다 */
     private String lastAnnounced;
 
+    private RecordRepository recordRepository;
+    /** 이번 시도에서 한 번이라도 해낸 동작. 실패해도 해낸 동작은 점수로 인정한다 */
+    private boolean crouched;
+    private boolean covered;
+    /** 서버가 채점한 이번 시도 결과. 완료 화면 체크리스트에 쓴다 */
+    @Nullable
+    private SimulationResultResponse lastResult;
+
     private final ActivityResultLauncher<String> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 permissionDenied = !granted;
@@ -122,6 +135,7 @@ public class SimulationRunActivity extends AppCompatActivity {
         fire = getIntent().getBooleanExtra(SimulationIntroActivity.EXTRA_FIRE, false);
         evaluator = new DisasterPoseEvaluator(fire);
         steps = DisasterStory.steps(fire);
+        recordRepository = new RecordRepository(this);
 
         if (!fire) {
             // 지진: 실제 방 대신 지진 난 방 사진을 배경으로 쓰고,
@@ -290,8 +304,50 @@ public class SimulationRunActivity extends AppCompatActivity {
 
         long now = SystemClock.uptimeMillis();
         PoseCheck check = evaluator.evaluate(pose, hands);
+        rememberDoneSteps(check);
         PoseTrainingSession.Phase phase = session.update(check, now);
         applyState(phase, check, now);
+
+        if (phase == PoseTrainingSession.Phase.SUCCESS || phase == PoseTrainingSession.Phase.RETRY) {
+            submitResult(phase == PoseTrainingSession.Phase.SUCCESS, session.elapsedMs(now));
+        }
+    }
+
+    /** 지진은 웅크린 뒤에 머리 보호를 보므로, 머리 보호 단계까지 왔으면 웅크린 것이다 */
+    private void rememberDoneSteps(PoseCheck check) {
+        if (check == PoseCheck.NOT_PROTECTED || check == PoseCheck.CORRECT) {
+            crouched = true;
+        }
+        if (check == PoseCheck.CORRECT) {
+            covered = true;
+        }
+    }
+
+    /** 성공이나 시간 초과로 한 번의 시도가 끝나면 서버에 채점을 맡기고 기록으로 남긴다 */
+    private void submitResult(boolean success, long elapsedMs) {
+        lastResult = null;
+        if (!recordRepository.isLoggedIn()) {
+            return;
+        }
+
+        List<String> done = new ArrayList<>();
+        if (fire) {
+            if (covered) done.add(SimulationRequest.STEP_COVER_MOUTH);
+        } else {
+            if (crouched) done.add(SimulationRequest.STEP_CROUCH);
+            if (covered) done.add(SimulationRequest.STEP_COVER_HEAD);
+        }
+
+        SimulationRequest request = new SimulationRequest(
+                fire ? SimulationRequest.FIRE : SimulationRequest.EARTHQUAKE,
+                success, elapsedMs, done);
+        recordRepository.saveSimulation(request, result -> {
+            if (result.isSuccess()) {
+                lastResult = result.getData();
+            } else {
+                Log.w(TAG, "시뮬레이션 결과 저장 실패: " + result.getCode());
+            }
+        });
     }
 
     private void applyState(PoseTrainingSession.Phase phase, PoseCheck check, long now) {
@@ -394,6 +450,9 @@ public class SimulationRunActivity extends AppCompatActivity {
     private void restartTraining() {
         session.restart();
         lastAnnounced = null;
+        crouched = false;
+        covered = false;
+        lastResult = null;
         if (!fire) {
             binding.quakeEffect.setShaking(currentStep().shaking);
         }
@@ -548,6 +607,18 @@ public class SimulationRunActivity extends AppCompatActivity {
     private void finishTraining() {
         Intent intent = new Intent(this, TrainingCompleteActivity.class);
         intent.putExtra(TrainingCompleteActivity.EXTRA_TITLE_RES, R.string.complete_training);
+        // 서버 채점이 아직 안 왔거나 실패했으면 체크리스트 없이 보여준다
+        if (lastResult != null && !lastResult.getKeywords().isEmpty()) {
+            List<KeywordResponse> keywords = lastResult.getKeywords();
+            String[] labels = new String[keywords.size()];
+            boolean[] passed = new boolean[keywords.size()];
+            for (int i = 0; i < keywords.size(); i++) {
+                labels[i] = keywords.get(i).getLabel();
+                passed[i] = keywords.get(i).isPassed();
+            }
+            intent.putExtra(TrainingCompleteActivity.EXTRA_CHECK_LABEL_TEXTS, labels);
+            intent.putExtra(TrainingCompleteActivity.EXTRA_CHECK_RESULTS, passed);
+        }
         startActivity(intent);
         finish();
     }

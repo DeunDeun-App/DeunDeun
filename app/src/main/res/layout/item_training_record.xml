@@ -49,7 +49,7 @@
             app:layout_constraintTop_toTopOf="@id/record_title"
             tools:text="92점" />
 
-        <!-- 성취 배지는 개수가 가변이라 코드에서 채운다 (현재 최대 3개) -->
+        <!-- 키워드 배지는 개수가 가변이라 코드에서 채운다 (현재 최대 3개) -->
         <LinearLayout
             android:id="@+id/record_achievements"
             android:layout_width="0dp"
@@ -59,6 +59,22 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/record_meta" />
+
+        <!-- 못 한 키워드의 피드백 한 줄. 다 해냈으면 숨긴다 -->
+        <TextView
+            android:id="@+id/record_feedback"
+            style="@style/Text.ItemMeta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:lineSpacingExtra="3dp"
+            android:textColor="@color/text_pill"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/record_achievements"
+            tools:text="어느 동네인지, 근처에 보이는 큰 건물이나 가게 이름을 말해주세요."
+            tools:visibility="visible" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
