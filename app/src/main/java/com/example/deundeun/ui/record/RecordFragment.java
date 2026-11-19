@@ -167,7 +167,8 @@ public class RecordFragment extends Fragment {
         report.reportMeta.setText(scores.isEmpty()
                 ? getString(R.string.record_no_practice)
                 : getString(R.string.record_recent_count, scores.size()));
-        report.reportChart.setDescriptionTitle(typeName + " " + getString(R.string.record_tab_score));
+        report.reportChart.setFixedMax(100);
+        report.reportChart.setDescription(typeName + " " + getString(R.string.record_tab_score), "점");
 
         boolean practiced = !scores.isEmpty();
         int[] values = toArray(scores);
@@ -175,7 +176,10 @@ public class RecordFragment extends Fragment {
         report.reportChart.setVisibility(practiced ? View.VISIBLE : View.GONE);
         report.reportChartEmpty.setVisibility(practiced ? View.GONE : View.VISIBLE);
         if (practiced) {
-            report.reportChart.setData(attemptLabels(values.length), values);
+            // 가장 최근 연습만 진하게 칠해 "지금"이 어디인지 보이게 한다
+            boolean[] latestOnly = new boolean[values.length];
+            latestOnly[values.length - 1] = true;
+            report.reportChart.setData(attemptLabels(values.length), values, latestOnly);
         }
 
         List<RecordResponse.Rate> rates = reportData == null ? new ArrayList<>() : reportData.getRates();
