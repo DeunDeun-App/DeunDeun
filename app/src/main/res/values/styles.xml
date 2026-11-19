@@ -168,6 +168,16 @@
         <item name="android:insetBottom">0dp</item>
     </style>
 
+    <!-- 재난 이야기 선택지 : 검은 카메라 화면 위 흰 버튼 -->
+    <style name="Button.StoryChoice" parent="Button.Primary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="backgroundTint">@color/white</item>
+        <item name="strokeColor">@color/orange_primary</item>
+        <item name="strokeWidth">2dp</item>
+    </style>
+
     <!-- 하단 고정 CTA : "가입하기", "확인", "다음" -->
     <style name="Button.Cta" parent="Button.Primary">
         <item name="android:textSize">20sp</item>

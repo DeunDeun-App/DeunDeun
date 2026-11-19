@@ -29,6 +29,10 @@
 
     <dimen name="back_title_margin">3dp</dimen>
     <dimen name="button_height">56dp</dimen>
+    <!-- 재난 이야기 선택지 두 개(56dp + 아래 여백 10dp) 자리. 고른 뒤에도 장면 그림 크기가 그대로이게 한다 -->
+    <dimen name="story_choice_area_height">132dp</dimen>
+    <!-- 재난 이야기 피드백 세 줄(22sp) 자리 -->
+    <dimen name="story_feedback_height">120dp</dimen>
     <dimen name="button_radius">12dp</dimen>
     <dimen name="field_height">48dp</dimen>
     <dimen name="field_radius">10dp</dimen>
