@@ -239,6 +239,17 @@
 
         </RelativeLayout>
 
+        <TextView
+            android:id="@+id/recent_empty"
+            style="@style/Text.ItemMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/space_xl"
+            android:paddingBottom="@dimen/space_xl"
+            android:text="@string/record_empty"
+            android:visibility="gone" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recent_records"
             android:layout_width="match_parent"

@@ -46,13 +46,29 @@
 
     <!-- ===== 기록탭 ===== -->
     <string name="record_title">훈련 기록</string>
-    <string name="record_tab_history">훈련 이력</string>
-    <string name="record_tab_score">119 점수 변화</string>
-    <string name="record_legend_simulation">시뮬레이션</string>
-    <string name="record_legend_call">119 연습</string>
-    <string name="record_recent">최근 훈련</string>
+    <string name="record_tab_score">점수 변화</string>
     <string name="record_achievement_title">항목별 달성률</string>
     <string name="percent_format">%1$d%%</string>
+    <string name="record_report_call">119 신고 연습</string>
+    <string name="record_report_simulation">재난 시뮬레이션</string>
+    <string name="record_recent_count">최근 %1$d회 연습</string>
+    <string name="record_no_practice">아직 연습 기록이 없어요</string>
+    <string name="record_chart_empty">연습하면 회차별 점수가 보여요</string>
+    <string name="record_latest_score">최근 점수</string>
+    <string name="record_delta_up">%1$d점 ↑</string>
+    <string name="record_delta_down">%1$d점 ↓</string>
+    <string name="record_delta_same">같아요</string>
+    <string name="record_delta_first">첫 연습</string>
+    <string name="record_delta_title">지난번보다</string>
+    <string name="record_count_value">%1$d회</string>
+    <string name="record_score_value">%1$d점</string>
+    <string name="record_value_none">–</string>
+    <string name="record_rates_empty">연습하면 항목별 달성률이 보여요</string>
+    <string name="record_empty">아직 훈련 기록이 없어요</string>
+    <string name="record_load_failed">기록을 불러오지 못했어요</string>
+    <string name="record_this_week">이번 주</string>
+    <string name="record_attempt">%1$d회</string>
+    <string name="record_attempt_latest">최근</string>
 
     <!-- ===== 내정보 ===== -->
     <string name="profile_title">내 정보</string>

@@ -80,6 +80,14 @@
         <item name="android:includeFontPadding">false</item>
     </style>
 
+    <!-- 기록탭 요약 숫자 : "3회", "100점" -->
+    <style name="Text.SummaryValue" parent="">
+        <item name="android:fontFamily">@font/pretendard_extrabold</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:textColor">@color/text_primary</item>
+        <item name="android:includeFontPadding">false</item>
+    </style>
+
     <!-- 통계 단위 : "분" -->
     <style name="Text.StatUnit" parent="">
         <item name="android:fontFamily">@font/pretendard_medium</item>

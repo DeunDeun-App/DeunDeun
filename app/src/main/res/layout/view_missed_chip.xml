@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- "✗ 주소" 못 한 키워드 배지 -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="wrap_content"
+    android:layout_height="25dp"
+    android:layout_marginEnd="@dimen/space_s"
+    android:background="@drawable/bg_chip_missed"
+    android:gravity="center_vertical"
+    android:orientation="horizontal"
+    android:paddingStart="8dp"
+    android:paddingEnd="10dp">
+
+    <ImageView
+        android:layout_width="12dp"
+        android:layout_height="12dp"
+        android:importantForAccessibility="no"
+        android:src="@drawable/ic_x_small" />
+
+    <TextView
+        android:id="@+id/chip_label"
+        style="@style/Text.Chip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:textColor="@color/text_pill"
+        tools:text="주소" />
+
+</LinearLayout>
