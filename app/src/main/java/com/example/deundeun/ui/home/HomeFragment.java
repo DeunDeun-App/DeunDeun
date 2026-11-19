@@ -111,7 +111,7 @@ public class HomeFragment extends Fragment {
         binding.emergencyCallCount.setText(
                 getString(R.string.home_week_count, summary.getEmergencyCallCount()));
         binding.weeklyTotal.setText(String.valueOf(summary.getTotalMinutes()));
-        bindWeeklyChart(summary);
+        WeeklyChartBinder.bind(binding.weeklyChart, summary);
 
         List<TrainingRecord> records = new ArrayList<>();
         if (data != null) {
@@ -125,20 +125,6 @@ public class HomeFragment extends Fragment {
         adapter.submit(records);
         binding.recentEmpty.setVisibility(records.isEmpty() ? View.VISIBLE : View.GONE);
         binding.btnSeeAll.setVisibility(records.isEmpty() ? View.GONE : View.VISIBLE);
-    }
-
-    /** 요일별 훈련 시간(분). 훈련한 요일은 막대와 요일 글씨를 주황색으로 강조한다 */
-    private void bindWeeklyChart(WeeklySummary summary) {
-        String[] days = getResources().getStringArray(R.array.weekday_labels);
-        int[] minutes = summary.getMinutesByDay();
-        boolean[] trained = new boolean[minutes.length];
-        for (int i = 0; i < minutes.length; i++) {
-            trained[i] = minutes[i] > 0;
-        }
-        binding.weeklyChart.setValueSuffix(getString(R.string.home_unit_minute));
-        binding.weeklyChart.setDescription(getString(R.string.home_weekly_title),
-                getString(R.string.home_unit_minute));
-        binding.weeklyChart.setData(days, minutes, trained);
     }
 
     @Override

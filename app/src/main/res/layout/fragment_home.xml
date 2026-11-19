@@ -198,12 +198,13 @@
 
                 </LinearLayout>
 
-                <!-- 기록탭과 같은 막대 그래프. 훈련한 요일은 막대와 요일 글씨가 주황색 -->
-                <com.example.deundeun.ui.common.BarChartView
+                <LinearLayout
                     android:id="@+id/weekly_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="180dp"
-                    android:layout_marginTop="@dimen/space_l" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/space_l"
+                    android:orientation="horizontal"
+                    android:weightSum="7" />
 
             </LinearLayout>
 

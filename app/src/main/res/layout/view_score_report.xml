@@ -136,7 +136,7 @@
                 android:layout_marginTop="5dp"
                 tools:text="최근 6회 연습" />
 
-            <com.example.deundeun.ui.common.BarChartView
+            <com.example.deundeun.ui.record.ScoreBarChartView
                 android:id="@+id/report_chart"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"

@@ -37,4 +37,7 @@
     <dimen name="field_height">48dp</dimen>
     <dimen name="field_radius">10dp</dimen>
 
+    <!-- 주간 차트 -->
+    <dimen name="chart_bar_width">30dp</dimen>
+    <dimen name="chart_track_height">92dp</dimen>
 </resources>
