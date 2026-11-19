@@ -59,14 +59,6 @@ public class WeeklySummary {
         return total;
     }
 
-    /** 막대 높이 비율 계산의 기준값. 모두 0이면 1을 돌려 0으로 나누는 것을 막는다. */
-    public int getMaxMinutes() {
-        int max = 0;
-        for (int minutes : minutesByDay) {
-            max = Math.max(max, minutes);
-        }
-        return max == 0 ? 1 : max;
-    }
 
     public int getSimulationCount() {
         return simulationCount;
