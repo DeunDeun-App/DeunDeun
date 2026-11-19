@@ -57,4 +57,8 @@
     <!-- 지진 시뮬레이션 화면 효과 -->
     <color name="quake_dust">#CCB5ADA3</color>
     <color name="quake_vignette">#99000000</color>
+
+    <!-- 재난 이야기 장면 카드 -->
+    <color name="story_scene_quake">#FF3B3631</color>
+    <color name="story_scene_fire">#FF45261F</color>
 </resources>
