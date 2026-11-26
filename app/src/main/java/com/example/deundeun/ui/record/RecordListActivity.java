@@ -33,7 +33,7 @@ public class RecordListActivity extends AppCompatActivity {
         binding = ActivityRecordListBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        InsetsUtil.applyTopInset(binding.btnBack);
+        InsetsUtil.applyTopInset(binding.recordListRoot);
         InsetsUtil.applyBottomInset(binding.recordList);
 
         binding.btnBack.setOnClickListener(v -> finish());
