@@ -74,8 +74,6 @@ public class ProfileFragment extends Fragment {
 
         setUpSwitchRow(binding.shareLocation,
                 R.string.profile_share_location, R.string.profile_share_location_desc);
-        setUpSwitchRow(binding.shareResult,
-                R.string.profile_share_result, R.string.profile_share_result_desc);
         setUpSwitchRow(binding.shareSos,
                 R.string.profile_share_sos, R.string.profile_share_sos_desc);
 
@@ -141,7 +139,6 @@ public class ProfileFragment extends Fragment {
 
         bindingSwitches = true;
         binding.shareLocation.switchToggle.setChecked(profile.isShareLocation());
-        binding.shareResult.switchToggle.setChecked(profile.isShareResult());
         binding.shareSos.switchToggle.setChecked(profile.isSosAlert());
         bindingSwitches = false;
     }
@@ -168,7 +165,6 @@ public class ProfileFragment extends Fragment {
     private void saveSettings(ViewProfileSwitchRowBinding changed, boolean checked) {
         SettingsRequest request = new SettingsRequest(
                 binding.shareLocation.switchToggle.isChecked(),
-                binding.shareResult.switchToggle.isChecked(),
                 binding.shareSos.switchToggle.isChecked());
 
         repository.updateSettings(request, result -> {
