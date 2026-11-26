@@ -1,6 +1,7 @@
 package com.example.deundeun.ui.home;
 
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.deundeun.data.model.TrainingRecord;
 import com.example.deundeun.databinding.ItemTrainingRecordBinding;
 import com.example.deundeun.databinding.ViewAchievementChipBinding;
+import com.example.deundeun.databinding.ViewMissedChipBinding;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,13 +60,29 @@ public class RecentRecordAdapter extends RecyclerView.Adapter<RecentRecordAdapte
                     itemView.getContext().getString(
                             com.example.deundeun.R.string.score_format, record.getScore()));
 
-            bindAchievements(record.getAchievements());
+            bindKeywords(record.getAchievements(), record.getMissed());
 
-            itemView.setContentDescription(record.getTitle() + ", " + record.getMetaLine()
-                    + ", " + record.getScore() + "점");
+            String feedback = record.getFeedback();
+            binding.recordFeedback.setText(feedback);
+            binding.recordFeedback.setVisibility(feedback == null ? View.GONE : View.VISIBLE);
+
+            StringBuilder description = new StringBuilder(record.getTitle())
+                    .append(", ").append(record.getMetaLine())
+                    .append(", ").append(record.getScore()).append("점");
+            for (String label : record.getAchievements()) {
+                description.append(", ").append(label).append(" 해냄");
+            }
+            for (String label : record.getMissed()) {
+                description.append(", ").append(label).append(" 못 함");
+            }
+            if (feedback != null) {
+                description.append(", ").append(feedback);
+            }
+            itemView.setContentDescription(description);
         }
 
-        private void bindAchievements(List<String> achievements) {
+        /** 해낸 키워드는 ✓, 못 한 키워드는 ✗ 배지로 보여준다 */
+        private void bindKeywords(List<String> achievements, List<String> missed) {
             ViewGroup container = binding.recordAchievements;
             container.removeAllViews();
             LayoutInflater inflater = LayoutInflater.from(container.getContext());
@@ -74,7 +92,12 @@ public class RecentRecordAdapter extends RecyclerView.Adapter<RecentRecordAdapte
                 chip.chipLabel.setText(achievement);
                 container.addView(chip.getRoot());
             }
-            container.setVisibility(achievements.isEmpty() ? ViewGroup.GONE : ViewGroup.VISIBLE);
+            for (String label : missed) {
+                ViewMissedChipBinding chip = ViewMissedChipBinding.inflate(inflater, container, false);
+                chip.chipLabel.setText(label);
+                container.addView(chip.getRoot());
+            }
+            container.setVisibility(container.getChildCount() == 0 ? View.GONE : View.VISIBLE);
         }
     }
 }

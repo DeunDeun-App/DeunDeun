@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/** 내정보. */
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "profile";
@@ -74,8 +73,6 @@ public class ProfileFragment extends Fragment {
 
         setUpSwitchRow(binding.shareLocation,
                 R.string.profile_share_location, R.string.profile_share_location_desc);
-        setUpSwitchRow(binding.shareResult,
-                R.string.profile_share_result, R.string.profile_share_result_desc);
         setUpSwitchRow(binding.shareSos,
                 R.string.profile_share_sos, R.string.profile_share_sos_desc);
 
@@ -141,7 +138,6 @@ public class ProfileFragment extends Fragment {
 
         bindingSwitches = true;
         binding.shareLocation.switchToggle.setChecked(profile.isShareLocation());
-        binding.shareResult.switchToggle.setChecked(profile.isShareResult());
         binding.shareSos.switchToggle.setChecked(profile.isSosAlert());
         bindingSwitches = false;
     }
@@ -168,7 +164,6 @@ public class ProfileFragment extends Fragment {
     private void saveSettings(ViewProfileSwitchRowBinding changed, boolean checked) {
         SettingsRequest request = new SettingsRequest(
                 binding.shareLocation.switchToggle.isChecked(),
-                binding.shareResult.switchToggle.isChecked(),
                 binding.shareSos.switchToggle.isChecked());
 
         repository.updateSettings(request, result -> {
@@ -264,8 +259,7 @@ public class ProfileFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
-        if (result.hasCode("SESSION_EXPIRED")) {
-            SessionNavigator.toLogin(requireActivity(), R.string.error_session_expired);
+        if (SessionNavigator.redirectIfExpired(requireActivity(), result)) {
             return;
         }
         Toast.makeText(requireContext(), result.getMessageOr(getString(R.string.error_network)),

@@ -9,6 +9,9 @@ import com.example.deundeun.data.network.dto.call.CallResultResponse;
 import com.example.deundeun.data.network.dto.call.CallSessionResponse;
 import com.example.deundeun.data.network.dto.disaster.DisasterMessageResponse;
 import com.example.deundeun.data.network.dto.disaster.EasyMessageResponse;
+import com.example.deundeun.data.network.dto.record.RecordResponse;
+import com.example.deundeun.data.network.dto.simulation.SimulationRequest;
+import com.example.deundeun.data.network.dto.simulation.SimulationResultResponse;
 import com.example.deundeun.data.network.dto.sos.GuardianResponse;
 import com.example.deundeun.data.network.dto.sos.SosRequest;
 import com.example.deundeun.data.network.dto.sos.SosResponse;
@@ -114,4 +117,12 @@ public interface ApiService {
     @POST("call/sessions/{sessionId}/complete")
     Call<ApiResponse<CallResultResponse>> completeCall(@Header("Authorization") String authorization,
                                                        @Path("sessionId") long sessionId);
+
+    @POST("simulation/results")
+    Call<ApiResponse<SimulationResultResponse>> saveSimulationResult(
+            @Header("Authorization") String authorization,
+            @Body SimulationRequest request);
+
+    @GET("records")
+    Call<ApiResponse<RecordResponse>> getRecords(@Header("Authorization") String authorization);
 }

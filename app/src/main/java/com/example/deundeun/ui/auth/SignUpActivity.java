@@ -23,9 +23,6 @@ import com.example.deundeun.ui.common.LabeledInputView;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * 회원가입
- */
 public class SignUpActivity extends AppCompatActivity {
 
     private ActivitySignUpBinding binding;

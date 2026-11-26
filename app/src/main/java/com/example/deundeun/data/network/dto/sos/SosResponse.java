@@ -2,7 +2,6 @@ package com.example.deundeun.data.network.dto.sos;
 
 import java.util.List;
 
-/** SOS 저장 결과. */
 public class SosResponse {
 
     private long sosId;

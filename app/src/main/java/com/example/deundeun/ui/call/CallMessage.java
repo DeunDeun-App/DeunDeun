@@ -1,6 +1,5 @@
 package com.example.deundeun.ui.call;
 
-/** 가상 통화의 대화 한 줄. */
 public class CallMessage {
 
     private final String text;

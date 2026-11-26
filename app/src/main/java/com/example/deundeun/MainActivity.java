@@ -19,6 +19,7 @@ import com.example.deundeun.ui.common.NavItemView;
 import com.example.deundeun.ui.common.NotchedBarDrawable;
 import com.example.deundeun.ui.common.SessionNavigator;
 import com.example.deundeun.ui.home.HomeFragment;
+import com.example.deundeun.ui.notification.LatestDisasterStore;
 import com.example.deundeun.ui.profile.ProfileFragment;
 import com.example.deundeun.ui.record.RecordFragment;
 import com.example.deundeun.ui.sos.SosActivity;
@@ -77,6 +78,9 @@ public class MainActivity extends AppCompatActivity {
                 : HomeFragment.TAG;
         showTab(requestedTab(getIntent(), initialTag));
 
+        // 알림 화면을 열었을 때 재난문자가 바로 보이도록 미리 불러 둔다 (위치를 잡느라 최대 10초 걸림)
+        LatestDisasterStore.preload(this);
+
         checkSession();
     }
 
@@ -85,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
             if (result.isSuccess() && result.getData() != null) {
                 sessionManager.updateUser(result.getData().getLoginId(),
                         result.getData().getUserName());
-            } else if (result.hasCode("SESSION_EXPIRED")) {
-                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            } else {
+                SessionNavigator.redirectIfExpired(this, result);
             }
         });
     }

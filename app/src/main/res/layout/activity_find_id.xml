@@ -6,7 +6,6 @@
     android:id="@+id/find_id_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".ui.auth.FindIdActivity">
 
     <androidx.core.widget.NestedScrollView

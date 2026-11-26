@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
+import android.view.accessibility.AccessibilityManager;
 
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
@@ -25,18 +28,28 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.core.content.ContextCompat;
 
 import com.example.deundeun.R;
+import com.example.deundeun.data.network.dto.record.KeywordResponse;
+import com.example.deundeun.data.network.dto.simulation.SimulationRequest;
+import com.example.deundeun.data.network.dto.simulation.SimulationResultResponse;
+import com.example.deundeun.data.repository.RecordRepository;
 import com.example.deundeun.databinding.ActivitySimulationRunBinding;
+import com.example.deundeun.ui.call.OperatorVoice;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.TrainingCompleteActivity;
 import com.example.deundeun.ui.simulation.pose.DisasterPoseEvaluator;
 import com.example.deundeun.ui.simulation.pose.PoseCheck;
 import com.example.deundeun.ui.simulation.pose.PoseLandmarkerHelper;
 import com.example.deundeun.ui.simulation.pose.PoseTrainingSession;
+import com.example.deundeun.ui.simulation.story.DisasterStory;
+import com.example.deundeun.ui.simulation.story.StoryStep;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mediapipe.tasks.components.containers.NormalizedLandmark;
 import com.google.mediapipe.tasks.vision.handlandmarker.HandLandmarkerResult;
 import com.google.mediapipe.tasks.vision.poselandmarker.PoseLandmarkerResult;
 
+import com.google.android.material.button.MaterialButton;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -45,9 +58,12 @@ import java.util.concurrent.Executors;
 /**
  * 시뮬레이션 진행 화면.
  *
- * CameraX 로 카메라를 띄우고, 프레임마다 MediaPipe 로 자세를 인식해
- * {@link DisasterPoseEvaluator} 가 판정한 결과에 맞춰 짧은 안내 문장을 보여준다.
- * 올바른 자세를 몇 초 유지하면 완료, 제한 시간 안에 못 하면 재훈련을 권한다.
+ * {@link DisasterStory} 의 짧은 이야기를 한 장면씩 보여준다.
+ * - 고르기 장면: 두 행동 중 하나를 고른다. 틀리면 이유를 듣고 다시 고른다
+ * - 따라 하기 장면: CameraX 로 카메라를 띄우고, 프레임마다 MediaPipe 로 자세를 인식해
+ *   {@link DisasterPoseEvaluator} 가 판정한 결과에 맞춰 짧은 안내 문장을 보여준다.
+ *   올바른 자세를 몇 초 유지하면 다음 장면, 제한 시간 안에 못 하면 재훈련을 권한다.
+ * 카메라는 따라 하기 장면에서만 켠다. 자세 시도가 끝나면 결과를 서버에 기록한다.
  */
 public class SimulationRunActivity extends AppCompatActivity {
 
@@ -56,6 +72,7 @@ public class SimulationRunActivity extends AppCompatActivity {
     private ActivitySimulationRunBinding binding;
 
     private boolean fire;
+    private String scenario;
     private DisasterPoseEvaluator evaluator;
     private final PoseTrainingSession session = new PoseTrainingSession();
 
@@ -63,17 +80,58 @@ public class SimulationRunActivity extends AppCompatActivity {
     private PoseLandmarkerHelper poseHelper;
     private boolean frontCamera = true;
     private boolean permissionDenied;
+    /** 따라 하기 장면이라 카메라가 켜져 있어야 하는지 */
+    private boolean cameraWanted;
+    private boolean helperRequested;
+    @Nullable
+    private ProcessCameraProvider cameraProvider;
+
+    private List<StoryStep> steps;
+    private int stepIndex;
+    /** 고르기 장면에서 맞는 답을 골랐는지 */
+    private boolean choiceSolved;
+    private MaterialButton[] choiceButtons;
+
+    /** 장면과 안내를 소리로 읽어 준다. 화면 낭독기를 쓰는 사람에게는 낭독기가 읽으므로 쓰지 않는다 */
+    private OperatorVoice voice;
+    private boolean readAloud;
 
     /** 같은 문장을 화면 낭독기로 반복해서 읽지 않으려고 기억해 둔다 */
     private String lastAnnounced;
+
+    private RecordRepository recordRepository;
+    /** 이번 시도에서 한 번이라도 해낸 동작. 실패해도 해낸 동작은 점수로 인정한다 */
+    private boolean crouched;
+    private boolean covered;
+    /** 서버가 채점한 이번 시도 결과. 완료 화면 체크리스트에 쓴다 */
+    @Nullable
+    private SimulationResultResponse lastResult;
+    /** 이야기 고르기 장면에서 잘못 고른 횟수. 점수에서 깎는다 */
+    private int wrongChoices;
+    /** 자세 장면을 성공했을 때 걸린 시간. 결과는 이야기를 다 마친 뒤 잘못 고른 횟수와 함께 보낸다 */
+    private long poseElapsedMs = -1;
+    /** 마지막에 결과를 보내는 중인지. 그 사이 버튼을 다시 눌러도 두 번 보내지 않는다 */
+    private boolean submitting;
+
+    /** 자세 장면에서 걸린 시간을 0.5초마다 갱신한다 */
+    private final Handler timerHandler = new Handler(Looper.getMainLooper());
+    private final Runnable timerTick = new Runnable() {
+        @Override
+        public void run() {
+            updatePoseTimer();
+            if (isPoseStep() && session.getPhase() != PoseTrainingSession.Phase.SUCCESS) {
+                timerHandler.postDelayed(this, 500L);
+            }
+        }
+    };
 
     private final ActivityResultLauncher<String> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
                 permissionDenied = !granted;
                 if (granted) {
-                    startCamera();
+                    if (cameraWanted) startCamera();
                 } else {
-                    showMessage(R.string.sim_camera_permission_denied);
+                    if (isPoseStep()) showMessage(R.string.sim_camera_permission_denied);
                     applyButton();
                 }
             });
@@ -92,38 +150,56 @@ public class SimulationRunActivity extends AppCompatActivity {
         if (scenario == null) {
             scenario = getString(R.string.sim_scenario_earthquake);
         }
-        binding.badgeScenario.setText(getString(R.string.sim_running_badge, scenario));
+        this.scenario = scenario;
 
         fire = getIntent().getBooleanExtra(SimulationIntroActivity.EXTRA_FIRE, false);
         evaluator = new DisasterPoseEvaluator(fire);
+        steps = DisasterStory.steps(fire);
+        recordRepository = new RecordRepository(this);
 
         if (!fire) {
             // 지진: 실제 방 대신 지진 난 방 사진을 배경으로 쓰고,
-            // 화면이 흔들리다가 올바른 대피 자세를 취하면 멈춘다
+            // 흔들리는 장면에서는 화면이 흔들리다가 올바른 대피 자세를 취하면 멈춘다
             binding.virtualBackground.setVisibility(View.VISIBLE);
             binding.quakeEffect.setVisibility(View.VISIBLE);
-            binding.quakeEffect.setShakeTarget(binding.cameraPreview);
-            binding.quakeEffect.setShaking(true);
         }
+        binding.scenePanel.setBackgroundTintList(ContextCompat.getColorStateList(this,
+                fire ? R.color.story_scene_fire : R.color.story_scene_quake));
 
+        voice = new OperatorVoice(this);
+        AccessibilityManager am = getSystemService(AccessibilityManager.class);
+        readAloud = am == null || !am.isTouchExplorationEnabled();
+
+        choiceButtons = new MaterialButton[]{binding.btnChoice1, binding.btnChoice2};
+        for (int i = 0; i < choiceButtons.length; i++) {
+            int index = i;
+            choiceButtons[i].setOnClickListener(v -> onChoiceClicked(index));
+        }
         binding.btnBack.setOnClickListener(v -> finish());
         binding.btnStatus.setOnClickListener(v -> onStatusClicked());
 
-        showMessage(R.string.sim_camera_loading);
-        applyButton();
-
         analysisExecutor = Executors.newSingleThreadExecutor();
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_GRANTED) {
-            startCamera();
-        } else {
-            permissionLauncher.launch(Manifest.permission.CAMERA);
-        }
+        showStep(0);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // 화면을 벗어났다 돌아오면 시간 표시를 다시 돌린다
+        if (isPoseStep()) startPoseTimer();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        timerHandler.removeCallbacks(timerTick);
+        voice.stop();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        voice.shutdown();
         // 분석 스레드에서 도는 작업이 끝난 뒤 닫히도록 같은 스레드에 넣는다
         analysisExecutor.execute(() -> {
             if (poseHelper != null) poseHelper.close();
@@ -131,7 +207,48 @@ public class SimulationRunActivity extends AppCompatActivity {
         analysisExecutor.shutdown();
     }
 
+    /** 따라 하기 장면에 들어왔을 때. 권한이 없으면 이때 처음 묻는다 */
+    private void ensureCamera() {
+        cameraWanted = true;
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_GRANTED) {
+            permissionDenied = false;
+            startCamera();
+        } else {
+            permissionLauncher.launch(Manifest.permission.CAMERA);
+        }
+    }
+
+    /** 고르기 장면으로 넘어가면 카메라를 끈다. 인식 모델은 다시 쓸 수 있게 남겨 둔다 */
+    private void stopCamera() {
+        cameraWanted = false;
+        if (cameraProvider != null) {
+            cameraProvider.unbindAll();
+        }
+    }
+
     private void startCamera() {
+        if (!helperRequested) {
+            helperRequested = true;
+            createPoseHelper();
+        }
+
+        ListenableFuture<ProcessCameraProvider> future = ProcessCameraProvider.getInstance(this);
+        future.addListener(() -> {
+            try {
+                cameraProvider = future.get();
+                // 준비하는 사이 다른 장면으로 넘어갔으면 켜지 않는다
+                if (cameraWanted && !isFinishing()) {
+                    bindCamera(cameraProvider);
+                }
+            } catch (ExecutionException | InterruptedException e) {
+                Log.e(TAG, "카메라 시작 실패", e);
+                showMessage(R.string.sim_pose_error);
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    private void createPoseHelper() {
         // 모델 로딩이 무거워서 분석 스레드에서 만든다
         // 화재는 손이 코와 입을 덮었는지 봐야 해서 손 모델도 같이 돌린다
         // 지진은 가상 배경을 위해 사람을 오려낸다
@@ -153,16 +270,6 @@ public class SimulationRunActivity extends AppCompatActivity {
                         runOnUiThread(() -> showMessage(R.string.sim_pose_error));
                     }
                 }));
-
-        ListenableFuture<ProcessCameraProvider> future = ProcessCameraProvider.getInstance(this);
-        future.addListener(() -> {
-            try {
-                bindCamera(future.get());
-            } catch (ExecutionException | InterruptedException e) {
-                Log.e(TAG, "카메라 시작 실패", e);
-                showMessage(R.string.sim_pose_error);
-            }
-        }, ContextCompat.getMainExecutor(this));
     }
 
     private void bindCamera(ProcessCameraProvider provider) {
@@ -214,16 +321,68 @@ public class SimulationRunActivity extends AppCompatActivity {
         List<List<NormalizedLandmark>> hands = handResult != null ? handResult.landmarks() : null;
         binding.poseOverlay.setLandmarks(pose, hands, imageWidth, imageHeight);
 
-        PoseTrainingSession.Phase before = session.getPhase();
-        if (before == PoseTrainingSession.Phase.SUCCESS
-                || before == PoseTrainingSession.Phase.RETRY) {
+        // 고르기 장면에서는 자세를 판정하지 않는다
+        if (!isPoseStep()) return;
+
+        if (session.getPhase() == PoseTrainingSession.Phase.SUCCESS) {
             return;
         }
 
         long now = SystemClock.uptimeMillis();
         PoseCheck check = evaluator.evaluate(pose, hands);
+        rememberDoneSteps(check);
         PoseTrainingSession.Phase phase = session.update(check, now);
         applyState(phase, check, now);
+
+        if (phase == PoseTrainingSession.Phase.SUCCESS) {
+            // 뒤 장면의 고르기까지 점수에 넣어야 해서 이야기를 마칠 때 보낸다
+            poseElapsedMs = session.elapsedMs(now);
+            // 성공한 순간의 시간으로 멈춘다
+            updatePoseTimer();
+        }
+    }
+
+    /** 지진은 웅크린 뒤에 머리 보호를 보므로, 머리 보호 단계까지 왔으면 웅크린 것이다 */
+    private void rememberDoneSteps(PoseCheck check) {
+        if (check == PoseCheck.NOT_PROTECTED || check == PoseCheck.CORRECT) {
+            crouched = true;
+        }
+        if (check == PoseCheck.CORRECT) {
+            covered = true;
+        }
+    }
+
+    /**
+     * 서버에 채점을 맡기고 기록으로 남긴다.
+     *
+     * @param then 응답을 받은 뒤(실패해도) 할 일. 없으면 null
+     */
+    private void submitResult(boolean success, long elapsedMs, @Nullable Runnable then) {
+        lastResult = null;
+        if (!recordRepository.isLoggedIn()) {
+            if (then != null) then.run();
+            return;
+        }
+
+        List<String> done = new ArrayList<>();
+        if (fire) {
+            if (covered) done.add(SimulationRequest.STEP_COVER_MOUTH);
+        } else {
+            if (crouched) done.add(SimulationRequest.STEP_CROUCH);
+            if (covered) done.add(SimulationRequest.STEP_COVER_HEAD);
+        }
+
+        SimulationRequest request = new SimulationRequest(
+                fire ? SimulationRequest.FIRE : SimulationRequest.EARTHQUAKE,
+                success, elapsedMs, done, wrongChoices);
+        recordRepository.saveSimulation(request, result -> {
+            if (result.isSuccess()) {
+                lastResult = result.getData();
+            } else {
+                Log.w(TAG, "시뮬레이션 결과 저장 실패: " + result.getCode());
+            }
+            if (then != null && !isFinishing() && !isDestroyed()) then.run();
+        });
     }
 
     private void applyState(PoseTrainingSession.Phase phase, PoseCheck check, long now) {
@@ -236,15 +395,16 @@ public class SimulationRunActivity extends AppCompatActivity {
         binding.guideLabel.setTextColor(accent);
         binding.poseOverlay.setAccent(accent);
         if (!fire) {
-            binding.quakeEffect.setShaking(phase == PoseTrainingSession.Phase.GUIDING);
+            binding.quakeEffect.setShaking(currentStep().shaking
+                    && phase == PoseTrainingSession.Phase.GUIDING);
         }
 
         switch (phase) {
             case SUCCESS:
-                showMessage(fire ? R.string.sim_fire_success : R.string.sim_ai_guide_success);
-                break;
-            case RETRY:
-                showMessage(R.string.sim_retry_message);
+                String done = getString(fire
+                        ? R.string.story_fire_pose_done : R.string.story_quake_pose_done);
+                showMessage(done, true);
+                speak(done);
                 break;
             case HOLDING:
                 showMessage(getString(R.string.sim_pose_hold, session.remainingHoldSeconds(now)),
@@ -270,16 +430,24 @@ public class SimulationRunActivity extends AppCompatActivity {
     }
 
     private void applyButton() {
+        if (!isPoseStep()) {
+            // 고르기 장면: 맞는 답을 고르기 전에는 선택지만, 고른 뒤에는 다음 버튼만 보여준다
+            binding.btnStatus.setVisibility(choiceSolved ? View.VISIBLE : View.GONE);
+            binding.btnStatus.setText(isLastStep() ? R.string.sim_finish : R.string.story_next);
+            binding.btnStatus.setBackgroundTintList(
+                    ContextCompat.getColorStateList(this, R.color.camera_success));
+            return;
+        }
+        binding.btnStatus.setVisibility(View.VISIBLE);
+
         PoseTrainingSession.Phase phase = session.getPhase();
         int textRes;
         int colorRes = R.color.orange_primary;
         if (permissionDenied) {
             textRes = R.string.sim_camera_permission_retry;
         } else if (phase == PoseTrainingSession.Phase.SUCCESS) {
-            textRes = R.string.sim_finish;
+            textRes = isLastStep() ? R.string.sim_finish : R.string.story_next;
             colorRes = R.color.camera_success;
-        } else if (phase == PoseTrainingSession.Phase.RETRY) {
-            textRes = R.string.sim_retry;
         } else {
             textRes = R.string.sim_detecting;
         }
@@ -288,33 +456,187 @@ public class SimulationRunActivity extends AppCompatActivity {
     }
 
     private void onStatusClicked() {
+        if (!isPoseStep()) {
+            if (choiceSolved) nextStep();
+            return;
+        }
         if (permissionDenied) {
             permissionLauncher.launch(Manifest.permission.CAMERA);
             return;
         }
-        switch (session.getPhase()) {
-            case SUCCESS:
-                finishTraining();
-                break;
-            case RETRY:
-                restartTraining();
-                break;
-            default:
-                // 인식 중에는 버튼으로 넘길 수 없다
-                break;
+        // 인식 중에는 버튼으로 넘길 수 없다. 성공할 때까지 계속 해볼 수 있다
+        if (session.getPhase() == PoseTrainingSession.Phase.SUCCESS) {
+            nextStep();
         }
     }
 
-    private void restartTraining() {
-        session.restart();
-        lastAnnounced = null;
-        if (!fire) {
-            binding.quakeEffect.setShaking(true);
+    // ---- 이야기 진행 ----
+
+    private StoryStep currentStep() {
+        return steps.get(stepIndex);
+    }
+
+    private boolean isPoseStep() {
+        return currentStep().type == StoryStep.Type.POSE;
+    }
+
+    private boolean isLastStep() {
+        return stepIndex >= steps.size() - 1;
+    }
+
+    private void nextStep() {
+        if (isLastStep()) {
+            if (submitting) return;
+            if (poseElapsedMs < 0) {
+                finishTraining();
+                return;
+            }
+            // 완료 화면에 서버 채점 결과를 보여주려고 응답을 받은 뒤 넘어간다
+            submitting = true;
+            binding.btnStatus.setEnabled(false);
+            submitResult(true, poseElapsedMs, this::finishTraining);
+        } else {
+            showStep(stepIndex + 1);
         }
-        binding.guideCard.setBackgroundResource(R.drawable.bg_camera_guide);
-        binding.guideLabel.setTextColor(ContextCompat.getColor(this, R.color.orange_primary));
-        showMessage(messageFor(fire ? PoseCheck.NOT_PROTECTED : PoseCheck.NOT_LOW));
+    }
+
+    private void showStep(int index) {
+        stepIndex = index;
+        StoryStep step = currentStep();
+        boolean pose = step.type == StoryStep.Type.POSE;
+        choiceSolved = false;
+        lastAnnounced = null;
+
+        binding.badgeScenario.setText(getString(R.string.sim_running_badge_step,
+                scenario, index + 1, steps.size()));
+        if (step.image != 0) {
+            binding.storyImage.setImageResource(step.image);
+        }
+        // 고르기 장면에서는 상황 문장은 그림 위에, 피드백은 그림 밑에 쓰므로 안내 카드는 숨긴다
+        binding.guideCard.setVisibility(pose ? View.VISIBLE : View.GONE);
+        binding.storyFeedback.setText(null);
+        binding.storyFeedback.setVisibility(pose ? View.GONE : View.INVISIBLE);
+        // 선택지를 고른 뒤 버튼 수가 줄어도 그림 크기가 바뀌지 않게 자리를 잡아 둔다
+        binding.ctaArea.setMinimumHeight(pose ? 0
+                : getResources().getDimensionPixelSize(R.dimen.story_choice_area_height));
+        // 카메라는 자세를 해 볼 때만 보여주고, 고르는 동안에는 장면 카드를 보여준다
+        binding.scenePanel.setVisibility(pose ? View.GONE : View.VISIBLE);
+        binding.cameraPreview.setVisibility(pose ? View.VISIBLE : View.INVISIBLE);
+        setGuideAccent(false);
+        if (!fire) {
+            // 흔들림 효과는 지금 보이는 쪽을 흔든다
+            binding.quakeEffect.setShakeTarget(pose ? binding.cameraPreview : binding.scenePanel);
+            binding.quakeEffect.setShaking(step.shaking);
+        }
+        if (pose) {
+            ensureCamera();
+        } else {
+            stopCamera();
+        }
+
+        for (int i = 0; i < choiceButtons.length; i++) {
+            MaterialButton button = choiceButtons[i];
+            boolean has = !pose && i < step.choices.size();
+            button.setVisibility(has ? View.VISIBLE : View.GONE);
+            if (has) {
+                String label = getString(step.choices.get(i).label);
+                button.setText(label);
+                button.setContentDescription(label);
+                button.setEnabled(true);
+                button.setAlpha(1f);
+            }
+        }
+
+        if (pose) {
+            session.restart();
+        }
+        binding.poseTimer.setVisibility(View.GONE);
+        if (pose) {
+            startPoseTimer();
+        } else {
+            timerHandler.removeCallbacks(timerTick);
+        }
+        String scene = getString(step.scene);
+        binding.sceneCaption.setText(scene);
+        showMessage(pose && permissionDenied
+                ? getString(R.string.sim_camera_permission_denied) : scene, true);
+        speak(scene);
         applyButton();
+    }
+
+    private void onChoiceClicked(int index) {
+        if (isPoseStep() || choiceSolved) return;
+        StoryStep.Choice choice = currentStep().choices.get(index);
+        String feedback = getString(choice.feedback);
+
+        if (choice.correct) {
+            choiceSolved = true;
+            for (MaterialButton button : choiceButtons) {
+                button.setVisibility(View.GONE);
+            }
+            setGuideAccent(true);
+            showFeedback(feedback, true);
+            speak(feedback);
+        } else {
+            // 틀린 답은 흐리게 두어 다시 고르지 않게 한다. 실패로 끝나지 않지만 점수는 깎인다
+            wrongChoices++;
+            MaterialButton button = choiceButtons[index];
+            button.setEnabled(false);
+            button.setAlpha(0.4f);
+            button.setContentDescription(getString(R.string.cd_story_choice_wrong,
+                    getString(choice.label)));
+            String message = feedback + "\n" + getString(R.string.story_try_again);
+            showFeedback(message, false);
+            speak(message);
+        }
+        applyButton();
+    }
+
+    /** 고르기 장면에서 고른 결과를 그림 밑에 보여준다. 맞으면 초록, 틀리면 연한 주황 */
+    private void showFeedback(String message, boolean good) {
+        binding.storyFeedback.setText(message);
+        binding.storyFeedback.setTextColor(ContextCompat.getColor(this,
+                good ? R.color.camera_success : R.color.orange_pale));
+        binding.storyFeedback.setVisibility(View.VISIBLE);
+        showMessage(message, true);
+    }
+
+    /**
+     * 자세 장면의 걸린 시간을 보여준다. 카메라가 사람을 처음 인식한 때부터 센다.
+     * 30초까지는 초록, 60초까지는 주황, 그 뒤로는 빨강으로 점수 구간을 알려준다.
+     */
+    private void updatePoseTimer() {
+        // 성공한 뒤에는 성공한 순간의 시간으로 고정한다
+        long elapsed = session.getPhase() == PoseTrainingSession.Phase.SUCCESS && poseElapsedMs >= 0
+                ? poseElapsedMs : session.elapsedMs(SystemClock.uptimeMillis());
+        boolean show = isPoseStep() && elapsed > 0;
+        binding.poseTimer.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (!show) return;
+
+        int seconds = (int) (elapsed / 1000L);
+        binding.poseTimer.setText(getString(R.string.sim_pose_timer, seconds));
+        binding.poseTimer.setContentDescription(getString(R.string.cd_sim_pose_timer, seconds));
+        int color = seconds <= 30 ? R.color.camera_success
+                : seconds <= 60 ? R.color.orange_primary : R.color.action_red_text;
+        binding.poseTimer.setTextColor(ContextCompat.getColor(this, color));
+    }
+
+    private void startPoseTimer() {
+        timerHandler.removeCallbacks(timerTick);
+        timerHandler.post(timerTick);
+    }
+
+    private void setGuideAccent(boolean good) {
+        binding.guideCard.setBackgroundResource(good
+                ? R.drawable.bg_camera_guide_success : R.drawable.bg_camera_guide);
+        binding.guideLabel.setTextColor(ContextCompat.getColor(this,
+                good ? R.color.camera_success : R.color.orange_primary));
+    }
+
+    private void speak(String text) {
+        if (readAloud) {
+            voice.speak(text.replace("\n", " "), () -> { });
+        }
     }
 
     private void showMessage(@StringRes int res) {
@@ -326,13 +648,26 @@ public class SimulationRunActivity extends AppCompatActivity {
         binding.guideCard.setContentDescription(getString(R.string.sim_ai_guide) + ", " + message);
         if (announce && !message.equals(lastAnnounced)) {
             lastAnnounced = message;
-            binding.guideCard.announceForAccessibility(message);
+            // 안내 카드가 숨겨진 고르기 장면에서도 읽히도록 화면 전체에서 알린다
+            binding.simRunRoot.announceForAccessibility(message);
         }
     }
 
     private void finishTraining() {
         Intent intent = new Intent(this, TrainingCompleteActivity.class);
         intent.putExtra(TrainingCompleteActivity.EXTRA_TITLE_RES, R.string.complete_training);
+        // 서버 채점이 아직 안 왔거나 실패했으면 체크리스트 없이 보여준다
+        if (lastResult != null && !lastResult.getKeywords().isEmpty()) {
+            List<KeywordResponse> keywords = lastResult.getKeywords();
+            String[] labels = new String[keywords.size()];
+            boolean[] passed = new boolean[keywords.size()];
+            for (int i = 0; i < keywords.size(); i++) {
+                labels[i] = keywords.get(i).getLabel();
+                passed[i] = keywords.get(i).isPassed();
+            }
+            intent.putExtra(TrainingCompleteActivity.EXTRA_CHECK_LABEL_TEXTS, labels);
+            intent.putExtra(TrainingCompleteActivity.EXTRA_CHECK_RESULTS, passed);
+        }
         startActivity(intent);
         finish();
     }

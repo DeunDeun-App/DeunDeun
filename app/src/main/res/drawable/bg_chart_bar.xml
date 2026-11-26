@@ -1,8 +1,0 @@
-<!-- 주간 차트 막대 -->
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-    <solid android:color="@color/orange_primary" />
-    <corners
-        android:topLeftRadius="7dp"
-        android:topRightRadius="7dp" />
-</shape>

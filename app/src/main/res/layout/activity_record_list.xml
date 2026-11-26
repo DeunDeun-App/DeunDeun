@@ -7,7 +7,6 @@
     android:id="@+id/record_list_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".ui.record.RecordListActivity">
 
     <ImageButton
@@ -22,6 +21,17 @@
         android:src="@drawable/ic_arrow_back"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/record_list_title"
+        style="@style/Text.ScreenTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/back_title_margin"
+        android:text="@string/record_list_title"
+        app:layout_constraintBottom_toBottomOf="@id/btn_back"
+        app:layout_constraintStart_toEndOf="@id/btn_back"
+        app:layout_constraintTop_toTopOf="@id/btn_back" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/record_list"

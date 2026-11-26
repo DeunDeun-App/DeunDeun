@@ -1,6 +1,5 @@
 package com.example.deundeun.data.network.dto.sos;
 
-/** SOS 를 받을 보호자. */
 public class GuardianResponse {
 
     private Long guardianId;

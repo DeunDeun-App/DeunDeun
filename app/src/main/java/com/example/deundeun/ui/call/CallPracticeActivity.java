@@ -2,18 +2,15 @@ package com.example.deundeun.ui.call;
 
 import android.Manifest;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.TypedValue;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -21,7 +18,6 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
@@ -50,8 +46,6 @@ import java.util.Locale;
  * 상담원 질문 → 사용자 대답(음성 인식) → 서버 판정 → 다음 질문 순서로 주고받는다.
  * 판정에 실패하면 도움말에 힌트를 보여주고 같은 질문을 한 번 더 묻는다.
  * 기회를 다 쓰면 실패로 기록하고 다음 질문으로 넘어간다.
- *
- * 개발 빌드에서는 마이크를 길게 누르면 글자로 대답할 수 있다 (에뮬레이터 테스트용).
  */
 public class CallPracticeActivity extends AppCompatActivity {
 
@@ -82,7 +76,6 @@ public class CallPracticeActivity extends AppCompatActivity {
     /** 못 알아들어서 한 번 더 듣는 중인지. 안내 문구를 지우지 않으려고 쓴다. */
     private boolean listeningAgain;
     private long startedAt;
-    private boolean debuggable;
 
     private long sessionId;
     private List<CallItemResponse> items = new ArrayList<>();
@@ -114,19 +107,11 @@ public class CallPracticeActivity extends AppCompatActivity {
         binding.messageList.setItemAnimator(null);
         binding.hintCard.setVisibility(View.GONE);
 
-        debuggable = (getApplicationInfo().flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
         speechInput = new SpeechInput(this);
         speechInput.setHints(Arrays.asList(getResources().getStringArray(R.array.call_speech_hints)));
         operatorVoice = new OperatorVoice(this);
 
         binding.btnMic.setOnClickListener(v -> onMicPressed());
-        binding.btnMic.setOnLongClickListener(v -> {
-            if (!debuggable || state != State.READY) {
-                return false;
-            }
-            showTypeAnswerDialog();
-            return true;
-        });
         binding.btnEndCall.setOnClickListener(v -> endCall());
 
         startedAt = SystemClock.elapsedRealtime();
@@ -177,8 +162,7 @@ public class CallPracticeActivity extends AppCompatActivity {
         repository.startSession(result -> {
             CallSessionResponse session = result.getData();
 
-            if ("SESSION_EXPIRED".equals(result.getCode())) {
-                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            if (SessionNavigator.redirectIfExpired(this, result)) {
                 return;
             }
             if (!result.isSuccess() || session == null || session.getItems().isEmpty()) {
@@ -220,11 +204,7 @@ public class CallPracticeActivity extends AppCompatActivity {
             return;
         }
         if (!SpeechInput.isAvailable(this)) {
-            if (debuggable) {
-                showTypeAnswerDialog();
-            } else {
-                showHint(getString(R.string.call_speech_unavailable));
-            }
+            showHint(getString(R.string.call_speech_unavailable));
             return;
         }
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -393,24 +373,6 @@ public class CallPracticeActivity extends AppCompatActivity {
         intent.putExtra(TrainingCompleteActivity.EXTRA_RETRY_ACTIVITY, CallPracticeActivity.class);
         startActivity(intent);
         finish();
-    }
-
-    /** 개발용. 에뮬레이터처럼 말하기 어려운 환경에서 글자로 대답한다. */
-    private void showTypeAnswerDialog() {
-        EditText input = new EditText(this);
-        input.setInputType(InputType.TYPE_CLASS_TEXT);
-
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.call_type_answer_title)
-                .setView(input)
-                .setPositiveButton(R.string.call_type_answer_ok, (dialog, which) -> {
-                    String text = input.getText().toString().trim();
-                    if (!text.isEmpty() && state == State.READY && !isAllAsked()) {
-                        onAnswer(text);
-                    }
-                })
-                .setNegativeButton(R.string.call_type_answer_cancel, null)
-                .show();
     }
 
     private void setState(State state) {

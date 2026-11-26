@@ -95,7 +95,103 @@
             android:layout_height="match_parent"
             android:padding="12dp" />
 
+        <!-- 자세 장면에서 걸린 시간. 30초 안에 하면 점수를 더 받고 60초가 넘으면 깎인다 -->
+        <TextView
+            android:id="@+id/pose_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_pose_timer"
+            android:fontFamily="@font/pretendard_bold"
+            android:includeFontPadding="false"
+            android:paddingStart="14dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="⏱ 12초"
+            tools:visibility="visible" />
+
     </FrameLayout>
+
+    <!-- 고르기 장면에서 카메라 대신 보여주는 장면 카드. 카메라는 자세를 해 볼 때만 켠다.
+         그림은 3:4 로 고정해 기기가 달라도 잘리지 않고, 상황 문장은 그림 아래쪽에 겹쳐 쓴다.
+         고른 뒤의 피드백은 그림 밑 story_feedback 에 쓴다 -->
+    <FrameLayout
+        android:id="@+id/scene_panel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="@dimen/space_l"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="@dimen/space_m"
+        android:background="@drawable/bg_story_scene"
+        app:layout_constraintDimensionRatio="720:964"
+        app:layout_constraintVertical_bias="0"
+        android:clipToOutline="true"
+        android:importantForAccessibility="no"
+        app:layout_constraintBottom_toTopOf="@id/story_feedback"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/badge_scenario">
+
+        <!-- 둥근 모서리는 scene_panel 의 clipToOutline 으로 자른다 -->
+        <ImageView
+            android:id="@+id/story_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop"
+            tools:src="@drawable/story_quake_1" />
+
+        <TextView
+            android:id="@+id/scene_caption"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            android:background="@drawable/bg_story_caption"
+            android:fontFamily="@font/pretendard_bold"
+            android:gravity="center"
+            android:includeFontPadding="false"
+            android:lineSpacingExtra="4sp"
+            android:paddingStart="16dp"
+            android:paddingTop="48dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="20dp"
+            android:shadowColor="#CC000000"
+            android:shadowRadius="6"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            tools:text="부엌에서 불이 났어요! 연기가 나요" />
+
+    </FrameLayout>
+
+    <!-- 고르기 장면의 피드백. 글이 생겨도 그림 크기가 바뀌지 않게 세 줄 높이를 늘 잡아 둔다 -->
+    <TextView
+        android:id="@+id/story_feedback"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/story_feedback_height"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="@dimen/space_s"
+        android:fontFamily="@font/pretendard_bold"
+        android:gravity="center"
+        android:includeFontPadding="false"
+        android:lineSpacingExtra="6sp"
+        android:textColor="@color/white"
+        android:textSize="22sp"
+        android:visibility="gone"
+        app:autoSizeMaxTextSize="22sp"
+        app:autoSizeMinTextSize="16sp"
+        app:autoSizeTextType="uniform"
+        app:layout_constraintBottom_toTopOf="@id/cta_area"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:text="숨으면 연기를 마시고\n구조대가 찾기 어려워요\n다시 골라 볼까요?"
+        tools:visibility="visible" />
 
     <!-- AI 가이드 -->
     <LinearLayout
@@ -109,7 +205,7 @@
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:padding="16dp"
-        app:layout_constraintBottom_toTopOf="@id/btn_status"
+        app:layout_constraintBottom_toTopOf="@id/cta_area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
@@ -129,21 +225,46 @@
             android:gravity="center"
             android:includeFontPadding="false"
             android:textColor="@color/white"
-            android:textSize="15sp"
+            android:textSize="17sp"
+            android:lineSpacingExtra="4sp"
             tools:text="탁자가 있어요! 탁자 밑으로 들어가 몸을 낮추세요" />
 
     </LinearLayout>
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_status"
-        style="@style/Button.Cta"
+    <!-- 하단 버튼 자리. 이야기 고르기 장면에서는 두 선택지를, 그 밖에는 상태 버튼을 보여준다 -->
+    <LinearLayout
+        android:id="@+id/cta_area"
         android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
-        android:text="@string/sim_detecting"
+        android:gravity="bottom"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_choice_1"
+            style="@style/Button.StoryChoice"
+            android:visibility="gone"
+            tools:text="책상 밑으로 들어가요"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_choice_2"
+            style="@style/Button.StoryChoice"
+            android:visibility="gone"
+            tools:text="밖으로 뛰어나가요"
+            tools:visibility="visible" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_status"
+            style="@style/Button.Cta"
+            android:layout_width="match_parent"
+            android:text="@string/sim_detecting" />
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

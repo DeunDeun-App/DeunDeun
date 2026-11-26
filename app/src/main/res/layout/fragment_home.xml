@@ -19,7 +19,7 @@
         android:paddingTop="@dimen/space_l"
         android:paddingEnd="@dimen/screen_h_margin">
 
-        <!-- 헤더 -->
+        <!-- 헤더: 이름과 시간대에 맞춘 인사말 -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,19 +27,25 @@
             android:paddingBottom="@dimen/space_l">
 
             <TextView
+                android:id="@+id/home_greeting"
                 style="@style/Text.ScreenTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:text="@string/home_title" />
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="12dp"
+                android:layout_toStartOf="@id/btn_notification"
+                android:accessibilityHeading="true"
+                android:lineSpacingExtra="4dp"
+                android:textSize="21sp"
+                tools:text="이현서 님,\n좋은 아침이에요" />
 
             <FrameLayout
                 android:id="@+id/btn_notification"
                 android:layout_width="@dimen/min_touch_target"
                 android:layout_height="@dimen/min_touch_target"
                 android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
+                android:layout_alignParentTop="true"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/cd_notification">
 
@@ -62,6 +68,24 @@
             </FrameLayout>
 
         </RelativeLayout>
+
+        <!-- 재난 행동요령 배너. 앱에 들어올 때마다 화재·지진 그림이 번갈아 나온다 -->
+        <com.google.android.material.card.MaterialCardView
+            style="@style/Card.Deundeun"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/space_l">
+
+            <ImageView
+                android:id="@+id/safety_banner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                tools:contentDescription="화재·지진 행동요령"
+                tools:src="@drawable/banner_safety_fire" />
+
+        </com.google.android.material.card.MaterialCardView>
 
         <!-- 훈련 바로가기 2종 -->
         <LinearLayout
@@ -198,13 +222,12 @@
 
                 </LinearLayout>
 
-                <LinearLayout
+                <!-- 기록탭과 같은 막대 그래프. 훈련한 요일은 막대와 요일 글씨가 주황색 -->
+                <com.example.deundeun.ui.common.BarChartView
                     android:id="@+id/weekly_chart"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/space_l"
-                    android:orientation="horizontal"
-                    android:weightSum="7" />
+                    android:layout_height="180dp"
+                    android:layout_marginTop="@dimen/space_l" />
 
             </LinearLayout>
 
@@ -238,6 +261,17 @@
                 android:text="@string/home_see_all" />
 
         </RelativeLayout>
+
+        <TextView
+            android:id="@+id/recent_empty"
+            style="@style/Text.ItemMeta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingTop="@dimen/space_xl"
+            android:paddingBottom="@dimen/space_xl"
+            android:text="@string/record_empty"
+            android:visibility="gone" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recent_records"

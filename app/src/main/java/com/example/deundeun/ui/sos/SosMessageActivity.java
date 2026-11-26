@@ -231,8 +231,7 @@ public class SosMessageActivity extends AppCompatActivity {
                 return;
             }
             SosResponse response = result.getData();
-            if ("SESSION_EXPIRED".equals(result.getCode())) {
-                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            if (SessionNavigator.redirectIfExpired(this, result)) {
                 return;
             }
             if (!result.isSuccess() || response == null) {

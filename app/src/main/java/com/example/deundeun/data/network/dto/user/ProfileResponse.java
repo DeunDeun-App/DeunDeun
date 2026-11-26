@@ -12,7 +12,6 @@ public class ProfileResponse {
     private String disabilityType;
     private String severity;
     private boolean shareLocation;
-    private boolean shareResult;
     private boolean sosAlert;
     private Guardian guardian;
 
@@ -24,7 +23,6 @@ public class ProfileResponse {
     @Nullable public String getDisabilityType() { return disabilityType; }
     @Nullable public String getSeverity() { return severity; }
     public boolean isShareLocation() { return shareLocation; }
-    public boolean isShareResult() { return shareResult; }
     public boolean isSosAlert() { return sosAlert; }
     @Nullable public Guardian getGuardian() { return guardian; }
 

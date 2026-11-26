@@ -38,7 +38,6 @@ import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import java.util.regex.Pattern;
 
-/** 내 정보 수정. */
 public class ProfileEditActivity extends AppCompatActivity {
 
     private static final Pattern PHONE_PATTERN = Pattern.compile("^01[016789]\\d{7,8}$");
@@ -345,8 +344,7 @@ public class ProfileEditActivity extends AppCompatActivity {
     }
 
     private void handleFailure(BaseRepository.Result<?> result) {
-        if (result.hasCode("SESSION_EXPIRED")) {
-            SessionNavigator.toLogin(this, R.string.error_session_expired);
+        if (SessionNavigator.redirectIfExpired(this, result)) {
             return;
         }
         Toast.makeText(this, result.getMessageOr(getString(R.string.error_network)),
