@@ -11,7 +11,16 @@
     <string name="cd_notification">알림</string>
 
     <!-- 홈 -->
-    <string name="home_title">홈</string>
+    <!-- 홈 인사말. 이름이 없으면 인사만 -->
+    <string name="home_greeting">%1$s 님,\n%2$s</string>
+    <string name="home_greeting_morning">좋은 아침이에요</string>
+    <string name="home_greeting_afternoon">좋은 오후예요</string>
+    <string name="home_greeting_evening">좋은 저녁이에요</string>
+    <string name="home_greeting_night">편안한 밤 되세요</string>
+
+    <!-- 홈 행동요령 배너 그림의 글자를 화면 낭독기로 읽어 줄 문장 -->
+    <string name="cd_safety_banner_fire">불이 나면 소·화·기. 소리쳐요, 불이야! 화재벨을 눌러요. 기어가듯 낮게, 계단으로 밖에 나가요.</string>
+    <string name="cd_safety_banner_quake">땅이 흔들리면 탁·구·공. 탁자 밑으로 들어가요. 구부려서 머리를 감싸요. 공터로 대피해요.</string>
     <string name="home_card_simulation">재난 시뮬레이션</string>
     <string name="home_card_call">119 신고 연습</string>
     <string name="home_weekly_title">이번 주 훈련 기록</string>
