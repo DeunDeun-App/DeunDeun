@@ -16,7 +16,6 @@ import com.example.deundeun.databinding.ItemCallMessageBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-/** 통화 대화 목록. */
 public class CallMessageAdapter extends RecyclerView.Adapter<CallMessageAdapter.MessageHolder> {
 
     private final List<CallMessage> items = new ArrayList<>();

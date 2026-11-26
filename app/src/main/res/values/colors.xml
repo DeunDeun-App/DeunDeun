@@ -12,7 +12,6 @@
     <!-- Text -->
     <color name="text_primary">#FF363636</color>
     <color name="text_secondary">#FFB4B4B4</color>
-    <color name="text_tertiary">#FFBEBEBE</color>
     <color name="text_unit">#FFAFAFAF</color>
 
     <!-- Surface -->
@@ -32,7 +31,6 @@
     <color name="surface_subtle">#FFF5F5F5</color>
     <color name="text_pill">#FF7C7C7C</color>
     <color name="divider">#FFEFEFEF</color>
-    <color name="orange_fill">#14F97316</color>
 
     <!-- 훈련 기능 화면 (시안에서 추출) -->
     <color name="orange_tint_bg">#FFFFF6F0</color>

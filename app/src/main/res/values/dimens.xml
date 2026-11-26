@@ -2,13 +2,11 @@
 <resources>
     <!-- 화면 여백 -->
     <dimen name="screen_h_margin">20dp</dimen>
-    <dimen name="card_padding">18dp</dimen>
     <dimen name="card_radius">20dp</dimen>
     <dimen name="card_elevation">2dp</dimen>
     <dimen name="card_stroke_width">1dp</dimen>
     <dimen name="chip_radius">20dp</dimen>
 
-    <dimen name="space_xs">4dp</dimen>
     <dimen name="space_s">8dp</dimen>
     <dimen name="space_m">14dp</dimen>
     <dimen name="space_l">20dp</dimen>

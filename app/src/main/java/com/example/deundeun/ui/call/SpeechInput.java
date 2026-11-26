@@ -176,7 +176,6 @@ public class SpeechInput {
     }
 
     private void choose(boolean useOnDevice) {
-        Log.d(TAG, "engine " + (useOnDevice ? "on-device" : "default"));
         if (onDevice != useOnDevice) {
             destroyRecognizer();
             onDevice = useOnDevice;
@@ -203,10 +202,6 @@ public class SpeechInput {
                             return;
                         }
                         handled[0] = true;
-                        Log.d(TAG, (onDevice ? "on-device" : "default")
-                                + " installed=" + support.getInstalledOnDeviceLanguages()
-                                + " pending=" + support.getPendingOnDeviceLanguages()
-                                + " online=" + support.getOnlineLanguages());
                         result.onResult(support);
                     }
 
@@ -216,7 +211,6 @@ public class SpeechInput {
                             return;
                         }
                         handled[0] = true;
-                        Log.d(TAG, (onDevice ? "on-device" : "default") + " support error " + error);
                         result.onResult(null);
                     }
                 });
@@ -256,12 +250,10 @@ public class SpeechInput {
         current.triggerModelDownload(intent, main, new ModelDownloadListener() {
             @Override
             public void onProgress(int completedPercent) {
-                Log.d(TAG, "download " + completedPercent + "%");
             }
 
             @Override
             public void onSuccess() {
-                Log.d(TAG, "download success");
                 if (listener != null) {
                     choose(onDevice);
                 }
@@ -270,7 +262,6 @@ public class SpeechInput {
             @Override
             public void onScheduled() {
                 // 와이파이 연결 등 조건이 맞으면 받는다. 이번에는 못 듣는다
-                Log.d(TAG, "download scheduled");
                 Listener ended = takeListener();
                 if (ended != null) {
                     ended.onError();
@@ -397,7 +388,6 @@ public class SpeechInput {
             return false;
         }
         heardAgain = true;
-        Log.d(TAG, "listen again");
         listener.onListenAgain();
         listen();
         return true;
@@ -431,7 +421,6 @@ public class SpeechInput {
 
         @Override
         public void onError(int error) {
-            Log.d(TAG, "recognition error " + error);
             if (listener == null) {
                 return;
             }

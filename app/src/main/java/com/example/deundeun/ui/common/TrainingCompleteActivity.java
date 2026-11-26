@@ -8,16 +8,12 @@ import android.view.ViewGroup;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.deundeun.R;
 import com.example.deundeun.databinding.ActivityTrainingCompleteBinding;
 import com.example.deundeun.databinding.ViewCheckRowBinding;
 
-/**
- * 훈련 완료.
- */
 public class TrainingCompleteActivity extends AppCompatActivity {
 
     public static final String EXTRA_TITLE_RES = "title_res";

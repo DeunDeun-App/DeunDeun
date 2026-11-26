@@ -1,6 +1,5 @@
 package com.example.deundeun.ui.simulation.pose;
 
-import android.util.Log;
 
 import androidx.annotation.Nullable;
 
@@ -9,7 +8,6 @@ import com.google.mediapipe.tasks.components.containers.NormalizedLandmark;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * MediaPipe 랜드마크로 대피 자세를 판정한다.
@@ -19,13 +17,9 @@ import java.util.Locale;
  *       입과 코-입 사이 지점이 손 윤곽 안에 들어오는지 본다. 얼굴만 보이면 된다.
  *
  * 좌표는 0~1 로 정규화된 이미지 좌표(y 는 아래로 갈수록 커짐)이다.
- * 기준값은 실제 기기로 시험해 보며 조정한다. Logcat 에서 태그 PoseEvaluator 로 값을 볼 수 있다.
+ * 기준값은 실제 기기로 시험해 보며 조정한다.
  */
 public class DisasterPoseEvaluator {
-
-    private static final String TAG = "PoseEvaluator";
-    /** 이 프레임 수마다 한 번 로그를 남긴다 */
-    private static final int LOG_INTERVAL_FRAMES = 15;
 
     // MediaPipe Pose 33개 랜드마크 중 쓰는 것
     private static final int NOSE = 0;
@@ -58,7 +52,6 @@ public class DisasterPoseEvaluator {
 
     private final boolean fire;
 
-    private int frameCount;
 
     public DisasterPoseEvaluator(boolean fire) {
         this.fire = fire;
@@ -71,13 +64,9 @@ public class DisasterPoseEvaluator {
     public PoseCheck evaluate(@Nullable List<NormalizedLandmark> pose,
                               @Nullable List<List<NormalizedLandmark>> hands) {
         if (fire) {
-            FireResult result = judgeFire(pose, hands);
-            logFire(pose, hands, result);
-            return result.check;
+            return judgeFire(pose, hands);
         }
-        PoseCheck check = judgeEarthquake(pose);
-        logEarthquake(pose, check);
-        return check;
+        return judgeEarthquake(pose);
     }
 
     // ===== 지진 =====
@@ -131,29 +120,15 @@ public class DisasterPoseEvaluator {
 
     // ===== 화재 =====
 
-    private static final class FireResult {
-        final PoseCheck check;
-        /** 입이 손 윤곽 안에 있는지 */
-        final boolean mouthCovered;
-        /** 코와 입 사이 지점이 손 윤곽 안에 있는지 */
-        final boolean noseCovered;
-
-        FireResult(PoseCheck check, boolean mouthCovered, boolean noseCovered) {
-            this.check = check;
-            this.mouthCovered = mouthCovered;
-            this.noseCovered = noseCovered;
-        }
-    }
-
-    private FireResult judgeFire(@Nullable List<NormalizedLandmark> pose,
-                                 @Nullable List<List<NormalizedLandmark>> hands) {
+    private PoseCheck judgeFire(@Nullable List<NormalizedLandmark> pose,
+                                @Nullable List<List<NormalizedLandmark>> hands) {
         // 얼굴이 보이는지만 본다. 코는 손에 가려질 수 있어서 귀로도 인정한다
         if (pose == null || pose.size() < 33
                 || !(visible(pose, NOSE) || visible(pose, LEFT_EAR) || visible(pose, RIGHT_EAR))) {
-            return new FireResult(PoseCheck.NO_PERSON, false, false);
+            return PoseCheck.NO_PERSON;
         }
         if (hands == null || hands.isEmpty()) {
-            return new FireResult(PoseCheck.NOT_PROTECTED, false, false);
+            return PoseCheck.NOT_PROTECTED;
         }
 
         // 손에 가려져도 포즈 모델이 추정한 코·입 위치는 쓸 만해서 가시성은 보지 않는다
@@ -165,19 +140,13 @@ public class DisasterPoseEvaluator {
         float midX = (nose.x() + mouthX) / 2f;
         float midY = (nose.y() + mouthY) / 2f;
 
-        boolean anyMouth = false;
-        boolean anyNose = false;
         for (List<NormalizedLandmark> hand : hands) {
             float[][] hull = convexHull(hand);
-            boolean mouth = contains(hull, mouthX, mouthY);
-            boolean noseSide = contains(hull, midX, midY);
-            if (mouth && noseSide) {
-                return new FireResult(PoseCheck.CORRECT, true, true);
+            if (contains(hull, mouthX, mouthY) && contains(hull, midX, midY)) {
+                return PoseCheck.CORRECT;
             }
-            anyMouth |= mouth;
-            anyNose |= noseSide;
         }
-        return new FireResult(PoseCheck.NOT_PROTECTED, anyMouth, anyNose);
+        return PoseCheck.NOT_PROTECTED;
     }
 
     /** 손 랜드마크를 감싸는 볼록 다각형(반시계 방향). Andrew 의 monotone chain */
@@ -216,39 +185,6 @@ public class DisasterPoseEvaluator {
 
     private static float cross(float[] o, float[] a, float[] b) {
         return (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
-    }
-
-    // ===== 로그 =====
-
-    private void logEarthquake(@Nullable List<NormalizedLandmark> pose, PoseCheck check) {
-        if (frameCount++ % LOG_INTERVAL_FRAMES != 0) return;
-        if (pose == null || pose.size() < 33) {
-            Log.d(TAG, "check=" + check + " (포즈 없음)");
-            return;
-        }
-        Log.d(TAG, String.format(Locale.US,
-                "check=%s knees=%s/%s shoulders=%.2f/%.2f wrists=%.2f/%.2f",
-                check,
-                kneeAngle(pose, LEFT_HIP, LEFT_KNEE, LEFT_ANKLE),
-                kneeAngle(pose, RIGHT_HIP, RIGHT_KNEE, RIGHT_ANKLE),
-                visibility(pose, LEFT_SHOULDER), visibility(pose, RIGHT_SHOULDER),
-                visibility(pose, LEFT_WRIST), visibility(pose, RIGHT_WRIST)));
-    }
-
-    private void logFire(@Nullable List<NormalizedLandmark> pose,
-                         @Nullable List<List<NormalizedLandmark>> hands, FireResult result) {
-        if (frameCount++ % LOG_INTERVAL_FRAMES != 0) return;
-        if (pose == null || pose.size() < 33) {
-            Log.d(TAG, "check=" + result.check + " (포즈 없음)");
-            return;
-        }
-        Log.d(TAG, String.format(Locale.US,
-                "check=%s hands=%d mouthCovered=%b noseCovered=%b nose=%.2f ears=%.2f/%.2f",
-                result.check,
-                hands == null ? 0 : hands.size(),
-                result.mouthCovered, result.noseCovered,
-                visibility(pose, NOSE),
-                visibility(pose, LEFT_EAR), visibility(pose, RIGHT_EAR)));
     }
 
     // ===== 공통 =====
