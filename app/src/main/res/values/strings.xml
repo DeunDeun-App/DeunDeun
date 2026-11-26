@@ -26,6 +26,7 @@
     <string name="home_weekly_title">이번 주 훈련 기록</string>
     <string name="home_unit_minute">분</string>
     <string name="home_recent_title">최근 훈련 기록</string>
+    <string name="record_list_title">전체 훈련 기록</string>
     <string name="home_see_all">전체 보기 ></string>
     <string name="home_week_count">이번주 %1$d번 했어요</string>
     <string name="score_format">%1$d점</string>
