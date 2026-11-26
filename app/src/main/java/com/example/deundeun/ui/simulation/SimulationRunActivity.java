@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -104,6 +106,24 @@ public class SimulationRunActivity extends AppCompatActivity {
     /** 서버가 채점한 이번 시도 결과. 완료 화면 체크리스트에 쓴다 */
     @Nullable
     private SimulationResultResponse lastResult;
+    /** 이야기 고르기 장면에서 잘못 고른 횟수. 점수에서 깎는다 */
+    private int wrongChoices;
+    /** 자세 장면을 성공했을 때 걸린 시간. 결과는 이야기를 다 마친 뒤 잘못 고른 횟수와 함께 보낸다 */
+    private long poseElapsedMs = -1;
+    /** 마지막에 결과를 보내는 중인지. 그 사이 버튼을 다시 눌러도 두 번 보내지 않는다 */
+    private boolean submitting;
+
+    /** 자세 장면에서 걸린 시간을 0.5초마다 갱신한다 */
+    private final Handler timerHandler = new Handler(Looper.getMainLooper());
+    private final Runnable timerTick = new Runnable() {
+        @Override
+        public void run() {
+            updatePoseTimer();
+            if (isPoseStep() && session.getPhase() != PoseTrainingSession.Phase.SUCCESS) {
+                timerHandler.postDelayed(this, 500L);
+            }
+        }
+    };
 
     private final ActivityResultLauncher<String> permissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> {
@@ -163,8 +183,16 @@ public class SimulationRunActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        // 화면을 벗어났다 돌아오면 시간 표시를 다시 돌린다
+        if (isPoseStep()) startPoseTimer();
+    }
+
+    @Override
     protected void onStop() {
         super.onStop();
+        timerHandler.removeCallbacks(timerTick);
         voice.stop();
     }
 
@@ -296,9 +324,7 @@ public class SimulationRunActivity extends AppCompatActivity {
         // 고르기 장면에서는 자세를 판정하지 않는다
         if (!isPoseStep()) return;
 
-        PoseTrainingSession.Phase before = session.getPhase();
-        if (before == PoseTrainingSession.Phase.SUCCESS
-                || before == PoseTrainingSession.Phase.RETRY) {
+        if (session.getPhase() == PoseTrainingSession.Phase.SUCCESS) {
             return;
         }
 
@@ -308,8 +334,11 @@ public class SimulationRunActivity extends AppCompatActivity {
         PoseTrainingSession.Phase phase = session.update(check, now);
         applyState(phase, check, now);
 
-        if (phase == PoseTrainingSession.Phase.SUCCESS || phase == PoseTrainingSession.Phase.RETRY) {
-            submitResult(phase == PoseTrainingSession.Phase.SUCCESS, session.elapsedMs(now));
+        if (phase == PoseTrainingSession.Phase.SUCCESS) {
+            // 뒤 장면의 고르기까지 점수에 넣어야 해서 이야기를 마칠 때 보낸다
+            poseElapsedMs = session.elapsedMs(now);
+            // 성공한 순간의 시간으로 멈춘다
+            updatePoseTimer();
         }
     }
 
@@ -323,10 +352,15 @@ public class SimulationRunActivity extends AppCompatActivity {
         }
     }
 
-    /** 성공이나 시간 초과로 한 번의 시도가 끝나면 서버에 채점을 맡기고 기록으로 남긴다 */
-    private void submitResult(boolean success, long elapsedMs) {
+    /**
+     * 서버에 채점을 맡기고 기록으로 남긴다.
+     *
+     * @param then 응답을 받은 뒤(실패해도) 할 일. 없으면 null
+     */
+    private void submitResult(boolean success, long elapsedMs, @Nullable Runnable then) {
         lastResult = null;
         if (!recordRepository.isLoggedIn()) {
+            if (then != null) then.run();
             return;
         }
 
@@ -340,13 +374,14 @@ public class SimulationRunActivity extends AppCompatActivity {
 
         SimulationRequest request = new SimulationRequest(
                 fire ? SimulationRequest.FIRE : SimulationRequest.EARTHQUAKE,
-                success, elapsedMs, done);
+                success, elapsedMs, done, wrongChoices);
         recordRepository.saveSimulation(request, result -> {
             if (result.isSuccess()) {
                 lastResult = result.getData();
             } else {
                 Log.w(TAG, "시뮬레이션 결과 저장 실패: " + result.getCode());
             }
+            if (then != null && !isFinishing() && !isDestroyed()) then.run();
         });
     }
 
@@ -370,9 +405,6 @@ public class SimulationRunActivity extends AppCompatActivity {
                         ? R.string.story_fire_pose_done : R.string.story_quake_pose_done);
                 showMessage(done, true);
                 speak(done);
-                break;
-            case RETRY:
-                showMessage(R.string.sim_retry_message);
                 break;
             case HOLDING:
                 showMessage(getString(R.string.sim_pose_hold, session.remainingHoldSeconds(now)),
@@ -416,8 +448,6 @@ public class SimulationRunActivity extends AppCompatActivity {
         } else if (phase == PoseTrainingSession.Phase.SUCCESS) {
             textRes = isLastStep() ? R.string.sim_finish : R.string.story_next;
             colorRes = R.color.camera_success;
-        } else if (phase == PoseTrainingSession.Phase.RETRY) {
-            textRes = R.string.sim_retry;
         } else {
             textRes = R.string.sim_detecting;
         }
@@ -434,31 +464,10 @@ public class SimulationRunActivity extends AppCompatActivity {
             permissionLauncher.launch(Manifest.permission.CAMERA);
             return;
         }
-        switch (session.getPhase()) {
-            case SUCCESS:
-                nextStep();
-                break;
-            case RETRY:
-                restartTraining();
-                break;
-            default:
-                // 인식 중에는 버튼으로 넘길 수 없다
-                break;
+        // 인식 중에는 버튼으로 넘길 수 없다. 성공할 때까지 계속 해볼 수 있다
+        if (session.getPhase() == PoseTrainingSession.Phase.SUCCESS) {
+            nextStep();
         }
-    }
-
-    private void restartTraining() {
-        session.restart();
-        lastAnnounced = null;
-        crouched = false;
-        covered = false;
-        lastResult = null;
-        if (!fire) {
-            binding.quakeEffect.setShaking(currentStep().shaking);
-        }
-        setGuideAccent(false);
-        showMessage(messageFor(fire ? PoseCheck.NOT_PROTECTED : PoseCheck.NOT_LOW));
-        applyButton();
     }
 
     // ---- 이야기 진행 ----
@@ -477,7 +486,15 @@ public class SimulationRunActivity extends AppCompatActivity {
 
     private void nextStep() {
         if (isLastStep()) {
-            finishTraining();
+            if (submitting) return;
+            if (poseElapsedMs < 0) {
+                finishTraining();
+                return;
+            }
+            // 완료 화면에 서버 채점 결과를 보여주려고 응답을 받은 뒤 넘어간다
+            submitting = true;
+            binding.btnStatus.setEnabled(false);
+            submitResult(true, poseElapsedMs, this::finishTraining);
         } else {
             showStep(stepIndex + 1);
         }
@@ -533,6 +550,12 @@ public class SimulationRunActivity extends AppCompatActivity {
         if (pose) {
             session.restart();
         }
+        binding.poseTimer.setVisibility(View.GONE);
+        if (pose) {
+            startPoseTimer();
+        } else {
+            timerHandler.removeCallbacks(timerTick);
+        }
         String scene = getString(step.scene);
         binding.sceneCaption.setText(scene);
         showMessage(pose && permissionDenied
@@ -555,7 +578,8 @@ public class SimulationRunActivity extends AppCompatActivity {
             showFeedback(feedback, true);
             speak(feedback);
         } else {
-            // 틀린 답은 흐리게 두어 다시 고르지 않게 한다. 실패로 끝나지 않는다
+            // 틀린 답은 흐리게 두어 다시 고르지 않게 한다. 실패로 끝나지 않지만 점수는 깎인다
+            wrongChoices++;
             MaterialButton button = choiceButtons[index];
             button.setEnabled(false);
             button.setAlpha(0.4f);
@@ -575,6 +599,31 @@ public class SimulationRunActivity extends AppCompatActivity {
                 good ? R.color.camera_success : R.color.orange_pale));
         binding.storyFeedback.setVisibility(View.VISIBLE);
         showMessage(message, true);
+    }
+
+    /**
+     * 자세 장면의 걸린 시간을 보여준다. 카메라가 사람을 처음 인식한 때부터 센다.
+     * 30초까지는 초록, 60초까지는 주황, 그 뒤로는 빨강으로 점수 구간을 알려준다.
+     */
+    private void updatePoseTimer() {
+        // 성공한 뒤에는 성공한 순간의 시간으로 고정한다
+        long elapsed = session.getPhase() == PoseTrainingSession.Phase.SUCCESS && poseElapsedMs >= 0
+                ? poseElapsedMs : session.elapsedMs(SystemClock.uptimeMillis());
+        boolean show = isPoseStep() && elapsed > 0;
+        binding.poseTimer.setVisibility(show ? View.VISIBLE : View.GONE);
+        if (!show) return;
+
+        int seconds = (int) (elapsed / 1000L);
+        binding.poseTimer.setText(getString(R.string.sim_pose_timer, seconds));
+        binding.poseTimer.setContentDescription(getString(R.string.cd_sim_pose_timer, seconds));
+        int color = seconds <= 30 ? R.color.camera_success
+                : seconds <= 60 ? R.color.orange_primary : R.color.action_red_text;
+        binding.poseTimer.setTextColor(ContextCompat.getColor(this, color));
+    }
+
+    private void startPoseTimer() {
+        timerHandler.removeCallbacks(timerTick);
+        timerHandler.post(timerTick);
     }
 
     private void setGuideAccent(boolean good) {

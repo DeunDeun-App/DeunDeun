@@ -196,8 +196,6 @@
     <string name="sim_pose_fire_no_person">얼굴이 화면에 보이게 해 주세요</string>
     <string name="sim_pose_fire_protect">손으로 코와 입을 막으세요</string>
     <string name="sim_pose_hold">좋아요! 그대로 %1$d초 유지하세요</string>
-    <string name="sim_retry_message">자세가 정확하지 않았어요. 다시 해볼까요?</string>
-    <string name="sim_retry">다시 훈련하기</string>
     <string name="sim_camera_permission_denied">카메라 권한이 있어야 자세를 확인할 수 있어요</string>
     <string name="sim_camera_permission_retry">카메라 권한 허용하기</string>
     <string name="sim_pose_error">자세 인식을 시작하지 못했어요</string>
@@ -205,6 +203,8 @@
     <!-- 재난 이야기: 장면마다 두 행동 중 하나를 고르고, 가운데에서 대피 자세를 직접 해 본다 -->
     <string name="sim_running_badge_step">%1$s 훈련 · %2$d/%3$d</string>
     <string name="story_next">다음</string>
+    <string name="sim_pose_timer">⏱ %1$d초</string>
+    <string name="cd_sim_pose_timer">자세를 시작한 지 %1$d초</string>
     <string name="story_try_again">다시 골라 볼까요?</string>
     <string name="cd_story_choice_wrong">%1$s, 고른 적 있음</string>
 

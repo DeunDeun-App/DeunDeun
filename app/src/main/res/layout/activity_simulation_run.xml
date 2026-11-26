@@ -95,6 +95,26 @@
             android:layout_height="match_parent"
             android:padding="12dp" />
 
+        <!-- 자세 장면에서 걸린 시간. 30초 안에 하면 점수를 더 받고 60초가 넘으면 깎인다 -->
+        <TextView
+            android:id="@+id/pose_timer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_pose_timer"
+            android:fontFamily="@font/pretendard_bold"
+            android:includeFontPadding="false"
+            android:paddingStart="14dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="14dp"
+            android:paddingBottom="8dp"
+            android:textColor="@color/white"
+            android:textSize="20sp"
+            android:visibility="gone"
+            tools:text="⏱ 12초"
+            tools:visibility="visible" />
+
     </FrameLayout>
 
     <!-- 고르기 장면에서 카메라 대신 보여주는 장면 카드. 카메라는 자세를 해 볼 때만 켠다.
