@@ -428,12 +428,22 @@
 
     <!-- ===== 알림 ===== -->
     <string name="notification_title">알림</string>
-    <string name="notification_1_title">재난문자 도착</string>
-    <string name="notification_1_desc">호우주의보 - 수원시</string>
-    <string name="notification_1_time">방금</string>
-    <string name="notification_2_title">오늘 훈련이 남았어요</string>
-    <string name="notification_2_desc">119 신고 연습 1개 남음</string>
-    <string name="notification_2_time">1시간 전</string>
+    <string name="notification_empty">새 알림이 없어요</string>
+    <string name="notification_disaster_title">재난문자 도착</string>
+    <!-- 예) 호우주의보 - 수원시 -->
+    <string name="notification_disaster_desc">%1$s - %2$s</string>
+    <string name="notification_disaster_fallback">새 재난문자가 있어요</string>
+    <string name="notification_training_title">오늘 훈련이 남았어요</string>
+    <!-- 예) 지진 대피 2번 · 화재 탈출 3번 남음 -->
+    <string name="notification_training_desc">%1$s 남음</string>
+    <string name="notification_training_left">%1$s %2$d번</string>
+    <string name="notification_training_done_title">오늘 훈련을 모두 마쳤어요</string>
+    <string name="notification_training_done_desc">지진 대피·화재 탈출 %1$d번씩 완료</string>
+    <string name="notification_time_now">방금</string>
+    <string name="notification_time_minutes">%1$d분 전</string>
+    <string name="notification_time_hours">%1$d시간 전</string>
+    <string name="notification_time_days">%1$d일 전</string>
+    <string name="notification_time_today">오늘</string>
     <string name="cd_unread">읽지 않음</string>
 
     <string name="placeholder_note">아직 만들지 않은 화면이에요.</string>
