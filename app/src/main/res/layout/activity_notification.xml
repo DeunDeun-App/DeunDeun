@@ -56,6 +56,17 @@
             tools:itemCount="2"
             tools:listitem="@layout/item_notification" />
 
+        <TextView
+            android:id="@+id/notification_empty"
+            style="@style/Text.Body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_xl"
+            android:gravity="center"
+            android:text="@string/notification_empty"
+            android:textColor="@color/text_secondary"
+            android:visibility="gone" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
