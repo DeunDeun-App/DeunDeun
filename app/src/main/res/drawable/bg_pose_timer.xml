@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 자세 장면에서 걸린 시간을 보여주는 칩 -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
+    <solid android:color="#B3000000" />
+    <corners android:radius="20dp" />
+</shape>
