@@ -132,8 +132,7 @@ public class SosActivity extends AppCompatActivity {
                 return;
             }
 
-            if ("SESSION_EXPIRED".equals(result.getCode())) {
-                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            if (SessionNavigator.redirectIfExpired(this, result)) {
                 return;
             }
             if (proceed) {

@@ -7,12 +7,22 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
+import com.example.deundeun.R;
+import com.example.deundeun.data.repository.BaseRepository;
 import com.example.deundeun.data.session.SessionManager;
 import com.example.deundeun.ui.auth.LoginActivity;
 
 public final class SessionNavigator {
 
     private SessionNavigator() {
+    }
+
+    public static boolean redirectIfExpired(Activity activity, BaseRepository.Result<?> result) {
+        if (!result.isSessionExpired()) {
+            return false;
+        }
+        toLogin(activity, R.string.error_session_expired);
+        return true;
     }
 
     public static void toLogin(Activity activity, @Nullable @StringRes Integer messageRes) {

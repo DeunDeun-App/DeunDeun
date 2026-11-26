@@ -12,7 +12,6 @@ import com.example.deundeun.databinding.ItemGuardianNoticeBinding;
 import java.util.ArrayList;
 import java.util.List;
 
-/** 보호자에게 보낸 알림 목록. */
 public class GuardianNoticeAdapter
         extends RecyclerView.Adapter<GuardianNoticeAdapter.NoticeHolder> {
 

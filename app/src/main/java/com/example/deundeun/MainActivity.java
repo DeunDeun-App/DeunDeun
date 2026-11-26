@@ -89,8 +89,8 @@ public class MainActivity extends AppCompatActivity {
             if (result.isSuccess() && result.getData() != null) {
                 sessionManager.updateUser(result.getData().getLoginId(),
                         result.getData().getUserName());
-            } else if (result.hasCode("SESSION_EXPIRED")) {
-                SessionNavigator.toLogin(this, R.string.error_session_expired);
+            } else {
+                SessionNavigator.redirectIfExpired(this, result);
             }
         });
     }

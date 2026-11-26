@@ -101,7 +101,6 @@ public class TrainingRecord {
         return achievements;
     }
 
-    /** 못 한 키워드 */
     public List<String> getMissed() {
         return missed;
     }

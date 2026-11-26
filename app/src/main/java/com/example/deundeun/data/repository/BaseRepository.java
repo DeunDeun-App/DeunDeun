@@ -50,11 +50,16 @@ public abstract class BaseRepository {
         public boolean hasCode(String prefix) {
             return code != null && code.startsWith(prefix);
         }
+
+        public boolean isSessionExpired() {
+            return SESSION_EXPIRED.equals(code);
+        }
     }
 
+    private static final String SESSION_EXPIRED = "SESSION_EXPIRED";
     private static final Type ERROR_TYPE = new TypeToken<ApiResponse<Object>>() {}.getType();
 
-    private final Gson gson = new Gson();
+    private static final Gson GSON = new Gson();
     protected final ApiService api = RetrofitClient.getApiService();
 
     protected <T> void enqueue(Call<ApiResponse<T>> call, Callback<Result<T>> callback) {
@@ -91,7 +96,7 @@ public abstract class BaseRepository {
         }
 
         try {
-            return gson.fromJson(errorBody.charStream(), ERROR_TYPE);
+            return GSON.fromJson(errorBody.charStream(), ERROR_TYPE);
 
         } catch (Exception e) {
             return null;
