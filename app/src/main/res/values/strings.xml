@@ -78,8 +78,6 @@
     <string name="profile_share_title">공유 설정</string>
     <string name="profile_share_location">위치 공유</string>
     <string name="profile_share_location_desc">SOS 시 보호자에게 GPS 전송</string>
-    <string name="profile_share_result">훈련 결과 공유</string>
-    <string name="profile_share_result_desc">훈련 완료 시 점수 알림</string>
     <string name="profile_share_sos">SOS 알림</string>
     <string name="profile_share_sos_desc">도움 요청 즉시 보호자 알림</string>
     <string name="profile_notice_title">보호자에게 보낸 알림</string>
@@ -315,7 +313,7 @@
     <!-- ===== 훈련 완료 ===== -->
     <string name="complete_training">훈련을 마쳤어요!</string>
     <string name="complete_practice">연습을 마쳤어요!</string>
-    <string name="complete_desc">이 기록은 자동으로 저장돼요\n보호자도 확인 할 수 있어요</string>
+    <string name="complete_desc">이 기록은 자동으로 저장돼요</string>
     <string name="complete_retry">다시 연습</string>
     <string name="complete_close">닫기</string>
     <string name="check_situation">상황</string>
