@@ -24,14 +24,12 @@ public class PoseTrainingSession {
     private long holdStartedAt = -1;
     private long lastCorrectAt = -1;
     private Phase phase = Phase.GUIDING;
-    private PoseCheck lastCheck = PoseCheck.NO_PERSON;
 
     public void restart() {
         startedAt = -1;
         holdStartedAt = -1;
         lastCorrectAt = -1;
         phase = Phase.GUIDING;
-        lastCheck = PoseCheck.NO_PERSON;
     }
 
     public Phase update(PoseCheck check, long nowMs) {
@@ -41,7 +39,6 @@ public class PoseTrainingSession {
         if (startedAt < 0) {
             startedAt = nowMs;
         }
-        lastCheck = check;
 
         if (check == PoseCheck.CORRECT) {
             if (holdStartedAt < 0) holdStartedAt = nowMs;
@@ -60,10 +57,6 @@ public class PoseTrainingSession {
 
     public Phase getPhase() {
         return phase;
-    }
-
-    public PoseCheck getLastCheck() {
-        return lastCheck;
     }
 
     /** 첫 프레임부터 지금까지 걸린 시간. 아직 시작 전이면 0 */

@@ -30,7 +30,6 @@ public class WaveformView extends View {
     private final float barWidth;
     private final float barGap;
 
-    /** 들어온 소리 크기. */
     private float target;
     /** 화면에 그리는 크기. 막대가 튀지 않도록 target 을 천천히 따라간다. */
     private float shown;

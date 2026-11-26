@@ -1,6 +1,5 @@
 package com.example.deundeun.data.network.dto.call;
 
-/** 답변 판정 결과. */
 public class CallAnswerResponse {
 
     private boolean passed;

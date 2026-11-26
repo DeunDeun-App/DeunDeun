@@ -10,7 +10,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.deundeun.databinding.ActivityCallIntroBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 
-/** 신고 연습 진입. */
 public class CallIntroActivity extends AppCompatActivity {
 
     private ActivityCallIntroBinding binding;

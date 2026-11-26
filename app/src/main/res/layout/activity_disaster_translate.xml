@@ -7,7 +7,6 @@
     android:id="@+id/translate_scroll"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     android:clipToPadding="false"
     android:paddingStart="@dimen/screen_h_margin"
     android:paddingTop="@dimen/space_s"

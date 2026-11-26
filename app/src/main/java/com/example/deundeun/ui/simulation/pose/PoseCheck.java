@@ -8,6 +8,5 @@ public enum PoseCheck {
     NOT_LOW,
     /** 머리(지진) 또는 코와 입(화재)을 가리지 않음 */
     NOT_PROTECTED,
-    /** 올바른 대피 자세 */
     CORRECT
 }

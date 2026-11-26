@@ -38,7 +38,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-/** 내정보. */
 public class ProfileFragment extends Fragment {
 
     public static final String TAG = "profile";
@@ -260,8 +259,7 @@ public class ProfileFragment extends Fragment {
         if (!isAdded()) {
             return;
         }
-        if (result.hasCode("SESSION_EXPIRED")) {
-            SessionNavigator.toLogin(requireActivity(), R.string.error_session_expired);
+        if (SessionNavigator.redirectIfExpired(requireActivity(), result)) {
             return;
         }
         Toast.makeText(requireContext(), result.getMessageOr(getString(R.string.error_network)),

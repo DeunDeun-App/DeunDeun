@@ -168,8 +168,6 @@
         <item>@array/disability_levels_autism</item>
         <item>@array/disability_levels_developmental</item>
     </array>
-    <string name="cd_switch_on">켜짐</string>
-    <string name="cd_switch_off">꺼짐</string>
 
     <!-- ===== 재난 시뮬레이션 ===== -->
     <string name="sim_eyebrow">재난 시뮬레이션</string>
@@ -184,11 +182,9 @@
     <string name="sim_howto_3">대피 자세를 취하면 AI가 인식해요</string>
     <string name="sim_start">카메라 시작하기</string>
     <string name="sim_ai_guide">AI 가이드</string>
-    <string name="sim_ai_guide_message">탁자가 있어요! 탁자 밑으로 들어가 몸을 낮추세요</string>
     <string name="sim_detecting">대피 자세 인식 중</string>
     <!-- 대피 자세 인식 성공 -->
     <string name="sim_finish">훈련 완료</string>
-    <string name="cd_sim_pose_detected">대피 자세를 바르게 취했어요</string>
     <string name="cd_camera_preview">카메라 화면</string>
     <!-- 포즈 인식 안내. 짧고 분명하게 -->
     <string name="sim_pose_no_person">몸 전체가 화면에 보이게 서 주세요</string>
@@ -316,9 +312,6 @@
     <string name="call_speech_unavailable">이 기기에서는 음성 인식을 쓸 수 없어요.</string>
     <string name="call_mic_denied">마이크를 허용해야 연습할 수 있어요.</string>
     <string name="call_login_required">로그인 정보가 없습니다. 다시 로그인해 주세요.</string>
-    <string name="call_type_answer_title">대답 입력 (개발용)</string>
-    <string name="call_type_answer_ok">보내기</string>
-    <string name="call_type_answer_cancel">취소</string>
 
     <!-- ===== 훈련 완료 ===== -->
     <string name="complete_training">훈련을 마쳤어요!</string>
@@ -326,9 +319,6 @@
     <string name="complete_desc">이 기록은 자동으로 저장돼요</string>
     <string name="complete_retry">다시 연습</string>
     <string name="complete_close">닫기</string>
-    <string name="check_situation">상황</string>
-    <string name="check_address">주소</string>
-    <string name="check_condition">상태 설명</string>
     <string name="cd_passed">통과</string>
     <string name="cd_failed">미통과</string>
 
@@ -366,7 +356,6 @@
     <string name="sos_footnote">위치 공유가 즉시 시작됩니다</string>
     <string name="sos_step_1_no_location">%1$s에게 도움 요청 전송</string>
     <string name="sos_footnote_no_location">위치 공유가 꺼져 있어 위치는 보내지 않습니다</string>
-    <string name="sos_requested">보호자에게 도움을 요청했어요.</string>
     <string name="sos_guardian_fallback">보호자</string>
     <string name="sos_login_required">로그인 후 도움을 요청할 수 있어요.</string>
     <string name="sos_network_error">지금은 요청을 보낼 수 없어요. 잠시 후 다시 해 주세요.</string>
@@ -454,7 +443,6 @@
     <string name="notification_time_today">오늘</string>
     <string name="cd_unread">읽지 않음</string>
 
-    <string name="placeholder_note">아직 만들지 않은 화면이에요.</string>
 
     <!-- ===== 인증 공통 ===== -->
     <string name="cd_back">뒤로 가기</string>

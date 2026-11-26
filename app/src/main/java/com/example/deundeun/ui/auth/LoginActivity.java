@@ -18,7 +18,6 @@ import com.example.deundeun.databinding.ActivityLoginBinding;
 import com.example.deundeun.ui.common.InsetsUtil;
 import com.example.deundeun.ui.common.KeyboardUtil;
 
-/** 로그인. 앱의 진입 화면. */
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;

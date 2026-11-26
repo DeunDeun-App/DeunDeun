@@ -6,7 +6,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.LinearLayout;
 
-import androidx.annotation.DrawableRes;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
@@ -53,10 +52,6 @@ public class NavItemView extends LinearLayout {
                 setLabel(label);
             }
         }
-    }
-
-    public void setIcon(@DrawableRes int iconRes) {
-        binding.navIcon.setImageResource(iconRes);
     }
 
     public void setLabel(@StringRes int labelRes) {

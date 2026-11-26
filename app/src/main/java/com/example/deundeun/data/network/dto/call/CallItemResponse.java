@@ -1,6 +1,5 @@
 package com.example.deundeun.data.network.dto.call;
 
-/** 상담원 질문 하나. */
 public class CallItemResponse {
 
     private long itemId;

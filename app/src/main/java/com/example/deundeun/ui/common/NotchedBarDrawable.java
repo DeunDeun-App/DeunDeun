@@ -13,19 +13,12 @@ import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/**
- * 하단탭 배경
- */
 public class NotchedBarDrawable extends Drawable {
 
     private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private final Path path = new Path();
     private final float notchRadius;
 
-    /**
-     * @param color       바 색
-     * @param notchRadius
-     */
     public NotchedBarDrawable(@ColorInt int color, float notchRadius) {
         this.notchRadius = notchRadius;
         paint.setColor(color);

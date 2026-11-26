@@ -5,7 +5,6 @@ import android.content.res.TypedArray;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.widget.LinearLayout;
 
 import androidx.annotation.Nullable;
@@ -50,9 +49,5 @@ public class AuthHeaderView extends LinearLayout {
 
     public void setOnBackClickListener(OnClickListener listener) {
         binding.btnBack.setOnClickListener(listener);
-    }
-
-    public View getTitleView() {
-        return binding.authTitle;
     }
 }

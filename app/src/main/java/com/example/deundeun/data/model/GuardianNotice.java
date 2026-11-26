@@ -1,6 +1,5 @@
 package com.example.deundeun.data.model;
 
-/** 보호자에게 보낸 알림 한 건. */
 public class GuardianNotice {
 
     private final String title;
